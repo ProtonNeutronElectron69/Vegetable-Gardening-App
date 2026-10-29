@@ -1,0 +1,18 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor and tool folders
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node (only used for the data check script)
+node_modules/
+npm-debug.log*
+
+# Local scratch output
+screenshots/
+*.log
