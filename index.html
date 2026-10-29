@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Phoenix Garden Guide</title>
+  <meta name="description" content="Planting calendar and growing guide for vegetables and fruit in the Phoenix, Arizona metro area.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30V15' stroke='%234d7c32' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M16 16C16 9 11 5 4 5c0 7 5 11 12 11zM16 13c0-6 4-10 11-10 0 6-4 10-11 10z' fill='%236a9f45'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#/calendar" aria-label="Phoenix Garden Guide home">
+        <svg class="brand-icon" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 30V15" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M16 16C16 9 11 5 4 5c0 7 5 11 12 11zM16 13c0-6 4-10 11-10 0 6-4 10-11 10z" fill="currentColor"/>
+        </svg>
+        <span class="brand-text">
+          <span class="brand-name">Phoenix Garden Guide</span>
+          <span class="brand-tag">Vegetables &amp; fruit for the low desert</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="#/calendar" data-nav="calendar">Calendar</a>
+        <a href="#/plants" data-nav="plants">Plants</a>
+        <a href="#/gallery" data-nav="gallery">Gallery</a>
+        <a href="#/about" data-nav="about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="site-main" tabindex="-1">
+    <noscript>
+      <p class="notice">This guide needs JavaScript turned on in your browser.</p>
+    </noscript>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Planting dates follow University of Arizona Cooperative Extension guides for Maricopa County.
+      Photos from Wikimedia Commons; see <a href="#/about">About</a> for sources and credits.
+    </p>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" type="button" data-lightbox="close" aria-label="Close photo viewer">&times;</button>
+      <button class="lightbox-nav lightbox-prev" type="button" data-lightbox="prev" aria-label="Previous photo">&#8249;</button>
+      <figure class="lightbox-figure">
+        <img class="lightbox-img" alt="">
+        <figcaption class="lightbox-caption"></figcaption>
+      </figure>
+      <button class="lightbox-nav lightbox-next" type="button" data-lightbox="next" aria-label="Next photo">&#8250;</button>
+    </div>
+  </dialog>
+
+  <!-- Plain scripts (not modules) so the app also works when opened straight from a file. -->
+  <script src="js/data/sources.js"></script>
+  <script src="js/data/plants.js"></script>
+  <script src="js/data/photos.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
