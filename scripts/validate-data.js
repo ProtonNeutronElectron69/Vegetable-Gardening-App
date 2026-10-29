@@ -25,7 +25,9 @@ const SEASONS = ["warm", "cool", "perennial"];
 const TEXT_FIELDS = ["name", "summary", "timeToHarvest", "spacing", "water", "sun", "growth", "yield"];
 
 const errors = [];
+const warnings = [];
 const fail = (where, msg) => errors.push(`${where}: ${msg}`);
+const warn = (where, msg) => warnings.push(`${where}: ${msg}`);
 
 // Returns the half-month index (0-23) for a window start or end date, or null if invalid.
 function parse(text, isEnd) {
@@ -80,7 +82,8 @@ for (const p of PLANTS || []) {
 
   const photo = PHOTOS[p.id];
   if (!photo) {
-    fail(where, "no photo in js/data/photos.js");
+    // The app shows a placeholder, so a missing photo is allowed but worth knowing about.
+    warn(where, "no photo in js/data/photos.js (a placeholder is shown)");
   } else {
     if (!fs.existsSync(path.join(root, photo.src))) fail(where, `photo file not found: ${photo.src}`);
     for (const f of ["artist", "license", "sourceUrl", "alt"]) {
@@ -97,6 +100,9 @@ for (const [key, s] of Object.entries(SOURCES || {})) {
   if (!s.title || !/^https:\/\//.test(s.url || "")) fail(`source "${key}"`, "needs a title and an https url");
 }
 
+if (warnings.length) {
+  console.warn(`Warning(s):\n  - ${warnings.join("\n  - ")}`);
+}
 if (errors.length) {
   console.error(`Found ${errors.length} problem(s):\n  - ${errors.join("\n  - ")}`);
   process.exit(1);
