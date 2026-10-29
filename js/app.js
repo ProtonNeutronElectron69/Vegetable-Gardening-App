@@ -229,7 +229,7 @@
     SEASON_ORDER.forEach(function (season) {
       var group = plants.filter(function (p) { return p.season === season; }).sort(byName);
       if (!group.length) return;
-      body += '<tr class="cal-group"><th colspan="25" scope="rowgroup">' + esc(SEASONS[season].group) + "</th></tr>";
+      body += '<tr class="cal-group"><th colspan="25" scope="rowgroup"><span>' + esc(SEASONS[season].group) + "</span></th></tr>";
       group.forEach(function (p) {
         body += '<tr><th scope="row" class="cal-plant-col"><a href="#/plant/' + p.id + '">' + esc(p.name) + "</a></th>" +
           p.cells.map(function (c, i) {

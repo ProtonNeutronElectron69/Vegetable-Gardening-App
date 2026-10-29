@@ -442,10 +442,10 @@ tbody .cal-plant-col a:hover { color: var(--brand-strong); text-decoration: unde
   letter-spacing: 0.07em;
   color: var(--text-muted);
   background: var(--surface-2);
-  padding: 6px 12px !important;
-  position: sticky;
-  left: 0;
+  padding: 6px 0 !important;
 }
+/* The label (not the full-width cell) sticks, so it stays visible when the chart scrolls sideways */
+.cal-group th span { position: sticky; left: 12px; padding: 0 12px; }
 
 .cal tbody td {
   height: 30px;
