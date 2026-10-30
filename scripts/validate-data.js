@@ -80,15 +80,36 @@ for (const p of PLANTS || []) {
     }
   }
 
-  const photo = PHOTOS[p.id];
-  if (!photo) {
+  if (p.leafy !== undefined && p.leafy !== true) fail(where, 'leafy must be true or left out');
+
+  const photos = PHOTOS[p.id];
+  if (!Array.isArray(photos) || photos.length === 0) {
     // The app shows a placeholder, so a missing photo is allowed but worth knowing about.
-    warn(where, "no photo in js/data/photos.js (a placeholder is shown)");
-  } else {
-    if (!fs.existsSync(path.join(root, photo.src))) fail(where, `photo file not found: ${photo.src}`);
-    for (const f of ["artist", "license", "sourceUrl", "alt"]) {
-      if (!photo[f]) fail(where, `photo is missing "${f}"`);
+    warn(where, "no photos in js/data/photos.js (a placeholder is shown)");
+    continue;
+  }
+  const counts = { produce: 0, plant: 0, closeup: 0 };
+  photos.forEach((ph, i) => {
+    const at = `${where} photo ${i + 1}`;
+    if (!(ph.kind in counts)) fail(at, `kind must be one of ${Object.keys(counts).join(", ")}`);
+    else counts[ph.kind]++;
+    for (const f of ["src", "thumb", "alt", "artist", "license", "sourceUrl"]) {
+      if (!ph[f]) fail(at, `missing "${f}"`);
     }
+    for (const f of ["src", "thumb"]) {
+      if (ph[f] && !fs.existsSync(path.join(root, ph[f]))) fail(at, `file not found: ${ph[f]}`);
+    }
+  });
+  // Gallery rules: 3+ harvest and 3+ whole-plant photos, or for leafy plants
+  // 1-2 wide shots ("plant") and 1-2 close-ups.
+  if (p.leafy) {
+    if (counts.produce) fail(where, 'leafy plants use "plant" and "closeup" photos, not "produce"');
+    if (counts.plant < 1 || counts.plant > 2) fail(where, `needs 1 to 2 wide "plant" photos (has ${counts.plant})`);
+    if (counts.closeup < 1 || counts.closeup > 2) fail(where, `needs 1 to 2 "closeup" photos (has ${counts.closeup})`);
+  } else {
+    if (counts.closeup) fail(where, '"closeup" photos are only for leafy plants');
+    if (counts.produce < 3) fail(where, `needs at least 3 "produce" photos (has ${counts.produce})`);
+    if (counts.plant < 3) fail(where, `needs at least 3 whole "plant" photos (has ${counts.plant})`);
   }
 }
 
@@ -107,4 +128,5 @@ if (errors.length) {
   console.error(`Found ${errors.length} problem(s):\n  - ${errors.join("\n  - ")}`);
   process.exit(1);
 }
-console.log(`OK: ${PLANTS.length} plants, ${Object.keys(SOURCES).length} sources, ${Object.keys(PHOTOS).length} photos.`);
+const photoTotal = Object.values(PHOTOS).reduce((n, list) => n + list.length, 0);
+console.log(`OK: ${PLANTS.length} plants, ${Object.keys(SOURCES).length} sources, ${photoTotal} photos.`);

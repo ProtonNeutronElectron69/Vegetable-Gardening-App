@@ -24,6 +24,9 @@
   };
 
   var CATEGORIES = { vegetable: "Vegetable", fruit: "Fruit", herb: "Herb" };
+
+  // Photo kinds: the edible part, the whole plant, or (for leafy plants) a close-up of the leaves.
+  var KINDS = { produce: "The harvest", plant: "Whole plant", closeup: "Close-up" };
   var SEASONS = {
     warm: { label: "Warm season", group: "Warm-season crops" },
     cool: { label: "Cool season", group: "Cool-season crops" },
@@ -84,7 +87,8 @@
     season: "all",
     query: "",
     plantableOnly: false,
-    galleryCategory: "all"
+    galleryCategory: "all",
+    galleryKind: "all"
   };
 
   function matchesFilters(p) {
@@ -117,13 +121,30 @@
     return '<span class="badge m-' + code + '">' + esc(METHODS[code].label) + "</span>";
   }
 
-  function photoImg(p, cls, sizes) {
-    var ph = PHOTOS[p.id];
+  function photosOf(p) { return PHOTOS[p.id] || []; }
+
+  function imgTag(ph, cls, useThumb) {
+    return '<img class="' + cls + '" src="' + esc(useThumb ? ph.thumb : ph.src) + '" alt="' + esc(ph.alt) +
+      '" loading="lazy" decoding="async">';
+  }
+
+  // The plant's first photo is its cover, used on cards and at the top of its page.
+  function photoImg(p, cls, useThumb) {
+    var ph = photosOf(p)[0];
     if (!ph) {
       return '<div class="' + cls + ' photo-missing" aria-hidden="true"><span>' + esc(p.name.charAt(0)) + "</span></div>";
     }
-    return '<img class="' + cls + '" src="' + esc(ph.src) + '" alt="' + esc(ph.alt || p.name) +
-      '" loading="lazy" decoding="async"' + (sizes ? ' sizes="' + sizes + '"' : "") + ">";
+    return imgTag(ph, cls, useThumb);
+  }
+
+  // A clickable grid of photos; indexes point into lightboxItems.
+  function photoGrid(items, offset) {
+    return '<ul class="gallery">' + items.map(function (it, i) {
+      return '<li><button type="button" class="gallery-item" data-photo="' + (offset + i) + '" aria-label="' +
+        esc(it.plant.name + ", " + KINDS[it.photo.kind].toLowerCase() + ": view larger") + '">' +
+        imgTag(it.photo, "gallery-img", true) +
+        '<span class="gallery-label">' + esc(KINDS[it.photo.kind]) + "</span></button></li>";
+    }).join("") + "</ul>";
   }
 
   function photoCredit(ph) {
@@ -269,7 +290,7 @@
     var now = todayHalf();
     return list.map(function (p) {
       return '<a class="card" href="#/plant/' + p.id + '">' +
-        '<div class="card-media">' + photoImg(p, "card-img") + "</div>" +
+        '<div class="card-media">' + photoImg(p, "card-img", true) + "</div>" +
         '<div class="card-body"><h2 class="card-title">' + esc(p.name) + "</h2>" +
         '<div class="tags"><span class="tag season-' + p.season + '">' + esc(SEASONS[p.season].label) + "</span>" +
         '<span class="tag">' + esc(CATEGORIES[p.category]) + "</span>" +
@@ -290,7 +311,8 @@
   function renderPlant(id) {
     var p = PLANT_BY_ID[id];
     if (!p) return renderNotFound();
-    var ph = PHOTOS[p.id];
+    var ph = photosOf(p)[0];
+    lightboxItems = photosOf(p).map(function (photo) { return { plant: p, photo: photo }; });
     var sorted = PLANTS.slice().sort(byName);
     var idx = sorted.indexOf(p);
     var prev = sorted[(idx - 1 + sorted.length) % sorted.length];
@@ -326,7 +348,7 @@
     var html = '<article class="page plant">' +
       '<nav class="crumbs" aria-label="Breadcrumb"><a href="#/plants">← All plants</a></nav>' +
       '<div class="plant-hero">' +
-      '<figure class="plant-photo">' + photoImg(p, "plant-img") +
+      '<figure class="plant-photo">' + photoImg(p, "plant-img", false) +
       (ph ? '<figcaption class="credit">' + photoCredit(ph) + "</figcaption>" : "") + "</figure>" +
       '<div class="plant-intro">' +
       '<div class="tags"><span class="tag season-' + p.season + '">' + esc(SEASONS[p.season].label) + "</span>" +
@@ -349,6 +371,11 @@
       '<section aria-labelledby="tips-title"><h2 id="tips-title">Phoenix growing tips</h2><ul class="tips">' +
       p.tips.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul></section>" +
 
+      (lightboxItems.length
+        ? '<section class="plant-gallery" aria-labelledby="photos-title"><h2 id="photos-title">Photos</h2>' +
+          photoGrid(lightboxItems, 0) + "</section>"
+        : "") +
+
       '<section class="plant-sources" aria-labelledby="src-title"><h2 id="src-title">Sources</h2><ul>' + sources + "</ul>" +
       '<p class="fine">Planting windows come from the sources above. Spacing, yield and tips are general home-garden guidance; results vary with variety, soil and weather.</p></section>' +
 
@@ -362,22 +389,47 @@
 
   // ------------------------------------------------------------ gallery
 
-  var galleryItems = [];
+  // Photos the viewer steps through: whatever the current gallery or plant page shows.
+  var lightboxItems = [];
+
+  function kindMatches(kind) {
+    if (state.galleryKind === "all") return true;
+    if (state.galleryKind === "plant") return kind === "plant";
+    return kind !== "plant"; // "harvest": the edible part, including leafy close-ups
+  }
 
   function renderGallery() {
-    galleryItems = PLANTS.filter(function (p) {
-      return PHOTOS[p.id] && (state.galleryCategory === "all" || p.category === state.galleryCategory);
+    var plants = PLANTS.filter(function (p) {
+      return state.galleryCategory === "all" || p.category === state.galleryCategory;
     }).sort(byName);
 
+    lightboxItems = [];
+    var groups = "";
+    plants.forEach(function (p) {
+      var items = photosOf(p).filter(function (ph) { return kindMatches(ph.kind); })
+        .map(function (ph) { return { plant: p, photo: ph }; });
+      if (!items.length) return;
+      groups += '<section class="gallery-group" id="g-' + p.id + '">' +
+        '<h2><a href="#/plant/' + p.id + '">' + esc(p.name) + "</a></h2>" +
+        photoGrid(items, lightboxItems.length) + "</section>";
+      lightboxItems = lightboxItems.concat(items);
+    });
+
+    var jump = '<label class="jump"><span class="visually-hidden">Jump to a plant</span><select data-jump>' +
+      '<option value="">Jump to a plant…</option>' +
+      plants.map(function (p) { return '<option value="' + p.id + '">' + esc(p.name) + "</option>"; }).join("") +
+      "</select></label>";
+
     var html = '<section class="page">' +
-      '<div class="page-head"><h1>Gallery</h1><p>Photos of every plant in the guide. Click a photo to see it larger.</p></div>' +
+      '<div class="page-head"><h1>Gallery</h1><p>' + lightboxItems.length +
+      " photos: the harvest and the whole plant for every crop in the guide. Click a photo to see it larger.</p></div>" +
       '<div class="toolbar">' +
       segmented("galleryCategory", [["all", "All"], ["vegetable", "Vegetables"], ["fruit", "Fruit"], ["herb", "Herbs"]],
-        state.galleryCategory, "Photo type") + "</div>" +
-      '<ul class="gallery">' + galleryItems.map(function (p, i) {
-        return '<li><button type="button" class="gallery-item" data-photo="' + i + '">' +
-          photoImg(p, "gallery-img") + '<span class="gallery-label">' + esc(p.name) + "</span></button></li>";
-      }).join("") + "</ul></section>";
+        state.galleryCategory, "Plant type") +
+      segmented("galleryKind", [["all", "All photos"], ["harvest", "The harvest"], ["plant", "Whole plants"]],
+        state.galleryKind, "Photo type") +
+      jump + "</div>" +
+      (groups || '<p class="empty">No photos match these filters.</p>') + "</section>";
     setView(html, "Gallery");
   }
 
@@ -385,15 +437,16 @@
   var lightboxIndex = 0;
 
   function showPhoto(i) {
-    if (!galleryItems.length) return;
-    lightboxIndex = (i + galleryItems.length) % galleryItems.length;
-    var p = galleryItems[lightboxIndex];
-    var ph = PHOTOS[p.id];
+    if (!lightboxItems.length) return;
+    lightboxIndex = (i + lightboxItems.length) % lightboxItems.length;
+    var p = lightboxItems[lightboxIndex].plant;
+    var ph = lightboxItems[lightboxIndex].photo;
     var img = lightbox.querySelector(".lightbox-img");
     img.src = ph.src;
-    img.alt = ph.alt || p.name;
+    img.alt = ph.alt;
     lightbox.querySelector(".lightbox-caption").innerHTML =
-      '<strong>' + esc(p.name) + "</strong>" +
+      "<strong>" + esc(p.name) + '<span class="lightbox-kind"> · ' + esc(KINDS[ph.kind]) + "</span></strong>" +
+      '<span class="lightbox-count">' + (lightboxIndex + 1) + " of " + lightboxItems.length + "</span>" +
       '<a class="lightbox-link" href="#/plant/' + p.id + '" data-lightbox="close">Open growing guide →</a>' +
       '<span class="credit">' + photoCredit(ph) + "</span>";
   }
@@ -430,8 +483,12 @@
   // ------------------------------------------------------------ about
 
   function renderAbout() {
-    var credits = PLANTS.slice().sort(byName).filter(function (p) { return PHOTOS[p.id]; }).map(function (p) {
-      return "<li><strong>" + esc(p.name) + ":</strong> " + photoCredit(PHOTOS[p.id]) + "</li>";
+    var photoCount = 0;
+    var credits = PLANTS.slice().sort(byName).filter(function (p) { return photosOf(p).length; }).map(function (p) {
+      photoCount += photosOf(p).length;
+      return "<li><strong>" + esc(p.name) + "</strong><ul>" + photosOf(p).map(function (ph) {
+        return "<li>" + esc(KINDS[ph.kind]) + ": " + photoCredit(ph) + "</li>";
+      }).join("") + "</ul></li>";
     }).join("");
     var sources = Object.keys(SOURCES).map(function (k) {
       var s = SOURCES[k];
@@ -471,7 +528,8 @@
 
       "<h2>Photo credits</h2>" +
       "<p>All photos are from Wikimedia Commons and are used under the license shown.</p>" +
-      '<ul class="credit-list">' + credits + "</ul>" +
+      '<details class="credits"><summary>Show credits for all ' + photoCount + " photos</summary>" +
+      '<ul class="credit-list">' + credits + "</ul></details>" +
       "</article>";
     setView(html, "About");
   }
@@ -529,6 +587,12 @@
   });
 
   main.addEventListener("change", function (e) {
+    if (e.target.matches("[data-jump]")) {
+      var group = document.getElementById("g-" + e.target.value);
+      if (group) group.scrollIntoView({ behavior: "smooth", block: "start" });
+      e.target.value = "";
+      return;
+    }
     if (e.target.matches('[data-filter="plantableOnly"]')) {
       state.plantableOnly = e.target.checked;
       refresh();
@@ -545,7 +609,7 @@
       seg.parentNode.querySelectorAll("button").forEach(function (b) {
         b.setAttribute("aria-pressed", String(b === seg));
       });
-      if (name === "galleryCategory") renderGallery();
+      if (name === "galleryCategory" || name === "galleryKind") renderGallery();
       else refresh();
       return;
     }

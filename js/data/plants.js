@@ -15,6 +15,10 @@
     B = seeds or transplants both work
     X = sets, cloves or tubers (onion sets, garlic cloves)
     P = plant a nursery tree, vine or plant (container or bare-root)
+
+  "leafy: true" marks plants where the plant itself is what you eat (greens, herbs,
+  green onions). Their photos are wide shots and close-ups instead of
+  harvest and whole-plant shots.
 */
 window.PLANTS = [
   // ---------------------------------------------------------------- warm season
@@ -380,6 +384,7 @@ window.PLANTS = [
   {
     id: "basil",
     name: "Basil",
+    leafy: true,
     category: "herb",
     season: "warm",
     summary: "The classic warm-season herb. Grows fast in spring and summer and is a good companion for tomatoes.",
@@ -405,6 +410,7 @@ window.PLANTS = [
   {
     id: "lettuce",
     name: "Lettuce",
+    leafy: true,
     category: "vegetable",
     season: "cool",
     summary: "Leaf lettuce is one of the easiest winter crops. It turns bitter and bolts once spring heat arrives.",
@@ -430,6 +436,7 @@ window.PLANTS = [
   {
     id: "spinach",
     name: "Spinach",
+    leafy: true,
     category: "vegetable",
     season: "cool",
     summary: "A quick winter green. Bolts (goes to flower) fast once days get long and warm.",
@@ -452,6 +459,7 @@ window.PLANTS = [
   {
     id: "kale",
     name: "Kale",
+    leafy: true,
     category: "vegetable",
     season: "cool",
     summary: "Hardy, productive and frost tolerant. Frost actually sweetens the leaves.",
@@ -473,6 +481,7 @@ window.PLANTS = [
   {
     id: "chard",
     name: "Swiss Chard",
+    leafy: true,
     category: "vegetable",
     season: "cool",
     summary: "Colorful, easy and long lasting. Often survives into summer longer than other greens.",
@@ -496,6 +505,7 @@ window.PLANTS = [
   {
     id: "bok-choy",
     name: "Bok Choy",
+    leafy: true,
     category: "vegetable",
     season: "cool",
     summary: "Very fast Asian green. Baby bok choy can be ready in about a month.",
@@ -749,6 +759,7 @@ window.PLANTS = [
   {
     id: "green-onions",
     name: "Green Onions",
+    leafy: true,
     category: "vegetable",
     season: "cool",
     summary: "Scallions are easy to tuck into any gap, and the planting window is long.",

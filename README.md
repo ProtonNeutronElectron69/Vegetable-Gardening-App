@@ -15,7 +15,7 @@ That's it. Bookmark the page to come back to it.
 
 - **Planting calendar**: shows what you can plant right now and lays out a full-year chart for every crop. Click any column to see what to plant in that half of the month, and filter by vegetables, fruit, herbs or season.
 - **Plant guides**: a page for each plant with planting dates, spacing, watering, sun, growth, typical yield and Phoenix-specific tips.
-- **Gallery**: photos of every plant, viewable full screen.
+- **Gallery**: about 230 photos. Each crop has at least three photos of the harvest and three of the whole plant, so you can see its size and shape. Leafy greens and herbs have wide shots and close-ups instead. Filter by plant type or photo type, jump straight to a plant, and view any photo full screen. Each plant's page also shows its own photos.
 - **About**: how Phoenix's two growing seasons work, watering basics, sources and photo credits.
 
 ## Where the information comes from
@@ -36,8 +36,8 @@ The app is plain HTML, CSS and JavaScript with no build step or dependencies.
 | `js/app.js` | The app: calendar, plant list, plant pages, gallery, about |
 | `js/data/plants.js` | One entry per plant: planting windows, growing facts, tips |
 | `js/data/sources.js` | Reference publications cited by plants |
-| `js/data/photos.js` | Photo file and credit for each plant |
-| `images/plants/` | Plant photos |
+| `js/data/photos.js` | Photo files, photo type and credits for each plant |
+| `images/plants/<plant>/` | Plant photos (with smaller versions in `thumbs/`) |
 | `scripts/validate-data.js` | Checks the data files for mistakes |
 
 To check the data after editing it (requires [Node.js](https://nodejs.org/)):

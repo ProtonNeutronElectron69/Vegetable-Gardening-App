@@ -13,7 +13,8 @@ Reference app for vegetable and fruit gardening in the Phoenix, AZ metro area (l
 - `js/app.js`: single IIFE; hash routes `#/calendar`, `#/plants`, `#/plant/<id>`, `#/gallery`, `#/about`. Views render HTML strings into `<main>`; always pass data through `esc()`.
 - `js/data/plants.js`: plant entries. Planting windows use half-month steps (`from` is the 1st or 15th, `to` is the 14th or month end). Methods: `S` seeds, `T` transplants, `B` both, `X` sets/cloves/tubers, `P` nursery plant or bare-root.
 - `js/data/sources.js`: citations keyed by id; every plant lists at least one.
-- `js/data/photos.js` and `images/plants/`: one photo per plant (Wikimedia Commons, free license, ~900px JPEG). Keep `images/plants/CREDITS.md` in sync.
+- `js/data/photos.js` and `images/plants/<id>/`: several photos per plant (Wikimedia Commons, free license). Each photo has a `kind`: `produce` (the harvest), `plant` (whole plant showing size and shape) or `closeup` (leafy plants only). Full images are up to 1000px with 400px versions in `thumbs/`. The first photo in a plant's list is its cover. Keep `images/plants/CREDITS.md` in sync.
+- Photo rules (enforced by the validator): at least 3 `produce` and 3 `plant` photos per plant; plants marked `leafy: true` in `plants.js` instead get 1 to 2 `plant` (wide) and 1 to 2 `closeup` photos. Avoid photos showing diseased plants, and check the species matches.
 - `css/styles.css`: color tokens on `:root` with dark-mode overrides; mobile rules under `@media (max-width: 760px)`.
 
 ## Data accuracy rules
