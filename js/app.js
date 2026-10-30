@@ -37,9 +37,9 @@
   // Visual themes (css/themes/<id>.css). The first is the default; the inline script
   // in index.html has the same id list so the saved theme applies before first paint.
   var THEMES = [
+    { id: "patch", name: "Sunny Patch", note: "Cartoon", colors: ["#8fd8ff", "#6fd16a", "#ffd84a", "#ff6b4a"] },
     { id: "sonoran", name: "Sonoran Sunset", note: "Desert dusk", colors: ["#2c2350", "#7a3b6e", "#e2714f", "#f6b65a"] },
     { id: "plot", name: "Garden Plot", note: "Simple shapes", colors: ["#2e9e5b", "#f6c343", "#e5533d", "#3a86c8"] },
-    { id: "patch", name: "Sunny Patch", note: "Cartoon", colors: ["#8fd8ff", "#6fd16a", "#ffd84a", "#ff6b4a"] },
     { id: "harvest", name: "Raised Bed", note: "Garden photo", colors: ["#3f6b2a", "#3b2a1e", "#b5452a", "#f2c48a"] },
     { id: "packet", name: "Seed Packet", note: "Vintage print", colors: ["#b23a2e", "#d99a2b", "#2f6f6a", "#8a4f7d"] },
     { id: "classic", name: "Classic", note: "Original look", colors: ["#4d7c32", "#c0622f", "#faf6ee", "#e5efd9"] }
