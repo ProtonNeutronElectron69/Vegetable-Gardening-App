@@ -1,0 +1,150 @@
+/* Theme draft 1: "Garden Plot" — flat colors and simple geometric shapes only.
+   Solid color blocks, square corners, circles for accents, no gradients or photos. */
+
+:root[data-skin="plot"] {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f1f4ef;
+  --text: #1d2a22;
+  --text-muted: #56635a;
+  --border: #1d2a22;
+  --brand: #2e9e5b;
+  --brand-strong: #1f7a43;
+  --brand-soft: #dff2e6;
+  --accent: #e5533d;
+  --m-seed: #2e9e5b;
+  --m-transplant: #f2a83b;
+  --m-sets: #6b4c9a;
+  --m-plant: #3a86c8;
+  --season-warm: #e5533d;
+  --season-warm-text: #ffffff;
+  --season-cool: #3a86c8;
+  --season-cool-text: #ffffff;
+  --season-perennial: #6b4c9a;
+  --season-perennial-text: #ffffff;
+  --radius: 0px;
+  --shadow: none;
+  --font: "Lexend", system-ui, sans-serif;
+  --c-sun: #f6c343;
+  --c-tomato: #e5533d;
+  --c-leaf: #2e9e5b;
+  --c-sky: #3a86c8;
+  --c-plum: #6b4c9a;
+  color-scheme: light;
+}
+
+[data-skin="plot"] body { background: var(--bg); }
+
+/* Header: a solid green band with a yellow sun circle and a red ground stripe.
+   The sun is part of the background so nothing gets clipped (the theme menu drops below the header). */
+[data-skin="plot"] .site-header {
+  background: radial-gradient(circle 90px at calc(100% - 50px) 30px, var(--c-sun) 99%, transparent 100%), var(--c-leaf);
+  border-bottom: 8px solid var(--c-tomato);
+}
+[data-skin="plot"] .header-inner { padding-block: 18px; }
+[data-skin="plot"] .brand, [data-skin="plot"] .brand:hover { color: #fff; }
+[data-skin="plot"] .brand-icon { color: var(--c-sun); }
+[data-skin="plot"] .brand-name { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.01em; }
+[data-skin="plot"] .brand-tag { color: #dff2e6; }
+
+/* Nav tabs: each tab is its own color block */
+[data-skin="plot"] .site-nav { gap: 6px; }
+[data-skin="plot"] .site-nav a {
+  border-radius: 0;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 16px;
+  border: 2px solid #1d2a22;
+}
+[data-skin="plot"] .site-nav a[data-nav="calendar"] { background: var(--c-tomato); }
+[data-skin="plot"] .site-nav a[data-nav="plants"] { background: var(--c-sky); }
+[data-skin="plot"] .site-nav a[data-nav="gallery"] { background: var(--c-plum); }
+[data-skin="plot"] .site-nav a[data-nav="about"] { background: #1d2a22; }
+[data-skin="plot"] .site-nav a:hover { color: #fff; transform: translateY(-2px); }
+[data-skin="plot"] .site-nav a[aria-current="page"] {
+  background: var(--c-sun);
+  color: #1d2a22;
+  box-shadow: 4px 4px 0 #1d2a22;
+}
+
+[data-skin="plot"] h1 { font-weight: 800; }
+[data-skin="plot"] .page-head h1::after {
+  content: "";
+  display: block;
+  width: 64px; height: 8px;
+  margin-top: 10px;
+  background: var(--c-sun);
+}
+[data-skin="plot"] .eyebrow { color: var(--c-tomato); }
+
+/* Plant-now panel: white box with a heavy outline and a sun-yellow top bar */
+[data-skin="plot"] .now-panel {
+  border: 3px solid #1d2a22;
+  border-top: 14px solid var(--c-sun);
+  border-radius: 0;
+}
+[data-skin="plot"] .icon-btn { border-radius: 50%; border: 2px solid #1d2a22; background: var(--c-sun); }
+[data-skin="plot"] .now-list a { border-radius: 0; border: 2px solid #1d2a22; background: #fff; }
+[data-skin="plot"] .now-list a:hover { background: var(--brand-soft); }
+
+/* Segmented filters: square buttons with solid fills when chosen */
+[data-skin="plot"] .segmented { border-radius: 0; background: transparent; padding: 0; gap: 0; border: 2px solid #1d2a22; }
+[data-skin="plot"] .segmented button { border-radius: 0; color: #1d2a22; padding: 8px 14px; }
+[data-skin="plot"] .segmented button + button { border-left: 2px solid #1d2a22; }
+[data-skin="plot"] .segmented button[aria-pressed="true"] { background: var(--c-leaf); color: #fff; box-shadow: none; }
+[data-skin="plot"] .search input { border-radius: 0; border: 2px solid #1d2a22; }
+[data-skin="plot"] .badge { border-radius: 0; text-shadow: none; }
+[data-skin="plot"] .swatch { border-radius: 50%; }
+
+/* Calendar table: dark header band, alternating month columns, colored season bars */
+[data-skin="plot"] .cal-scroll { border: 3px solid #1d2a22; border-radius: 0; }
+[data-skin="plot"] .cal thead th { background: #1d2a22; color: #fff; }
+[data-skin="plot"] .cal thead .cal-plant-col { color: var(--c-sun); }
+[data-skin="plot"] .cal-month { color: #fff; border-left-color: #3b4a40; }
+[data-skin="plot"] .cal-month.is-selected-month { color: var(--c-sun); }
+[data-skin="plot"] .cal-half button { color: #b9c4bc; }
+[data-skin="plot"] .cal-half.is-selected button { background: var(--c-sun); color: #1d2a22; border-radius: 0; }
+[data-skin="plot"] .cal tbody td:nth-child(4n), [data-skin="plot"] .cal tbody td:nth-child(4n+1) { background-color: #f1f4ef; }
+[data-skin="plot"] .cal tbody td[class*="m-"] { background-color: unset; }
+[data-skin="plot"] .cal tbody td.m-S { background: var(--m-seed); }
+[data-skin="plot"] .cal tbody td.m-T { background: var(--m-transplant); }
+[data-skin="plot"] .cal tbody td.m-B { background: linear-gradient(135deg, var(--m-seed) 50%, var(--m-transplant) 50%); }
+[data-skin="plot"] .cal tbody td.m-X { background: var(--m-sets); }
+[data-skin="plot"] .cal tbody td.m-P { background: var(--m-plant); }
+[data-skin="plot"] .cal-group th { color: #fff; font-weight: 700; }
+[data-skin="plot"] .cal-group-warm th { background: var(--c-tomato); }
+[data-skin="plot"] .cal-group-cool th { background: var(--c-sky); }
+[data-skin="plot"] .cal-group-perennial th { background: var(--c-plum); }
+[data-skin="plot"] .cal tbody tr:hover th.cal-plant-col { background: var(--c-sun); }
+
+/* Cards: square, outlined, a colored stripe by season */
+[data-skin="plot"] .card { border: 2px solid #1d2a22; border-radius: 0; }
+[data-skin="plot"] .card:hover { box-shadow: 6px 6px 0 #1d2a22; transform: translate(-2px, -2px); }
+[data-skin="plot"] .card-media { border-bottom: 2px solid #1d2a22; }
+[data-skin="plot"] .tag { border-radius: 0; }
+[data-skin="plot"] .tag-now { background: var(--c-sun); color: #1d2a22; }
+
+[data-skin="plot"] .plant-img, [data-skin="plot"] .plant-photo .photo-missing { border-radius: 0; border: 3px solid #1d2a22; }
+[data-skin="plot"] .when, [data-skin="plot"] .fact { border: 2px solid #1d2a22; border-radius: 0; }
+[data-skin="plot"] .fact dt { color: var(--c-sky); }
+[data-skin="plot"] .strip-cell { border-radius: 0; }
+
+[data-skin="plot"] .gallery-item { border-radius: 0; border: 2px solid #1d2a22; }
+[data-skin="plot"] .gallery-group h2 { display: inline-block; background: var(--c-sun); padding: 4px 10px; }
+[data-skin="plot"] .jump select { border-radius: 0; border: 2px solid #1d2a22; }
+
+[data-skin="plot"] .site-footer { background: #1d2a22; color: #c9d3cc; border-top: 8px solid var(--c-leaf); }
+[data-skin="plot"] .site-footer a { color: var(--c-sun); }
+
+@media (max-width: 760px) {
+  [data-skin="plot"] .site-nav { flex-wrap: nowrap; gap: 4px; }
+  [data-skin="plot"] .site-nav a { flex: 1; text-align: center; padding: 8px 4px; font-size: 0.85rem; }
+  [data-skin="plot"] .site-header { background: radial-gradient(circle 55px at calc(100% - 15px) 15px, var(--c-sun) 99%, transparent 100%), var(--c-leaf); }
+}
+
+/* Theme picker */
+[data-skin="plot"] .theme-btn { border-radius: 0; border: 2px solid #1d2a22; background: #fff; color: #1d2a22; }
+[data-skin="plot"] .theme-btn:hover, [data-skin="plot"] .theme-btn[aria-expanded="true"] { background: var(--c-sun); }
+[data-skin="plot"] .theme-menu { border-radius: 0; border: 3px solid #1d2a22; box-shadow: 6px 6px 0 #1d2a22; }
+[data-skin="plot"] .theme-menu button { border-radius: 0; }
+[data-skin="plot"] .theme-menu button[aria-checked="true"] { background: var(--c-sun); }

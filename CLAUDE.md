@@ -11,7 +11,7 @@ Reference app for vegetable and fruit gardening in the Phoenix, AZ metro area (l
 ## Releases
 
 - The site is published with GitHub Pages from `main` (https://protonneutronelectron69.github.io/Vegetable-Gardening-App/). Pages tells browsers to cache files for 10 minutes.
-- Every CSS and JS link in `index.html` carries the same `?v=YYYY-MM-DD` tag. Change it in every PR that edits CSS, JS or data, so visitors never get a mix of old and new files (which breaks images). The validator checks that all tags match.
+- Every CSS and JS link in `index.html` carries the same `?v=YYYY-MM-DD` tag (add `.2`, `.3` for a second release on the same day). Change it in every PR that edits CSS, JS or data, so visitors never get a mix of old and new files (which breaks images). The validator checks that all tags match.
 
 ## Layout
 
@@ -20,7 +20,10 @@ Reference app for vegetable and fruit gardening in the Phoenix, AZ metro area (l
 - `js/data/sources.js`: citations keyed by id; every plant lists at least one.
 - `js/data/photos.js` and `images/plants/<id>/`: several photos per plant (Wikimedia Commons, free license). Each photo has a `kind`: `produce` (the harvest), `plant` (whole plant showing size and shape) or `closeup` (leafy plants only). Full images are up to 1000px with 400px versions in `thumbs/`. The first photo in a plant's list is its cover. Keep `images/plants/CREDITS.md` in sync.
 - Photo rules (enforced by the validator): at least 3 `produce` and 3 `plant` photos per plant; plants marked `leafy: true` in `plants.js` instead get 1 to 2 `plant` (wide) and 1 to 2 `closeup` photos. Avoid photos showing diseased plants, and check the species matches.
-- `css/styles.css`: color tokens on `:root` with dark-mode overrides; mobile rules under `@media (max-width: 760px)`.
+- `css/styles.css`: base styles. Color tokens on `:root` with dark-mode overrides; mobile rules under `@media (max-width: 760px)`. This is also the "Classic" theme.
+- Themes: visitors pick one from the header's Theme menu; the choice is saved in `localStorage` (`garden-guide-theme`). Each theme is `css/themes/<id>.css`, with every rule scoped under `[data-skin="<id>"]` on `<html>` and its own light-only token values. All theme files load on every page; only the active one applies. To add a theme: add the CSS file and its `<link>`, and add the id to both `THEMES` in `js/app.js` and the early script in `index.html` (same order; the first is the default). The validator checks these stay in sync.
+- Fonts are bundled in `css/fonts/` (Latin subsets from Google Fonts, SIL Open Font License, license texts alongside) so the app works offline; `fonts.css` declares them.
+- Keep the shared planting colors meaning the same thing in every theme (`--m-seed`, `--m-transplant`, `--m-sets`, `--m-plant`).
 
 ## Data accuracy rules
 

@@ -17,6 +17,7 @@ That's it. Bookmark the page to come back to it.
 - **Plant guides**: a page for each plant with planting dates, spacing, watering, sun, growth, typical yield and Phoenix-specific tips.
 - **Gallery**: about 230 photos. Each crop has at least three photos of the harvest and three of the whole plant, so you can see its size and shape. Leafy greens and herbs have wide shots and close-ups instead. Filter by plant type or photo type, jump straight to a plant, and view any photo full screen. Each plant's page also shows its own photos.
 - **About**: how Phoenix's two growing seasons work, watering basics, sources and photo credits.
+- **Themes**: pick a look from the **Theme** button in the top corner: Sonoran Sunset (the default), Garden Plot, Sunny Patch, Raised Bed, Seed Packet or Classic. Your browser remembers the choice.
 
 ## Where the information comes from
 
@@ -32,7 +33,9 @@ The app is plain HTML, CSS and JavaScript with no build step or dependencies.
 | Path | What it holds |
 | --- | --- |
 | `index.html` | Page shell |
-| `css/styles.css` | All styling (light and dark mode) |
+| `css/styles.css` | Base styling (light and dark mode); also the Classic theme |
+| `css/themes/` | One stylesheet per selectable theme |
+| `css/fonts/` | Bundled fonts and their licenses |
 | `js/app.js` | The app: calendar, plant list, plant pages, gallery, about |
 | `js/data/plants.js` | One entry per plant: planting windows, growing facts, tips |
 | `js/data/sources.js` | Reference publications cited by plants |

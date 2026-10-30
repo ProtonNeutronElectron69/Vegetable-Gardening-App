@@ -34,6 +34,18 @@
   };
   var SEASON_ORDER = ["warm", "cool", "perennial"];
 
+  // Visual themes (css/themes/<id>.css). The first is the default; the inline script
+  // in index.html has the same id list so the saved theme applies before first paint.
+  var THEMES = [
+    { id: "sonoran", name: "Sonoran Sunset", note: "Desert dusk", colors: ["#2c2350", "#7a3b6e", "#e2714f", "#f6b65a"] },
+    { id: "plot", name: "Garden Plot", note: "Simple shapes", colors: ["#2e9e5b", "#f6c343", "#e5533d", "#3a86c8"] },
+    { id: "patch", name: "Sunny Patch", note: "Cartoon", colors: ["#8fd8ff", "#6fd16a", "#ffd84a", "#ff6b4a"] },
+    { id: "harvest", name: "Raised Bed", note: "Garden photo", colors: ["#3f6b2a", "#3b2a1e", "#b5452a", "#f2c48a"] },
+    { id: "packet", name: "Seed Packet", note: "Vintage print", colors: ["#b23a2e", "#d99a2b", "#2f6f6a", "#8a4f7d"] },
+    { id: "classic", name: "Classic", note: "Original look", colors: ["#4d7c32", "#c0622f", "#faf6ee", "#e5efd9"] }
+  ];
+  var THEME_KEY = "garden-guide-theme";
+
   // ------------------------------------------------------------ dates
 
   // "Feb 15" -> half-month index 0..23 (0 = Jan 1-14, 1 = Jan 15-31, ...).
@@ -250,7 +262,8 @@
     SEASON_ORDER.forEach(function (season) {
       var group = plants.filter(function (p) { return p.season === season; }).sort(byName);
       if (!group.length) return;
-      body += '<tr class="cal-group"><th colspan="25" scope="rowgroup"><span>' + esc(SEASONS[season].group) + "</span></th></tr>";
+      body += '<tr class="cal-group cal-group-' + season + '"><th colspan="25" scope="rowgroup"><span>' +
+        esc(SEASONS[season].group) + "</span></th></tr>";
       group.forEach(function (p) {
         body += '<tr><th scope="row" class="cal-plant-col"><a href="#/plant/' + p.id + '">' + esc(p.name) + "</a></th>" +
           p.cells.map(function (c, i) {
@@ -657,6 +670,69 @@
       if (el) el.focus({ preventScroll: true });
     }
   }
+
+  // ------------------------------------------------------------ theme picker
+
+  var themeBtn = document.getElementById("theme-btn");
+  var themeMenu = document.getElementById("theme-menu");
+
+  function currentTheme() {
+    return document.documentElement.getAttribute("data-skin") || THEMES[0].id;
+  }
+
+  function renderThemeMenu() {
+    var cur = currentTheme();
+    themeMenu.innerHTML = THEMES.map(function (t) {
+      return '<button type="button" role="menuitemradio" data-theme-id="' + t.id + '" aria-checked="' + (t.id === cur) + '">' +
+        '<span class="theme-dots" aria-hidden="true">' + t.colors.map(function (c) {
+          return '<span style="background:' + c + '"></span>';
+        }).join("") + "</span>" +
+        '<span class="theme-name">' + esc(t.name) + '<small>' + esc(t.note) + "</small></span></button>";
+    }).join("");
+  }
+
+  function openThemeMenu() {
+    renderThemeMenu();
+    themeMenu.hidden = false;
+    themeBtn.setAttribute("aria-expanded", "true");
+    var checked = themeMenu.querySelector('[aria-checked="true"]');
+    if (checked) checked.focus();
+  }
+
+  function closeThemeMenu(refocus) {
+    themeMenu.hidden = true;
+    themeBtn.setAttribute("aria-expanded", "false");
+    if (refocus) themeBtn.focus();
+  }
+
+  function applyTheme(id) {
+    document.documentElement.setAttribute("data-skin", id);
+    try { localStorage.setItem(THEME_KEY, id); } catch (e) { /* private mode: the choice lasts for this visit only */ }
+  }
+
+  themeBtn.addEventListener("click", function () {
+    if (themeMenu.hidden) openThemeMenu();
+    else closeThemeMenu(false);
+  });
+
+  themeMenu.addEventListener("click", function (e) {
+    var item = e.target.closest("[data-theme-id]");
+    if (!item) return;
+    applyTheme(item.getAttribute("data-theme-id"));
+    closeThemeMenu(true);
+  });
+
+  themeMenu.addEventListener("keydown", function (e) {
+    var items = Array.prototype.slice.call(themeMenu.querySelectorAll("[data-theme-id]"));
+    var i = items.indexOf(document.activeElement);
+    if (e.key === "ArrowDown") { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+    if (e.key === "ArrowUp") { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+    if (e.key === "Escape") closeThemeMenu(true);
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!themeMenu.hidden && !e.target.closest(".theme-picker")) closeThemeMenu(false);
+  });
 
   window.addEventListener("hashchange", route);
   route();
