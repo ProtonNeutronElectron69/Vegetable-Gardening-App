@@ -624,6 +624,35 @@ tbody .cal-plant-col a:hover { color: var(--brand-strong); text-decoration: unde
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
 }
 
+.gallery-group { margin-bottom: 28px; scroll-margin-top: 16px; }
+.gallery-group h2 { font-size: 1.15rem; margin-bottom: 10px; }
+.gallery-group h2 a { color: var(--text); text-decoration: none; }
+.gallery-group h2 a:hover { color: var(--brand-strong); text-decoration: underline; }
+.gallery-group .gallery { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.gallery-group .gallery-label, .plant-gallery .gallery-label { font-size: 0.78rem; font-weight: 600; }
+
+.plant-gallery { margin-bottom: 28px; }
+.plant-gallery .gallery { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+
+.jump select {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  max-width: 100%;
+}
+
+.lightbox-kind { font-weight: 400; color: #d6d1c4; }
+.lightbox-count { font-size: 0.8rem; color: #bdb8ab; }
+
+details.credits { margin-top: 8px; }
+details.credits summary { cursor: pointer; font-weight: 600; color: var(--brand-strong); }
+.credit-list ul { padding-left: 1.2em; margin: 4px 0 10px; }
+.credit-list ul li { margin-bottom: 2px; }
+
 .lightbox {
   border: 0;
   padding: 0;
@@ -701,6 +730,11 @@ tbody .cal-plant-col a:hover { color: var(--brand-strong); text-decoration: unde
   tbody .cal-plant-col { white-space: normal; font-size: 0.82rem; line-height: 1.2; }
 
   .gallery { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+  .gallery-group .gallery,
+  .plant-gallery .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .gallery-group .gallery-label,
+  .plant-gallery .gallery-label { font-size: 0.68rem; padding: 18px 6px 5px; }
+  .jump, .jump select { width: 100%; }
   .lightbox-inner { padding: 8px; gap: 4px; }
   .lightbox-nav { position: absolute; bottom: 16px; }
   .lightbox-prev { left: 16px; }
