@@ -138,7 +138,8 @@
 
 @media (max-width: 760px) {
   [data-skin="plot"] .site-nav { flex-wrap: nowrap; gap: 4px; }
-  [data-skin="plot"] .site-nav a { flex: 1; text-align: center; padding: 8px 4px; font-size: 0.85rem; }
+  [data-skin="plot"] .site-nav a { flex: 1 1 auto; text-align: center; white-space: nowrap; padding: 8px 4px; font-size: 0.85rem; }
+  :root[data-skin="plot"][lang="vi"] .site-nav a { font-size: 0.76rem; padding-inline: 3px; }
   [data-skin="plot"] .site-header { background: radial-gradient(circle 55px at calc(100% - 15px) 15px, var(--c-sun) 99%, transparent 100%), var(--c-leaf); }
 }
 
@@ -148,3 +149,8 @@
 [data-skin="plot"] .theme-menu { border-radius: 0; border: 3px solid #1d2a22; box-shadow: 6px 6px 0 #1d2a22; }
 [data-skin="plot"] .theme-menu button { border-radius: 0; }
 [data-skin="plot"] .theme-menu button[aria-checked="true"] { background: var(--c-sun); }
+
+/* Language toggle */
+[data-skin="plot"] .lang-toggle { border-radius: 0; border: 2px solid #1d2a22; background: #fff; }
+[data-skin="plot"] .lang-toggle button { color: #1d2a22; }
+[data-skin="plot"] .lang-toggle button[aria-pressed="true"] { background: var(--c-sun); color: #1d2a22; }

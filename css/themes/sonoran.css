@@ -135,3 +135,17 @@
 [data-skin="sonoran"] .theme-btn:hover, [data-skin="sonoran"] .theme-btn[aria-expanded="true"] { background: #fff6e9; color: var(--dusk-1); }
 [data-skin="sonoran"] .theme-menu { border: 0; }
 [data-skin="sonoran"] .theme-menu button[aria-checked="true"] { background: #fde0cc; }
+
+/* Language toggle: an outlined pill; the chosen language glows like the active tab */
+[data-skin="sonoran"] .lang-toggle { background: transparent; border: 1.5px solid rgba(255, 246, 233, 0.45); }
+[data-skin="sonoran"] .lang-toggle button { color: #fff6e9; }
+[data-skin="sonoran"] .lang-toggle button[aria-pressed="true"] { background: linear-gradient(135deg, #ffd27a, #f6a04d); color: var(--dusk-1); }
+
+/* Vietnamese: Outfit has no Vietnamese letters, so use Be Vietnam Pro, a similar geometric face */
+:root[data-skin="sonoran"][lang="vi"] { --font: "Be Vietnam Pro", system-ui, sans-serif; }
+
+@media (max-width: 760px) {
+  [data-skin="sonoran"] .site-nav { gap: 4px; }
+  [data-skin="sonoran"] .brand-name { font-size: 1.15rem; }
+  :root[data-skin="sonoran"][lang="vi"] .site-nav a { font-size: 0.78rem; padding-inline: 3px; }
+}

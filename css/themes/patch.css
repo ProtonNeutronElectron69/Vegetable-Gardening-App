@@ -143,7 +143,8 @@
 
 @media (max-width: 760px) {
   [data-skin="patch"] .site-nav { flex-wrap: nowrap; gap: 5px; }
-  [data-skin="patch"] .site-nav a { flex: 1; text-align: center; padding: 6px 2px; font-size: 0.82rem; border-width: 2px; box-shadow: 2px 2px 0 var(--ink); }
+  [data-skin="patch"] .site-nav a { flex: 1 1 auto; text-align: center; white-space: nowrap; padding: 6px 2px; font-size: 0.82rem; border-width: 2px; box-shadow: 2px 2px 0 var(--ink); }
+  :root[data-skin="patch"][lang="vi"] .site-nav a { font-size: 0.76rem; }
   [data-skin="patch"] .brand-name { font-size: 1.2rem; }
 }
 
@@ -154,3 +155,11 @@
 [data-skin="patch"] .theme-menu button { border-radius: 12px; }
 [data-skin="patch"] .theme-menu button[aria-checked="true"] { background: #d8f5cf; }
 [data-skin="patch"] .theme-dots span { border-color: var(--ink); }
+
+/* Language toggle */
+[data-skin="patch"] .lang-toggle { border: 3px solid var(--ink); background: #fff; box-shadow: 3px 3px 0 var(--ink); }
+[data-skin="patch"] .lang-toggle button { color: var(--ink); }
+[data-skin="patch"] .lang-toggle button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+
+/* Vietnamese: Fredoka has no Vietnamese letters, so use Baloo 2, another rounded face */
+:root[data-skin="patch"][lang="vi"] { --font: "Baloo 2", "Fredoka", system-ui, sans-serif; }

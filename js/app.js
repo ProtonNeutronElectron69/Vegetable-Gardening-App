@@ -1,6 +1,8 @@
 /*
   Phoenix Garden Guide: a small single-page app with no build step.
   Views are chosen by the URL hash: #/calendar, #/plants, #/plant/<id>, #/gallery, #/about.
+  All visible text comes from js/i18n.js (interface) and js/data/plants.vi.js /
+  sources.vi.js (Vietnamese plant and source text); English plant text is in plants.js.
 */
 (function () {
   "use strict";
@@ -8,64 +10,95 @@
   var PLANTS = window.PLANTS || [];
   var PHOTOS = window.PHOTOS || {};
   var SOURCES = window.SOURCES || {};
+  var I18N = window.I18N || {};
+  var PLANTS_VI = window.PLANTS_VI || {};
+  var SOURCES_VI = window.SOURCES_VI || {};
 
-  var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  var MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July",
-    "August", "September", "October", "November", "December"];
+  // Month abbreviations as written in plants.js ("Feb 15"); display names come from i18n.js.
+  var DATA_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   // Day counts used for labels; February uses 28 to match the Extension charts.
   var MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-  var METHODS = {
-    S: { label: "Seeds", long: "Sow seeds directly in the garden" },
-    T: { label: "Transplants", long: "Set out transplants (nursery starts or your own seedlings)" },
-    B: { label: "Seeds or transplants", long: "Sow seeds or set out transplants" },
-    X: { label: "Sets, cloves or tubers", long: "Plant onion sets, garlic cloves or seed potatoes" },
-    P: { label: "Nursery plants", long: "Plant nursery plants, container trees or bare-root stock" }
-  };
-
-  var CATEGORIES = { vegetable: "Vegetable", fruit: "Fruit", herb: "Herb" };
-
-  // Photo kinds: the edible part, the whole plant, or (for leafy plants) a close-up of the leaves.
-  var KINDS = { produce: "The harvest", plant: "Whole plant", closeup: "Close-up" };
-  var SEASONS = {
-    warm: { label: "Warm season", group: "Warm-season crops" },
-    cool: { label: "Cool season", group: "Cool-season crops" },
-    perennial: { label: "Perennial", group: "Trees, vines & perennials" }
-  };
+  var METHOD_CODES = ["S", "T", "B", "X", "P"];
   var SEASON_ORDER = ["warm", "cool", "perennial"];
 
-  // Visual themes (css/themes/<id>.css). The first is the default; the inline script
-  // in index.html has the same id list so the saved theme applies before first paint.
+  // Visual themes (css/themes/<id>.css); names are in i18n.js as "theme.<id>". The first is
+  // the default; the inline script in index.html has the same id list so the saved theme
+  // applies before first paint.
   var THEMES = [
-    { id: "patch", name: "Sunny Patch", note: "Cartoon", colors: ["#8fd8ff", "#6fd16a", "#ffd84a", "#ff6b4a"] },
-    { id: "sonoran", name: "Sonoran Sunset", note: "Desert dusk", colors: ["#2c2350", "#7a3b6e", "#e2714f", "#f6b65a"] },
-    { id: "plot", name: "Garden Plot", note: "Simple shapes", colors: ["#2e9e5b", "#f6c343", "#e5533d", "#3a86c8"] },
-    { id: "harvest", name: "Raised Bed", note: "Garden photo", colors: ["#3f6b2a", "#3b2a1e", "#b5452a", "#f2c48a"] },
-    { id: "packet", name: "Seed Packet", note: "Vintage print", colors: ["#b23a2e", "#d99a2b", "#2f6f6a", "#8a4f7d"] },
-    { id: "classic", name: "Classic", note: "Original look", colors: ["#4d7c32", "#c0622f", "#faf6ee", "#e5efd9"] }
+    { id: "patch", colors: ["#8fd8ff", "#6fd16a", "#ffd84a", "#ff6b4a"] },
+    { id: "sonoran", colors: ["#2c2350", "#7a3b6e", "#e2714f", "#f6b65a"] },
+    { id: "plot", colors: ["#2e9e5b", "#f6c343", "#e5533d", "#3a86c8"] },
+    { id: "harvest", colors: ["#3f6b2a", "#3b2a1e", "#b5452a", "#f2c48a"] },
+    { id: "packet", colors: ["#b23a2e", "#d99a2b", "#2f6f6a", "#8a4f7d"] },
+    { id: "classic", colors: ["#4d7c32", "#c0622f", "#faf6ee", "#e5efd9"] }
   ];
   var THEME_KEY = "garden-guide-theme";
+
+  // Languages. The inline script in index.html sets <html lang> before first paint
+  // (saved choice, else the browser's language).
+  var LANGS = ["en", "vi"];
+  var LANG_KEY = "garden-guide-lang";
+  var lang = document.documentElement.getAttribute("lang") === "vi" ? "vi" : "en";
+
+  // ------------------------------------------------------------ text
+
+  // Interface text for the current language, with {placeholders} filled from params.
+  function t(key, params) {
+    var entry = I18N[key];
+    if (!entry) return key;
+    var s = entry[lang] !== undefined ? entry[lang] : entry.en;
+    if (typeof s !== "string") return s;
+    return s.replace(/\{(\w+)\}/g, function (m, name) {
+      return params && params[name] !== undefined ? params[name] : m;
+    });
+  }
+
+  // A plant field in the current language (English text lives on the plant itself).
+  function pt(p, field) {
+    var vi = lang === "vi" && PLANTS_VI[p.id];
+    return vi && vi[field] != null ? vi[field] : p[field];
+  }
+  function pname(p) { return pt(p, "name"); }
+
+  function lowerFirst(s) { return s.charAt(0).toLocaleLowerCase(lang) + s.slice(1); }
+
+  // Lowercase without accents, so "ca chua" finds "cà chua".
+  function fold(s) {
+    return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d");
+  }
+
+  function methodLabel(code) { return t("method." + code); }
+  function kindLabel(kind) { return t("kind." + kind)[0]; }
+  function kindLower(kind) { return t("kind." + kind)[1]; }
 
   // ------------------------------------------------------------ dates
 
   // "Feb 15" -> half-month index 0..23 (0 = Jan 1-14, 1 = Jan 15-31, ...).
   function halfIndex(text) {
     var parts = text.trim().split(/\s+/);
-    var month = MONTHS.indexOf(parts[0]);
+    var month = DATA_MONTHS.indexOf(parts[0]);
     var day = parseInt(parts[1], 10);
     if (month < 0 || isNaN(day)) throw new Error("Bad date in plant data: " + text);
     return month * 2 + (day >= 15 ? 1 : 0);
   }
 
+  // Values every date template may need, in the current language.
+  function monthParams(m, day) {
+    return { month: t("months.long")[m], mon: t("months.short")[m], n: m + 1, d: day, end: MONTH_DAYS[m] };
+  }
+
   function halfRange(i) {
-    var m = Math.floor(i / 2);
-    return i % 2 === 0
-      ? MONTHS[m] + " 1–" + 14
-      : MONTHS[m] + " 15–" + MONTH_DAYS[m];
+    return t(i % 2 === 0 ? "range.early" : "range.late", monthParams(Math.floor(i / 2)));
   }
 
   function halfName(i) {
-    return (i % 2 === 0 ? "Early " : "Late ") + MONTH_NAMES[Math.floor(i / 2)];
+    return t(i % 2 === 0 ? "half.early" : "half.late", monthParams(Math.floor(i / 2)));
+  }
+
+  // Both forms of a period name; a template picks the one its grammar needs.
+  function halfParams(i) {
+    var name = halfName(i);
+    return { half: name, halfLower: lowerFirst(name) };
   }
 
   function todayHalf() {
@@ -89,7 +122,7 @@
   var PLANT_BY_ID = {};
   PLANTS.forEach(function (p) { PLANT_BY_ID[p.id] = p; });
 
-  function byName(a, b) { return a.name.localeCompare(b.name); }
+  function byName(a, b) { return pname(a).localeCompare(pname(b), lang); }
 
   // ------------------------------------------------------------ state
 
@@ -108,8 +141,11 @@
     if (state.season !== "all" && p.season !== state.season) return false;
     if (state.plantableOnly && !p.cells[state.half]) return false;
     if (state.query) {
-      var q = state.query.toLowerCase();
-      if (p.name.toLowerCase().indexOf(q) < 0 && p.summary.toLowerCase().indexOf(q) < 0) return false;
+      // Search both languages, so an English name still works in Vietnamese and vice versa.
+      var q = fold(state.query);
+      var vi = PLANTS_VI[p.id] || {};
+      var hay = [p.name, p.summary, vi.name || "", vi.summary || ""].map(fold).join(" ");
+      if (hay.indexOf(q) < 0) return false;
     }
     return true;
   }
@@ -126,17 +162,21 @@
 
   function setView(html, title) {
     main.innerHTML = html;
-    document.title = title ? title + " · Phoenix Garden Guide" : "Phoenix Garden Guide";
+    document.title = title ? title + " · " + t("site.name") : t("site.name");
   }
 
   function methodBadge(code) {
-    return '<span class="badge m-' + code + '">' + esc(METHODS[code].label) + "</span>";
+    return '<span class="badge m-' + code + '">' + esc(methodLabel(code)) + "</span>";
   }
 
   function photosOf(p) { return PHOTOS[p.id] || []; }
 
-  function imgTag(ph, cls, useThumb) {
-    return '<img class="' + cls + '" src="' + esc(useThumb ? ph.thumb : ph.src) + '" alt="' + esc(ph.alt) +
+  function photoAlt(p, ph) {
+    return lang === "en" ? ph.alt : pname(p) + ": " + kindLower(ph.kind);
+  }
+
+  function imgTag(p, ph, cls, useThumb) {
+    return '<img class="' + cls + '" src="' + esc(useThumb ? ph.thumb : ph.src) + '" alt="' + esc(photoAlt(p, ph)) +
       '" loading="lazy" decoding="async">';
   }
 
@@ -144,18 +184,18 @@
   function photoImg(p, cls, useThumb) {
     var ph = photosOf(p)[0];
     if (!ph) {
-      return '<div class="' + cls + ' photo-missing" aria-hidden="true"><span>' + esc(p.name.charAt(0)) + "</span></div>";
+      return '<div class="' + cls + ' photo-missing" aria-hidden="true"><span>' + esc(pname(p).charAt(0)) + "</span></div>";
     }
-    return imgTag(ph, cls, useThumb);
+    return imgTag(p, ph, cls, useThumb);
   }
 
   // A clickable grid of photos; indexes point into lightboxItems.
   function photoGrid(items, offset) {
     return '<ul class="gallery">' + items.map(function (it, i) {
       return '<li><button type="button" class="gallery-item" data-photo="' + (offset + i) + '" aria-label="' +
-        esc(it.plant.name + ", " + KINDS[it.photo.kind].toLowerCase() + ": view larger") + '">' +
-        imgTag(it.photo, "gallery-img", true) +
-        '<span class="gallery-label">' + esc(KINDS[it.photo.kind]) + "</span></button></li>";
+        esc(t("photo.viewLarger", { plant: pname(it.plant), kind: kindLower(it.photo.kind) })) + '">' +
+        imgTag(it.plant, it.photo, "gallery-img", true) +
+        '<span class="gallery-label">' + esc(kindLabel(it.photo.kind)) + "</span></button></li>";
     }).join("") + "</ul>";
   }
 
@@ -164,8 +204,13 @@
     var lic = ph.licenseUrl
       ? '<a href="' + esc(ph.licenseUrl) + '" target="_blank" rel="noopener">' + esc(ph.license) + "</a>"
       : esc(ph.license);
-    return 'Photo: ' + esc(ph.artist || "Unknown") + " · " + lic +
+    return esc(t("photo.credit", { artist: ph.artist || t("photo.unknown") })) + " · " + lic +
       ' · <a href="' + esc(ph.sourceUrl) + '" target="_blank" rel="noopener">Wikimedia Commons</a>';
+  }
+
+  function sourceLink(k) {
+    var s = SOURCES[k];
+    return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title) + "</a>" + esc(t("source.english"));
   }
 
   function segmented(name, options, current, label) {
@@ -176,23 +221,26 @@
       }).join("") + "</div>";
   }
 
+  function categoryOptions() {
+    return [["all", t("filter.all")], ["vegetable", t("filter.vegetables")], ["fruit", t("filter.fruit")], ["herb", t("filter.herbs")]];
+  }
+
   function filterToolbar(opts) {
     return '<div class="toolbar">' +
-      '<label class="search"><span class="visually-hidden">Search plants</span>' +
-      '<input type="search" data-filter="query" placeholder="Search plants…" value="' + esc(state.query) + '"></label>' +
-      segmented("category", [["all", "All"], ["vegetable", "Vegetables"], ["fruit", "Fruit"], ["herb", "Herbs"]],
-        state.category, "Plant type") +
-      segmented("season", [["all", "Any season"], ["warm", "Warm"], ["cool", "Cool"], ["perennial", "Perennial"]],
-        state.season, "Growing season") +
+      '<label class="search"><span class="visually-hidden">' + esc(t("filter.searchLabel")) + "</span>" +
+      '<input type="search" data-filter="query" placeholder="' + esc(t("filter.search")) + '" value="' + esc(state.query) + '"></label>' +
+      segmented("category", categoryOptions(), state.category, t("filter.typeLabel")) +
+      segmented("season", [["all", t("filter.anySeason")], ["warm", t("filter.warm")], ["cool", t("filter.cool")],
+        ["perennial", t("filter.perennial")]], state.season, t("filter.seasonLabel")) +
       '<label class="check"><input type="checkbox" data-filter="plantableOnly"' + (state.plantableOnly ? " checked" : "") +
       "> " + esc(opts.plantableLabel) + "</label>" +
       "</div>";
   }
 
   function legend() {
-    return '<ul class="legend" aria-label="Legend">' +
-      Object.keys(METHODS).map(function (k) {
-        return '<li><span class="swatch m-' + k + '"></span>' + esc(METHODS[k].label) + "</li>";
+    return '<ul class="legend" aria-label="' + esc(t("legend.label")) + '">' +
+      METHOD_CODES.map(function (k) {
+        return '<li><span class="swatch m-' + k + '"></span>' + esc(methodLabel(k)) + "</li>";
       }).join("") + "</ul>";
   }
 
@@ -205,50 +253,51 @@
 
     var nowList = plantable.length
       ? '<ul class="now-list">' + plantable.map(function (p) {
-          return '<li><a href="#/plant/' + p.id + '"><span class="now-name">' + esc(p.name) + "</span>" +
+          return '<li><a href="#/plant/' + p.id + '"><span class="now-name">' + esc(pname(p)) + "</span>" +
             methodBadge(p.cells[h]) + "</a></li>";
         }).join("") + "</ul>"
-      : '<p class="empty">Nothing on the planting chart for this period. It is a good time to plan, prepare beds and harvest.</p>';
+      : '<p class="empty">' + esc(t("cal.empty")) + "</p>";
+
+    var count = plantable.length === 1 ? t("cal.countOne") : t("cal.countMany", { n: plantable.length });
 
     var html =
       '<section class="page">' +
-      '<div class="page-head"><h1>Planting calendar</h1>' +
-      "<p>When to plant vegetables and fruit in the Phoenix metro area (low desert, about 1,100 feet). " +
-      "Pick a plant to see spacing, watering and growing tips.</p></div>" +
+      '<div class="page-head"><h1>' + esc(t("cal.title")) + "</h1><p>" + esc(t("cal.intro")) + "</p></div>" +
 
       '<section class="now-panel" aria-labelledby="now-title">' +
       '<div class="now-head">' +
-      '<button type="button" class="icon-btn" data-step="-1" aria-label="Previous half-month">&#8249;</button>' +
-      '<div class="now-title"><span class="eyebrow">' + (isToday ? "Plant now" : "What to plant") + "</span>" +
+      '<button type="button" class="icon-btn" data-step="-1" aria-label="' + esc(t("cal.prev")) + '">&#8249;</button>' +
+      '<div class="now-title"><span class="eyebrow">' + esc(isToday ? t("cal.plantNow") : t("cal.whatToPlant")) + "</span>" +
       '<h2 id="now-title">' + esc(halfName(h)) + "</h2>" +
-      '<span class="now-range">' + esc(halfRange(h)) + (isToday ? " · this is today" : "") + "</span></div>" +
-      '<button type="button" class="icon-btn" data-step="1" aria-label="Next half-month">&#8250;</button>' +
+      '<span class="now-range">' + esc(halfRange(h) + (isToday ? t("cal.isToday") : "")) + "</span></div>" +
+      '<button type="button" class="icon-btn" data-step="1" aria-label="' + esc(t("cal.next")) + '">&#8250;</button>' +
       "</div>" +
-      (isToday ? "" : '<button type="button" class="link-btn" data-today>Back to today</button>') +
-      '<p class="now-count">' + plantable.length + (plantable.length === 1 ? " plant" : " plants") + " can go in the ground</p>" +
+      (isToday ? "" : '<button type="button" class="link-btn" data-today>' + esc(t("cal.backToday")) + "</button>") +
+      '<p class="now-count">' + esc(count) + "</p>" +
       nowList +
       "</section>" +
 
-      filterToolbar({ plantableLabel: "Only show plants for " + halfName(h) }) +
+      filterToolbar({ plantableLabel: t("cal.onlyFor", halfParams(h)) }) +
       legend() +
-      '<p class="hint">Tip: click any column to see what to plant in that half of the month.</p>' +
-      '<div class="cal-scroll" tabindex="0" aria-label="Planting chart, scrolls sideways">' + calendarTable() + "</div>" +
+      '<p class="hint">' + esc(t("cal.hint")) + "</p>" +
+      '<div class="cal-scroll" tabindex="0" aria-label="' + esc(t("cal.scrollLabel")) + '">' + calendarTable() + "</div>" +
       "</section>";
 
-    setView(html, "Planting calendar");
+    setView(html, t("cal.title"));
   }
 
   function calendarTable() {
     var h = state.half;
     var today = todayHalf();
     var plants = PLANTS.filter(matchesFilters);
+    var months = t("months.short");
 
-    var head1 = '<tr><th class="cal-plant-col" rowspan="2" scope="col">Plant</th>' +
-      MONTHS.map(function (m, i) {
+    var head1 = '<tr><th class="cal-plant-col" rowspan="2" scope="col">' + esc(t("cal.plantColumn")) + "</th>" +
+      months.map(function (m, i) {
         var sel = Math.floor(h / 2) === i ? " is-selected-month" : "";
-        return '<th colspan="2" scope="colgroup" class="cal-month' + sel + '">' + m + "</th>";
+        return '<th colspan="2" scope="colgroup" class="cal-month' + sel + '">' + esc(m) + "</th>";
       }).join("") + "</tr>";
-    var head2 = "<tr>" + MONTHS.map(function (m, mi) {
+    var head2 = "<tr>" + months.map(function (m, mi) {
       return [0, 1].map(function (k) {
         var i = mi * 2 + k;
         var cls = "cal-half" + (i === h ? " is-selected" : "") + (i === today ? " is-today" : "");
@@ -263,22 +312,22 @@
       var group = plants.filter(function (p) { return p.season === season; }).sort(byName);
       if (!group.length) return;
       body += '<tr class="cal-group cal-group-' + season + '"><th colspan="25" scope="rowgroup"><span>' +
-        esc(SEASONS[season].group) + "</span></th></tr>";
+        esc(t("group." + season)) + "</span></th></tr>";
       group.forEach(function (p) {
-        body += '<tr><th scope="row" class="cal-plant-col"><a href="#/plant/' + p.id + '">' + esc(p.name) + "</a></th>" +
+        body += '<tr><th scope="row" class="cal-plant-col"><a href="#/plant/' + p.id + '">' + esc(pname(p)) + "</a></th>" +
           p.cells.map(function (c, i) {
             var cls = (c ? "m-" + c : "") + (i === h ? " is-selected" : "") + (i % 2 === 1 ? " half-b" : "");
-            var tip = p.name + ", " + halfName(i) + ": " + (c ? METHODS[c].label : "not on the chart");
+            var tip = pname(p) + ", " + halfName(i) + ": " + (c ? methodLabel(c) : t("cal.notOnChart"));
             return '<td class="' + cls.trim() + '" data-half="' + i + '" title="' + esc(tip) + '">' +
-              (c ? '<span class="visually-hidden">' + esc(METHODS[c].label) + "</span>" : "") + "</td>";
+              (c ? '<span class="visually-hidden">' + esc(methodLabel(c)) + "</span>" : "") + "</td>";
           }).join("") + "</tr>";
       });
     });
     if (!body) {
-      body = '<tr><td colspan="25" class="empty">No plants match these filters.</td></tr>';
+      body = '<tr><td colspan="25" class="empty">' + esc(t("filter.noPlants")) + "</td></tr>";
     }
 
-    return '<table class="cal"><caption class="visually-hidden">Planting windows by half-month</caption>' +
+    return '<table class="cal"><caption class="visually-hidden">' + esc(t("cal.caption")) + "</caption>" +
       "<thead>" + head1 + head2 + "</thead><tbody>" + body + "</tbody></table>";
   }
 
@@ -286,11 +335,11 @@
 
   function renderPlants() {
     var html = '<section class="page">' +
-      '<div class="page-head"><h1>Plants</h1><p>' + PLANTS.length +
-      " vegetables, herbs and fruits that grow well in the Phoenix area.</p></div>" +
-      filterToolbar({ plantableLabel: "Can plant now (" + halfName(todayHalf()) + ")" }) +
+      '<div class="page-head"><h1>' + esc(t("plants.title")) + "</h1><p>" +
+      esc(t("plants.intro", { n: PLANTS.length })) + "</p></div>" +
+      filterToolbar({ plantableLabel: t("plants.canPlantNow", halfParams(todayHalf())) }) +
       '<div class="card-grid" id="plant-grid">' + plantCards() + "</div></section>";
-    setView(html, "Plants");
+    setView(html, t("plants.title"));
   }
 
   function plantCards() {
@@ -299,26 +348,31 @@
     state.half = todayHalf();
     var list = PLANTS.filter(matchesFilters).sort(byName);
     state.half = saved;
-    if (!list.length) return '<p class="empty">No plants match these filters.</p>';
+    if (!list.length) return '<p class="empty">' + esc(t("filter.noPlants")) + "</p>";
     var now = todayHalf();
     return list.map(function (p) {
       return '<a class="card" href="#/plant/' + p.id + '">' +
         '<div class="card-media">' + photoImg(p, "card-img", true) + "</div>" +
-        '<div class="card-body"><h2 class="card-title">' + esc(p.name) + "</h2>" +
-        '<div class="tags"><span class="tag season-' + p.season + '">' + esc(SEASONS[p.season].label) + "</span>" +
-        '<span class="tag">' + esc(CATEGORIES[p.category]) + "</span>" +
-        (p.cells[now] ? '<span class="tag tag-now">Plant now</span>' : "") + "</div>" +
-        '<p class="card-text">' + esc(p.summary) + "</p></div></a>";
+        '<div class="card-body"><h2 class="card-title">' + esc(pname(p)) + "</h2>" +
+        '<div class="tags"><span class="tag season-' + p.season + '">' + esc(t("season." + p.season)) + "</span>" +
+        '<span class="tag">' + esc(t("category." + p.category)) + "</span>" +
+        (p.cells[now] ? '<span class="tag tag-now">' + esc(t("plants.tagNow")) + "</span>" : "") + "</div>" +
+        '<p class="card-text">' + esc(pt(p, "summary")) + "</p></div></a>";
     }).join("");
   }
 
   // ------------------------------------------------------------ plant detail
 
+  function dayLabel(text) {
+    var parts = text.trim().split(/\s+/);
+    return t("date.day", monthParams(DATA_MONTHS.indexOf(parts[0]), parseInt(parts[1], 10)));
+  }
+
   function windowText(w) {
     var a = halfIndex(w.from), b = halfIndex(w.to);
     // A window covering exactly one whole month reads better as "All of March".
-    if (a % 2 === 0 && b === a + 1) return "All of " + MONTH_NAMES[a / 2];
-    return w.from + " – " + w.to;
+    if (a % 2 === 0 && b === a + 1) return t("date.wholeMonth", monthParams(a / 2));
+    return dayLabel(w.from) + " – " + dayLabel(w.to);
   }
 
   function renderPlant(id) {
@@ -331,14 +385,18 @@
     var prev = sorted[(idx - 1 + sorted.length) % sorted.length];
     var next = sorted[(idx + 1) % sorted.length];
     var now = todayHalf();
+    var months = t("months.short");
+    var tiny = t("months.tiny");
 
-    var strip = '<div class="strip" role="img" aria-label="' + esc(p.name + " planting months") + '">' +
-      MONTHS.map(function (m, mi) {
+    var strip = '<div class="strip" role="img" aria-label="' + esc(t("plant.months", { name: pname(p) })) + '">' +
+      months.map(function (m, mi) {
         return '<div class="strip-month' + (Math.floor(now / 2) === mi ? " is-now" : "") + '">' +
           '<div class="strip-cells">' + [0, 1].map(function (k) {
             var c = p.cells[mi * 2 + k];
             return '<span class="strip-cell' + (c ? " m-" + c : "") + (mi * 2 + k === now ? " is-today" : "") + '"></span>';
-          }).join("") + "</div><span class=\"strip-label\">" + m.charAt(0) + '<span class="strip-label-rest">' + m.slice(1) + "</span></span></div>";
+          }).join("") + "</div>" +
+          '<span class="strip-label"><span class="strip-label-full">' + esc(m) + '</span><span class="strip-label-tiny">' +
+          esc(tiny[mi]) + "</span></span></div>";
       }).join("") + "</div>";
 
     var windows = '<ul class="window-list">' + p.windows.map(function (w) {
@@ -346,58 +404,57 @@
     }).join("") + "</ul>";
 
     var nowNote = p.cells[now]
-      ? '<p class="now-note yes">Good news: you can plant this now (' + esc(METHODS[p.cells[now]].label.toLowerCase()) + ").</p>"
-      : '<p class="now-note">Not a planting time right now (' + esc(halfName(now)) + ").</p>";
+      ? '<p class="now-note yes">' + esc(t("plant.nowYes", { method: lowerFirst(methodLabel(p.cells[now])) })) + "</p>"
+      : '<p class="now-note">' + esc(t("plant.nowNo", halfParams(now))) + "</p>";
 
-    function fact(label, value) {
-      return '<div class="fact"><dt>' + esc(label) + "</dt><dd>" + esc(value) + "</dd></div>";
+    function fact(key, field) {
+      return '<div class="fact"><dt>' + esc(t(key)) + "</dt><dd>" + esc(pt(p, field)) + "</dd></div>";
     }
 
     var sources = p.sources.map(function (k) {
-      var s = SOURCES[k];
-      return s ? '<li><a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title) + "</a></li>" : "";
+      return SOURCES[k] ? "<li>" + sourceLink(k) + "</li>" : "";
     }).join("");
 
     var html = '<article class="page plant">' +
-      '<nav class="crumbs" aria-label="Breadcrumb"><a href="#/plants">← All plants</a></nav>' +
+      '<nav class="crumbs" aria-label="' + esc(t("plant.breadcrumb")) + '"><a href="#/plants">' + esc(t("plant.back")) + "</a></nav>" +
       '<div class="plant-hero">' +
       '<figure class="plant-photo">' + photoImg(p, "plant-img", false) +
       (ph ? '<figcaption class="credit">' + photoCredit(ph) + "</figcaption>" : "") + "</figure>" +
       '<div class="plant-intro">' +
-      '<div class="tags"><span class="tag season-' + p.season + '">' + esc(SEASONS[p.season].label) + "</span>" +
-      '<span class="tag">' + esc(CATEGORIES[p.category]) + "</span></div>" +
-      "<h1>" + esc(p.name) + "</h1>" +
-      '<p class="lead">' + esc(p.summary) + "</p>" +
-      '<section class="when" aria-labelledby="when-title"><h2 id="when-title">When to plant</h2>' +
+      '<div class="tags"><span class="tag season-' + p.season + '">' + esc(t("season." + p.season)) + "</span>" +
+      '<span class="tag">' + esc(t("category." + p.category)) + "</span></div>" +
+      "<h1>" + esc(pname(p)) + "</h1>" +
+      '<p class="lead">' + esc(pt(p, "summary")) + "</p>" +
+      '<section class="when" aria-labelledby="when-title"><h2 id="when-title">' + esc(t("plant.when")) + "</h2>" +
       strip + windows + nowNote + "</section>" +
       "</div></div>" +
 
-      '<section aria-labelledby="facts-title"><h2 id="facts-title">Growing facts</h2><dl class="facts">' +
-      fact("Time to harvest", p.timeToHarvest) +
-      fact("Spacing", p.spacing) +
-      fact("Water", p.water) +
-      fact("Sun", p.sun) +
-      fact("Growth", p.growth) +
-      fact("Typical yield", p.yield) +
+      '<section aria-labelledby="facts-title"><h2 id="facts-title">' + esc(t("plant.facts")) + '</h2><dl class="facts">' +
+      fact("fact.timeToHarvest", "timeToHarvest") +
+      fact("fact.spacing", "spacing") +
+      fact("fact.water", "water") +
+      fact("fact.sun", "sun") +
+      fact("fact.growth", "growth") +
+      fact("fact.yield", "yield") +
       "</dl></section>" +
 
-      '<section aria-labelledby="tips-title"><h2 id="tips-title">Phoenix growing tips</h2><ul class="tips">' +
-      p.tips.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul></section>" +
+      '<section aria-labelledby="tips-title"><h2 id="tips-title">' + esc(t("plant.tips")) + '</h2><ul class="tips">' +
+      pt(p, "tips").map(function (tip) { return "<li>" + esc(tip) + "</li>"; }).join("") + "</ul></section>" +
 
       (lightboxItems.length
-        ? '<section class="plant-gallery" aria-labelledby="photos-title"><h2 id="photos-title">Photos</h2>' +
+        ? '<section class="plant-gallery" aria-labelledby="photos-title"><h2 id="photos-title">' + esc(t("plant.photos")) + "</h2>" +
           photoGrid(lightboxItems, 0) + "</section>"
         : "") +
 
-      '<section class="plant-sources" aria-labelledby="src-title"><h2 id="src-title">Sources</h2><ul>' + sources + "</ul>" +
-      '<p class="fine">Planting windows come from the sources above. Spacing, yield and tips are general home-garden guidance; results vary with variety, soil and weather.</p></section>' +
+      '<section class="plant-sources" aria-labelledby="src-title"><h2 id="src-title">' + esc(t("plant.sources")) + "</h2><ul>" +
+      sources + "</ul>" + '<p class="fine">' + esc(t("plant.sourcesNote")) + "</p></section>" +
 
-      '<nav class="pager" aria-label="More plants">' +
-      '<a href="#/plant/' + prev.id + '">← ' + esc(prev.name) + "</a>" +
-      '<a href="#/plant/' + next.id + '">' + esc(next.name) + " →</a></nav>" +
+      '<nav class="pager" aria-label="' + esc(t("plant.more")) + '">' +
+      '<a href="#/plant/' + prev.id + '">← ' + esc(pname(prev)) + "</a>" +
+      '<a href="#/plant/' + next.id + '">' + esc(pname(next)) + " →</a></nav>" +
       "</article>";
 
-    setView(html, p.name);
+    setView(html, pname(p));
   }
 
   // ------------------------------------------------------------ gallery
@@ -423,27 +480,26 @@
         .map(function (ph) { return { plant: p, photo: ph }; });
       if (!items.length) return;
       groups += '<section class="gallery-group" id="g-' + p.id + '">' +
-        '<h2><a href="#/plant/' + p.id + '">' + esc(p.name) + "</a></h2>" +
+        '<h2><a href="#/plant/' + p.id + '">' + esc(pname(p)) + "</a></h2>" +
         photoGrid(items, lightboxItems.length) + "</section>";
       lightboxItems = lightboxItems.concat(items);
     });
 
-    var jump = '<label class="jump"><span class="visually-hidden">Jump to a plant</span><select data-jump>' +
-      '<option value="">Jump to a plant…</option>' +
-      plants.map(function (p) { return '<option value="' + p.id + '">' + esc(p.name) + "</option>"; }).join("") +
+    var jump = '<label class="jump"><span class="visually-hidden">' + esc(t("gallery.jumpLabel")) + "</span><select data-jump>" +
+      '<option value="">' + esc(t("gallery.jump")) + "</option>" +
+      plants.map(function (p) { return '<option value="' + p.id + '">' + esc(pname(p)) + "</option>"; }).join("") +
       "</select></label>";
 
     var html = '<section class="page">' +
-      '<div class="page-head"><h1>Gallery</h1><p>' + lightboxItems.length +
-      " photos: the harvest and the whole plant for every crop in the guide. Click a photo to see it larger.</p></div>" +
+      '<div class="page-head"><h1>' + esc(t("gallery.title")) + "</h1><p>" +
+      esc(t("gallery.intro", { n: lightboxItems.length })) + "</p></div>" +
       '<div class="toolbar">' +
-      segmented("galleryCategory", [["all", "All"], ["vegetable", "Vegetables"], ["fruit", "Fruit"], ["herb", "Herbs"]],
-        state.galleryCategory, "Plant type") +
-      segmented("galleryKind", [["all", "All photos"], ["harvest", "The harvest"], ["plant", "Whole plants"]],
-        state.galleryKind, "Photo type") +
+      segmented("galleryCategory", categoryOptions(), state.galleryCategory, t("filter.typeLabel")) +
+      segmented("galleryKind", [["all", t("gallery.allPhotos")], ["harvest", t("gallery.harvest")], ["plant", t("gallery.wholePlants")]],
+        state.galleryKind, t("gallery.photoType")) +
       jump + "</div>" +
-      (groups || '<p class="empty">No photos match these filters.</p>') + "</section>";
-    setView(html, "Gallery");
+      (groups || '<p class="empty">' + esc(t("gallery.none")) + "</p>") + "</section>";
+    setView(html, t("gallery.title"));
   }
 
   var lightbox = document.getElementById("lightbox");
@@ -456,11 +512,11 @@
     var ph = lightboxItems[lightboxIndex].photo;
     var img = lightbox.querySelector(".lightbox-img");
     img.src = ph.src;
-    img.alt = ph.alt;
+    img.alt = photoAlt(p, ph);
     lightbox.querySelector(".lightbox-caption").innerHTML =
-      "<strong>" + esc(p.name) + '<span class="lightbox-kind"> · ' + esc(KINDS[ph.kind]) + "</span></strong>" +
-      '<span class="lightbox-count">' + (lightboxIndex + 1) + " of " + lightboxItems.length + "</span>" +
-      '<a class="lightbox-link" href="#/plant/' + p.id + '" data-lightbox="close">Open growing guide →</a>' +
+      "<strong>" + esc(pname(p)) + '<span class="lightbox-kind"> · ' + esc(kindLabel(ph.kind)) + "</span></strong>" +
+      '<span class="lightbox-count">' + esc(t("viewer.count", { i: lightboxIndex + 1, n: lightboxItems.length })) + "</span>" +
+      '<a class="lightbox-link" href="#/plant/' + p.id + '" data-lightbox="close">' + esc(t("viewer.guide")) + "</a>" +
       '<span class="credit">' + photoCredit(ph) + "</span>";
   }
 
@@ -499,56 +555,50 @@
     var photoCount = 0;
     var credits = PLANTS.slice().sort(byName).filter(function (p) { return photosOf(p).length; }).map(function (p) {
       photoCount += photosOf(p).length;
-      return "<li><strong>" + esc(p.name) + "</strong><ul>" + photosOf(p).map(function (ph) {
-        return "<li>" + esc(KINDS[ph.kind]) + ": " + photoCredit(ph) + "</li>";
+      return "<li><strong>" + esc(pname(p)) + "</strong><ul>" + photosOf(p).map(function (ph) {
+        return "<li>" + esc(kindLabel(ph.kind)) + ": " + photoCredit(ph) + "</li>";
       }).join("") + "</ul></li>";
     }).join("");
     var sources = Object.keys(SOURCES).map(function (k) {
-      var s = SOURCES[k];
-      return '<li><a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title) + "</a>" +
-        (s.note ? '<span class="fine"> ' + esc(s.note) + "</span>" : "") + "</li>";
+      var note = lang === "vi" && SOURCES_VI[k] ? SOURCES_VI[k] : SOURCES[k].note;
+      return "<li>" + sourceLink(k) + (note ? '<span class="fine"> ' + esc(note) + "</span>" : "") + "</li>";
     }).join("");
 
     var html = '<article class="page prose">' +
-      "<h1>About this guide</h1>" +
-      "<p>Phoenix Garden Guide is a quick reference for growing vegetables and fruit in the Phoenix metro area " +
-      "(the “low desert” of Maricopa County). It works offline in any web browser.</p>" +
+      "<h1>" + esc(t("about.title")) + "</h1>" +
+      "<p>" + esc(t("about.intro")) + "</p>" +
 
-      "<h2>Two growing seasons, not one</h2>" +
-      "<p>Phoenix gardens run backwards compared to most of the country. Summer heat, not winter cold, is the hard season. " +
-      "There are two main planting times:</p><ul>" +
-      "<li><strong>Fall (late August to November)</strong> for cool-season crops such as lettuce, broccoli, carrots, peas and onions, which grow through the mild winter.</li>" +
-      "<li><strong>Late winter to spring (mid-February to April)</strong> for warm-season crops such as tomatoes, squash, melons and corn, which need to fruit before June heat.</li></ul>" +
-      "<p>A few crops (okra, black-eyed peas, sweet potatoes, Armenian cucumbers) actually thrive through summer. Light frosts can happen on some winter nights, so keep frost cloth handy for tender plants.</p>" +
+      "<h2>" + esc(t("about.seasons")) + "</h2>" +
+      "<p>" + esc(t("about.seasonsIntro")) + "</p><ul>" +
+      "<li>" + t("about.fallHtml") + "</li>" +
+      "<li>" + t("about.springHtml") + "</li></ul>" +
+      "<p>" + esc(t("about.summer")) + "</p>" +
 
-      "<h2>How to read the calendar</h2>" +
-      "<p>Each month is split into two halves (the 1st to the 14th, and the 15th to the end), matching the University of Arizona chart. Colors show how to plant:</p>" +
+      "<h2>" + esc(t("about.read")) + "</h2>" +
+      "<p>" + esc(t("about.readIntro")) + "</p>" +
       legend() +
-      "<p>An empty square means that period is not recommended for planting that crop in the Extension guide.</p>" +
+      "<p>" + esc(t("about.readEmpty")) + "</p>" +
 
-      "<h2>Watering basics</h2><ul>" +
-      "<li>Water deeply and less often rather than a little every day. Most vegetables root in the top 1 to 2 feet; trees much deeper.</li>" +
-      "<li>Push a long screwdriver or soil probe into the soil after watering: it slides easily through moist soil and shows how deep the water went.</li>" +
-      "<li>Drip irrigation and a 2 to 3 inch layer of mulch save a lot of water and keep roots cooler.</li>" +
-      "<li>In summer, vegetable beds may need water daily; in winter, every several days is often enough.</li></ul>" +
+      "<h2>" + esc(t("about.water")) + "</h2><ul>" +
+      ["about.water1", "about.water2", "about.water3", "about.water4"].map(function (k) {
+        return "<li>" + esc(t(k)) + "</li>";
+      }).join("") + "</ul>" +
 
-      "<h2>Sources</h2>" +
-      "<p>Planting windows come from University of Arizona Cooperative Extension publications. Check your local " +
-      '<a href="https://extension.arizona.edu/maricopa" target="_blank" rel="noopener">Maricopa County Extension</a> ' +
-      "office or Master Gardeners for the latest advice.</p><ul class=\"source-list\">" + sources + "</ul>" +
-      '<p class="fine">Spacing, watering, yield and tips are general home-garden guidance compiled for this app; ' +
-      "results vary with variety, soil, microclimate and weather.</p>" +
+      "<h2>" + esc(t("about.sources")) + "</h2>" +
+      "<p>" + t("about.sourcesHtml") + '</p><ul class="source-list">' + sources + "</ul>" +
+      '<p class="fine">' + esc(t("about.sourcesNote")) + "</p>" +
 
-      "<h2>Photo credits</h2>" +
-      "<p>All photos are from Wikimedia Commons and are used under the license shown.</p>" +
-      '<details class="credits"><summary>Show credits for all ' + photoCount + " photos</summary>" +
+      "<h2>" + esc(t("about.credits")) + "</h2>" +
+      "<p>" + esc(t("about.creditsIntro")) + "</p>" +
+      '<details class="credits"><summary>' + esc(t("about.creditsShow", { n: photoCount })) + "</summary>" +
       '<ul class="credit-list">' + credits + "</ul></details>" +
       "</article>";
-    setView(html, "About");
+    setView(html, t("nav.about"));
   }
 
   function renderNotFound() {
-    setView('<section class="page"><h1>Page not found</h1><p><a href="#/calendar">Go to the planting calendar</a></p></section>', "Not found");
+    setView('<section class="page"><h1>' + esc(t("notFound.title")) + '</h1><p><a href="#/calendar">' +
+      esc(t("notFound.link")) + "</a></p></section>", t("notFound.title"));
   }
 
   // ------------------------------------------------------------ routing
@@ -613,9 +663,9 @@
   });
 
   main.addEventListener("click", function (e) {
-    var t = e.target;
+    var target = e.target;
 
-    var seg = t.closest("button[data-filter]");
+    var seg = target.closest("button[data-filter]");
     if (seg) {
       var name = seg.getAttribute("data-filter");
       state[name] = seg.getAttribute("data-value");
@@ -627,27 +677,27 @@
       return;
     }
 
-    var step = t.closest("[data-step]");
+    var step = target.closest("[data-step]");
     if (step) {
       state.half = (state.half + parseInt(step.getAttribute("data-step"), 10) + 24) % 24;
       renderCalendarKeepScroll();
       return;
     }
 
-    if (t.closest("[data-today]")) {
+    if (target.closest("[data-today]")) {
       state.half = todayHalf();
       renderCalendarKeepScroll();
       return;
     }
 
-    var half = t.closest("[data-half]");
+    var half = target.closest("[data-half]");
     if (half && half.closest(".cal")) {
       state.half = parseInt(half.getAttribute("data-half"), 10);
       renderCalendarKeepScroll();
       return;
     }
 
-    var photo = t.closest("[data-photo]");
+    var photo = target.closest("[data-photo]");
     if (photo) {
       openLightbox(parseInt(photo.getAttribute("data-photo"), 10));
     }
@@ -671,6 +721,41 @@
     }
   }
 
+  // ------------------------------------------------------------ language
+
+  // Text in index.html (header, footer, viewer buttons) is marked with data-i18n attributes.
+  function applyStaticText() {
+    document.documentElement.setAttribute("lang", lang);
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      el.textContent = t(el.getAttribute("data-i18n"));
+    });
+    document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
+      el.innerHTML = t(el.getAttribute("data-i18n-html"));
+    });
+    document.querySelectorAll("[data-i18n-aria]").forEach(function (el) {
+      el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria")));
+    });
+    var desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute("content", t("site.description"));
+    document.querySelectorAll("[data-lang]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang));
+    });
+  }
+
+  function setLanguage(next) {
+    if (LANGS.indexOf(next) < 0 || next === lang) return;
+    lang = next;
+    try { localStorage.setItem(LANG_KEY, lang); } catch (e) { /* private mode: the choice lasts for this visit only */ }
+    applyStaticText();
+    if (!themeMenu.hidden) renderThemeMenu();
+    route();
+  }
+
+  document.querySelector(".lang-toggle").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-lang]");
+    if (b) setLanguage(b.getAttribute("data-lang"));
+  });
+
   // ------------------------------------------------------------ theme picker
 
   var themeBtn = document.getElementById("theme-btn");
@@ -682,12 +767,13 @@
 
   function renderThemeMenu() {
     var cur = currentTheme();
-    themeMenu.innerHTML = THEMES.map(function (t) {
-      return '<button type="button" role="menuitemradio" data-theme-id="' + t.id + '" aria-checked="' + (t.id === cur) + '">' +
-        '<span class="theme-dots" aria-hidden="true">' + t.colors.map(function (c) {
+    themeMenu.innerHTML = THEMES.map(function (th) {
+      var label = t("theme." + th.id);
+      return '<button type="button" role="menuitemradio" data-theme-id="' + th.id + '" aria-checked="' + (th.id === cur) + '">' +
+        '<span class="theme-dots" aria-hidden="true">' + th.colors.map(function (c) {
           return '<span style="background:' + c + '"></span>';
         }).join("") + "</span>" +
-        '<span class="theme-name">' + esc(t.name) + '<small>' + esc(t.note) + "</small></span></button>";
+        '<span class="theme-name">' + esc(label[0]) + "<small>" + esc(label[1]) + "</small></span></button>";
     }).join("");
   }
 
@@ -734,6 +820,39 @@
     if (!themeMenu.hidden && !e.target.closest(".theme-picker")) closeThemeMenu(false);
   });
 
+  // ------------------------------------------------------------ header fit
+
+  // If the header items don't fit on one line, switch to the two-row layout
+  // (title, Theme and language on top; tabs below) instead of letting buttons wrap.
+  var header = document.querySelector(".site-header");
+  var fitPending = false;
+
+  function fitHeader() {
+    fitPending = false;
+    header.classList.remove("is-stacked");
+    var brand = header.querySelector(".brand").getBoundingClientRect();
+    var wrapped = [".site-nav", ".theme-picker", ".lang-toggle"].some(function (sel) {
+      return header.querySelector(sel).getBoundingClientRect().top >= brand.bottom - 1;
+    });
+    if (wrapped) header.classList.add("is-stacked");
+  }
+
+  function scheduleFitHeader() {
+    if (fitPending) return;
+    fitPending = true;
+    requestAnimationFrame(fitHeader);
+  }
+
+  window.addEventListener("resize", scheduleFitHeader);
+  if (document.fonts) {
+    // Fonts arriving (including the Vietnamese ones, loaded on demand) change label widths.
+    document.fonts.addEventListener("loadingdone", scheduleFitHeader);
+  }
+  themeMenu.addEventListener("click", scheduleFitHeader);
+  document.querySelector(".lang-toggle").addEventListener("click", scheduleFitHeader);
+
   window.addEventListener("hashchange", route);
+  applyStaticText();
   route();
+  fitHeader();
 })();
