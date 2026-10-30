@@ -6,7 +6,23 @@
   <title>Phoenix Garden Guide</title>
   <meta name="description" content="Planting calendar and growing guide for vegetables and fruit in the Phoenix, Arizona metro area.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30V15' stroke='%234d7c32' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M16 16C16 9 11 5 4 5c0 7 5 11 12 11zM16 13c0-6 4-10 11-10 0 6-4 10-11 10z' fill='%236a9f45'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="css/styles.css?v=2026-10-30">
+  <!-- Apply the visitor's saved theme before anything draws, so the page never flashes the wrong look.
+       The list of themes lives in js/app.js (THEMES); keep the two in sync. -->
+  <script>
+    (function () {
+      var themes = ["sonoran", "plot", "patch", "harvest", "packet", "classic"];
+      var saved = null;
+      try { saved = localStorage.getItem("garden-guide-theme"); } catch (e) {}
+      document.documentElement.setAttribute("data-skin", themes.indexOf(saved) >= 0 ? saved : themes[0]);
+    })();
+  </script>
+  <link rel="stylesheet" href="css/styles.css?v=2026-10-30.2">
+  <link rel="stylesheet" href="css/fonts/fonts.css?v=2026-10-30.2">
+  <link rel="stylesheet" href="css/themes/sonoran.css?v=2026-10-30.2">
+  <link rel="stylesheet" href="css/themes/plot.css?v=2026-10-30.2">
+  <link rel="stylesheet" href="css/themes/patch.css?v=2026-10-30.2">
+  <link rel="stylesheet" href="css/themes/harvest.css?v=2026-10-30.2">
+  <link rel="stylesheet" href="css/themes/packet.css?v=2026-10-30.2">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -29,6 +45,13 @@
         <a href="#/gallery" data-nav="gallery">Gallery</a>
         <a href="#/about" data-nav="about">About</a>
       </nav>
+      <div class="theme-picker">
+        <button type="button" class="theme-btn" id="theme-btn" aria-haspopup="true" aria-expanded="false" aria-controls="theme-menu">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 0 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.8-.4-1.1-.3-.3-.4-.6-.4-1 0-.9.7-1.6 1.6-1.6H16a5 5 0 0 0 5-5C21 6.6 17 3 12 3Zm-5.5 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"/></svg>
+          <span class="theme-btn-label">Theme</span>
+        </button>
+        <div class="theme-menu" id="theme-menu" role="menu" aria-label="Choose a theme" hidden></div>
+      </div>
     </div>
   </header>
 
@@ -59,9 +82,9 @@
 
   <!-- Plain scripts (not modules) so the app also works when opened straight from a file.
        The ?v= value makes browsers fetch fresh copies after an update; change it on every release. -->
-  <script src="js/data/sources.js?v=2026-10-30"></script>
-  <script src="js/data/plants.js?v=2026-10-30"></script>
-  <script src="js/data/photos.js?v=2026-10-30"></script>
-  <script src="js/app.js?v=2026-10-30"></script>
+  <script src="js/data/sources.js?v=2026-10-30.2"></script>
+  <script src="js/data/plants.js?v=2026-10-30.2"></script>
+  <script src="js/data/photos.js?v=2026-10-30.2"></script>
+  <script src="js/app.js?v=2026-10-30.2"></script>
 </body>
 </html>

@@ -1,0 +1,156 @@
+/* Theme draft 2: "Sunny Patch" — cartoon garden.
+   Chunky rounded type, thick ink outlines, hard offset shadows, candy colors,
+   and a drawn sky with clouds, sun and rolling hills in the header. */
+
+:root[data-skin="patch"] {
+  --bg: #fff8e6;
+  --surface: #ffffff;
+  --surface-2: #fff1c9;
+  --text: #2b2340;
+  --text-muted: #5f5675;
+  --border: #2b2340;
+  --brand: #3bb54a;
+  --brand-strong: #23852f;
+  --brand-soft: #d8f5cf;
+  --accent: #ff6b4a;
+  --m-seed: #4cc35a;
+  --m-transplant: #ff9f1c;
+  --m-sets: #a66cff;
+  --m-plant: #2ec4f1;
+  --season-warm: #ffd2c2;
+  --season-warm-text: #8a2b12;
+  --season-cool: #c9ecff;
+  --season-cool-text: #10507a;
+  --season-perennial: #e7d6ff;
+  --season-perennial-text: #4b2a8a;
+  --radius: 18px;
+  --shadow: 4px 4px 0 #2b2340;
+  --font: "Fredoka", "Comic Sans MS", system-ui, sans-serif;
+  --ink: #2b2340;
+  color-scheme: light;
+}
+
+[data-skin="patch"] body { background: var(--bg); font-weight: 400; }
+[data-skin="patch"] h1, [data-skin="patch"] h2, [data-skin="patch"] .brand-name { font-weight: 700; }
+
+/* Header: sky, sun, clouds and two rolling hills, all drawn with CSS gradients */
+[data-skin="patch"] .site-header {
+  border-bottom: 4px solid var(--ink);
+  background:
+    radial-gradient(circle at 92% 30%, #ffd84a 0 38px, #ffb703 39px 44px, transparent 45px),
+    radial-gradient(ellipse 60px 22px at 18% 30%, #fff 98%, transparent),
+    radial-gradient(ellipse 40px 18px at 23% 22%, #fff 98%, transparent),
+    radial-gradient(ellipse 70px 24px at 70% 22%, #fff 98%, transparent),
+    radial-gradient(ellipse 700px 90px at 20% 135%, #6fd16a 98%, transparent),
+    radial-gradient(ellipse 800px 110px at 85% 150%, #4cb85a 98%, transparent),
+    linear-gradient(#8fd8ff, #c7ecff);
+}
+[data-skin="patch"] .header-inner { padding-block: 22px 34px; }
+[data-skin="patch"] .brand-icon {
+  color: #fff; background: var(--brand); border: 3px solid var(--ink); border-radius: 50%;
+  width: 46px; height: 46px; padding: 6px; box-shadow: 3px 3px 0 var(--ink);
+}
+[data-skin="patch"] .brand-name { font-size: 1.5rem; color: var(--ink); }
+[data-skin="patch"] .brand-tag { color: #1f4f6e; font-weight: 600; }
+
+/* Nav: chunky candy buttons, each its own color, bouncy on hover */
+[data-skin="patch"] .site-nav { gap: 10px; }
+[data-skin="patch"] .site-nav a {
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-weight: 600;
+  padding: 8px 18px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+[data-skin="patch"] .site-nav a[data-nav="calendar"] { background: #ffd84a; }
+[data-skin="patch"] .site-nav a[data-nav="plants"] { background: #8be38a; }
+[data-skin="patch"] .site-nav a[data-nav="gallery"] { background: #ffb3c7; }
+[data-skin="patch"] .site-nav a[data-nav="about"] { background: #b9e6ff; }
+[data-skin="patch"] .site-nav a:hover { transform: translate(-2px, -2px) rotate(-2deg); box-shadow: 5px 5px 0 var(--ink); color: var(--ink); }
+[data-skin="patch"] .site-nav a[aria-current="page"] { background: var(--accent); color: #fff; transform: rotate(-2deg); }
+
+[data-skin="patch"] .page-head h1 { color: var(--ink); }
+[data-skin="patch"] .eyebrow { color: var(--accent); font-weight: 700; }
+
+/* Panels and cards: white, thick outline, hard shadow */
+[data-skin="patch"] .now-panel,
+[data-skin="patch"] .cal-scroll,
+[data-skin="patch"] .card,
+[data-skin="patch"] .when,
+[data-skin="patch"] .fact {
+  border: 3px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+[data-skin="patch"] .now-panel { background: #fffdf5; }
+[data-skin="patch"] .icon-btn { border: 3px solid var(--ink); background: #ffd84a; box-shadow: 2px 2px 0 var(--ink); }
+[data-skin="patch"] .now-list a { border: 2px solid var(--ink); background: #fff; box-shadow: 2px 2px 0 var(--ink); }
+[data-skin="patch"] .now-list a:hover { background: #d8f5cf; transform: translate(-1px, -1px); }
+[data-skin="patch"] .badge { border: 2px solid var(--ink); text-shadow: none; color: var(--ink); }
+
+[data-skin="patch"] .segmented { background: #fff; border: 3px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+[data-skin="patch"] .segmented button { color: var(--ink); font-weight: 500; }
+[data-skin="patch"] .segmented button[aria-pressed="true"] { background: #8be38a; box-shadow: inset 0 0 0 2px var(--ink); }
+[data-skin="patch"] .search input, [data-skin="patch"] .jump select { border: 3px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+[data-skin="patch"] .swatch { border: 2px solid var(--ink); border-radius: 50%; }
+
+/* Calendar table: sunny header, striped months, bubbly season labels */
+[data-skin="patch"] .cal thead th { background: #ffd84a; }
+[data-skin="patch"] .cal thead tr:first-child th { border-bottom: 3px solid var(--ink); }
+[data-skin="patch"] .cal-month { color: var(--ink); font-weight: 700; border-left: 2px solid rgba(43, 35, 64, 0.25); }
+[data-skin="patch"] .cal-half button { color: var(--ink); font-weight: 600; }
+[data-skin="patch"] .cal-half.is-selected button { background: var(--accent); color: #fff; border-radius: 10px 10px 0 0; }
+[data-skin="patch"] .cal thead tr:last-child th { border-bottom: 3px solid var(--ink); }
+[data-skin="patch"] .cal tbody td:nth-child(4n), [data-skin="patch"] .cal tbody td:nth-child(4n+1) { background-color: #fff6d8; }
+[data-skin="patch"] .cal tbody td.m-S { background: var(--m-seed); }
+[data-skin="patch"] .cal tbody td.m-T { background: var(--m-transplant); }
+[data-skin="patch"] .cal tbody td.m-B { background: linear-gradient(135deg, var(--m-seed) 50%, var(--m-transplant) 50%); }
+[data-skin="patch"] .cal tbody td.m-X { background: var(--m-sets); }
+[data-skin="patch"] .cal tbody td.m-P { background: var(--m-plant); }
+[data-skin="patch"] .cal tbody td[class*="m-"] { border-radius: 8px; border: 2px solid #fff; }
+[data-skin="patch"] .cal-group th { background: transparent; padding: 10px 0 !important; }
+[data-skin="patch"] .cal-group th span {
+  display: inline-block; border: 2px solid var(--ink); border-radius: 999px; padding: 3px 14px;
+  font-size: 0.8rem; letter-spacing: 0.04em; color: var(--ink); box-shadow: 2px 2px 0 var(--ink);
+}
+[data-skin="patch"] .cal-group-warm th span { background: #ffb38a; }
+[data-skin="patch"] .cal-group-cool th span { background: #9fdcff; }
+[data-skin="patch"] .cal-group-perennial th span { background: #d4b8ff; }
+[data-skin="patch"] .cal tbody tr:hover th.cal-plant-col { background: #d8f5cf; }
+
+[data-skin="patch"] .card:hover { transform: translate(-3px, -3px) rotate(-0.6deg); box-shadow: 8px 8px 0 var(--ink); }
+[data-skin="patch"] .card-media { border-bottom: 3px solid var(--ink); }
+[data-skin="patch"] .tag { border: 2px solid var(--ink); }
+[data-skin="patch"] .tag-now { background: #ffd84a; color: var(--ink); }
+
+[data-skin="patch"] .plant-img { border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); }
+[data-skin="patch"] .fact dt { color: var(--accent); }
+[data-skin="patch"] .strip-cell { border-radius: 6px; }
+
+[data-skin="patch"] .gallery-item { border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); }
+[data-skin="patch"] .gallery-group h2 {
+  display: inline-block; background: #fff; border: 3px solid var(--ink); border-radius: 999px;
+  padding: 2px 16px; box-shadow: 3px 3px 0 var(--ink);
+}
+
+[data-skin="patch"] .site-footer {
+  border-top: 4px solid var(--ink);
+  background: #7a5230;
+  color: #fbe7cf;
+}
+[data-skin="patch"] .site-footer a { color: #ffd84a; }
+
+@media (max-width: 760px) {
+  [data-skin="patch"] .site-nav { flex-wrap: nowrap; gap: 5px; }
+  [data-skin="patch"] .site-nav a { flex: 1; text-align: center; padding: 6px 2px; font-size: 0.82rem; border-width: 2px; box-shadow: 2px 2px 0 var(--ink); }
+  [data-skin="patch"] .brand-name { font-size: 1.2rem; }
+}
+
+/* Theme picker */
+[data-skin="patch"] .theme-btn { border: 3px solid var(--ink); background: #fff; color: var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+[data-skin="patch"] .theme-btn:hover, [data-skin="patch"] .theme-btn[aria-expanded="true"] { background: #ffd84a; }
+[data-skin="patch"] .theme-menu { border: 3px solid var(--ink); border-radius: 18px; box-shadow: 5px 5px 0 var(--ink); }
+[data-skin="patch"] .theme-menu button { border-radius: 12px; }
+[data-skin="patch"] .theme-menu button[aria-checked="true"] { background: #d8f5cf; }
+[data-skin="patch"] .theme-dots span { border-color: var(--ink); }

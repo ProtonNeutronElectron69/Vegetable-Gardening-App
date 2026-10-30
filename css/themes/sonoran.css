@@ -1,0 +1,137 @@
+/* Theme draft 5: "Sonoran Sunset" — Phoenix's own palette.
+   A dusk sky gradient with saguaro silhouettes in the header, sand-colored pages,
+   and accents from prickly pear magenta, palo verde green and adobe orange. */
+
+:root[data-skin="sonoran"] {
+  --bg: #f7efe4;
+  --surface: #fffaf3;
+  --surface-2: #f0e3d1;
+  --text: #2c2236;
+  --text-muted: #6e6178;
+  --border: #e6d4bd;
+  --brand: #5c8a3a;
+  --brand-strong: #456d29;
+  --brand-soft: #e4eed6;
+  --accent: #c23b6f;
+  --m-seed: #6a9c3f;
+  --m-transplant: #ec8a3c;
+  --m-sets: #8e5bb5;
+  --m-plant: #2f8fa0;
+  --season-warm: #fde0cc;
+  --season-warm-text: #96400f;
+  --season-cool: #dbe9f2;
+  --season-cool-text: #23516e;
+  --season-perennial: #f1dceb;
+  --season-perennial-text: #7a2754;
+  --radius: 16px;
+  --shadow: 0 1px 2px rgba(60, 30, 40, 0.06), 0 10px 24px rgba(60, 30, 40, 0.08);
+  --font: "Outfit", system-ui, sans-serif;
+  --dusk-1: #2c2350;
+  --dusk-2: #7a3b6e;
+  --dusk-3: #e2714f;
+  --dusk-4: #f6b65a;
+  color-scheme: light;
+}
+
+[data-skin="sonoran"] body { background: var(--bg); }
+[data-skin="sonoran"] h1, [data-skin="sonoran"] .brand-name { font-weight: 800; letter-spacing: -0.02em; }
+
+/* Header: dusk gradient, a low sun, and a row of saguaro silhouettes along the bottom */
+[data-skin="sonoran"] .site-header {
+  border-bottom: 0;
+  position: relative;
+  background:
+    radial-gradient(circle at 78% 105%, #ffd27a 0 46px, rgba(255, 210, 122, 0.35) 47px 70px, transparent 71px),
+    linear-gradient(180deg, var(--dusk-1) 0%, var(--dusk-2) 45%, var(--dusk-3) 80%, var(--dusk-4) 100%);
+}
+[data-skin="sonoran"] .site-header::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 64px;
+  /* One 320px-wide desert tile (ground line plus three saguaros) repeated across, so the cacti keep their shape */
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 64'%3E%3Cpath fill='%232c2236' d='M0 54 Q40 48 80 52 T160 51 T240 53 T320 54 V64 H0Z'/%3E%3Cpath fill='%232c2236' d='M52 54V14a5 5 0 0 1 10 0v40z'/%3E%3Cpath fill='%232c2236' d='M62 34h5a3 3 0 0 0 3-3V20a4 4 0 0 1 8 0v11a11 11 0 0 1-11 11h-5z'/%3E%3Cpath fill='%232c2236' d='M52 40h-5a10 10 0 0 1-10-10v-6a4 4 0 0 1 8 0v6a2 2 0 0 0 2 2h5z'/%3E%3Cpath fill='%232c2236' d='M168 53V34a3.5 3.5 0 0 1 7 0v19z'/%3E%3Cpath fill='%232c2236' d='M175 44h3a2 2 0 0 0 2-2v-5a3 3 0 0 1 6 0v5a8 8 0 0 1-8 8h-3z'/%3E%3Cpath fill='%232c2236' d='M262 54V24a4.5 4.5 0 0 1 9 0v30z'/%3E%3Cpath fill='%232c2236' d='M262 42h-4a8 8 0 0 1-8-8v-4a3.5 3.5 0 0 1 7 0v4a1 1 0 0 0 1 1h4z'/%3E%3Cpath fill='%232c2236' d='M271 38h4a2 2 0 0 0 2-2v-8a3.5 3.5 0 0 1 7 0v8a9 9 0 0 1-9 9h-4z'/%3E%3C/svg%3E") left bottom / 320px 64px repeat-x;
+  pointer-events: none;
+}
+[data-skin="sonoran"] .header-inner { position: relative; z-index: 1; padding-block: 26px 70px; }
+[data-skin="sonoran"] .brand, [data-skin="sonoran"] .brand:hover { color: #fff6e9; }
+[data-skin="sonoran"] .brand-icon { color: #b9e08f; }
+[data-skin="sonoran"] .brand-name { font-size: 1.5rem; }
+[data-skin="sonoran"] .brand-tag { color: #ffd9b8; }
+
+/* Tabs: glowing pills, each a desert color, the active one lit like the sun */
+[data-skin="sonoran"] .site-nav { gap: 8px; }
+[data-skin="sonoran"] .site-nav a { color: #fff6e9; font-weight: 600; border: 1.5px solid rgba(255, 246, 233, 0.45); }
+[data-skin="sonoran"] .site-nav a[data-nav="calendar"]:hover { background: #c23b6f; color: #fff; }
+[data-skin="sonoran"] .site-nav a[data-nav="plants"]:hover { background: #5c8a3a; color: #fff; }
+[data-skin="sonoran"] .site-nav a[data-nav="gallery"]:hover { background: #e2714f; color: #fff; }
+[data-skin="sonoran"] .site-nav a[data-nav="about"]:hover { background: #2f8fa0; color: #fff; }
+[data-skin="sonoran"] .site-nav a[aria-current="page"] {
+  background: linear-gradient(135deg, #ffd27a, #f6a04d);
+  color: var(--dusk-1);
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(255, 210, 122, 0.3), 0 6px 18px rgba(246, 160, 77, 0.45);
+}
+
+[data-skin="sonoran"] .page-head h1 {
+  background: linear-gradient(90deg, var(--dusk-2), var(--dusk-3));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+[data-skin="sonoran"] .eyebrow { color: var(--accent); }
+
+/* Plant-now panel: a twilight card */
+[data-skin="sonoran"] .now-panel {
+  background: linear-gradient(160deg, #3a2c5e, #6d3a69);
+  color: #fff6e9;
+  border: 0;
+}
+[data-skin="sonoran"] .now-panel .eyebrow { color: #ffd27a; }
+[data-skin="sonoran"] .now-range, [data-skin="sonoran"] .now-count { color: #e6cfe0; }
+[data-skin="sonoran"] .now-panel .link-btn { color: #ffd27a; }
+[data-skin="sonoran"] .icon-btn { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.35); color: #fff; }
+[data-skin="sonoran"] .now-list a { background: rgba(255, 246, 233, 0.1); color: #fff6e9; border: 1px solid rgba(255, 246, 233, 0.22); }
+[data-skin="sonoran"] .now-list a:hover { background: #fff6e9; color: var(--dusk-1); }
+
+[data-skin="sonoran"] .segmented { background: var(--surface-2); }
+[data-skin="sonoran"] .segmented button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+[data-skin="sonoran"] .search input, [data-skin="sonoran"] .jump select { border-color: var(--border); background: var(--surface); }
+
+/* Calendar table: dusk-purple header, sand-striped months, colored season bands */
+[data-skin="sonoran"] .cal-scroll { border: 0; }
+[data-skin="sonoran"] .cal thead th { background: var(--dusk-1); color: #fff6e9; }
+[data-skin="sonoran"] .cal thead .cal-plant-col { color: #ffd27a; }
+[data-skin="sonoran"] .cal-month { color: #fff6e9; border-left-color: #4a3f72; }
+[data-skin="sonoran"] .cal-month.is-selected-month { color: #ffd27a; }
+[data-skin="sonoran"] .cal-half button { color: #b3a8d6; }
+[data-skin="sonoran"] .cal-half.is-selected button { background: #ffd27a; color: var(--dusk-1); }
+[data-skin="sonoran"] .cal tbody td:nth-child(4n), [data-skin="sonoran"] .cal tbody td:nth-child(4n+1) { background-color: #faf1e4; }
+[data-skin="sonoran"] .cal tbody td.m-S { background: var(--m-seed); }
+[data-skin="sonoran"] .cal tbody td.m-T { background: var(--m-transplant); }
+[data-skin="sonoran"] .cal tbody td.m-B { background: linear-gradient(135deg, var(--m-seed) 50%, var(--m-transplant) 50%); }
+[data-skin="sonoran"] .cal tbody td.m-X { background: var(--m-sets); }
+[data-skin="sonoran"] .cal tbody td.m-P { background: var(--m-plant); }
+[data-skin="sonoran"] .cal-group th { color: #fff; }
+[data-skin="sonoran"] .cal-group-warm th { background: linear-gradient(90deg, #e2714f, #f6b65a); }
+[data-skin="sonoran"] .cal-group-cool th { background: linear-gradient(90deg, #2f8fa0, #6fb7c4); }
+[data-skin="sonoran"] .cal-group-perennial th { background: linear-gradient(90deg, #7a3b6e, #c23b6f); }
+[data-skin="sonoran"] .cal tbody tr:hover th.cal-plant-col { background: #fde0cc; }
+
+[data-skin="sonoran"] .card { border: 0; }
+[data-skin="sonoran"] .card:hover { box-shadow: 0 16px 36px rgba(122, 59, 110, 0.22); }
+[data-skin="sonoran"] .tag-now { background: var(--accent); }
+
+[data-skin="sonoran"] .plant-img { border-radius: 22px; }
+[data-skin="sonoran"] .when, [data-skin="sonoran"] .fact { border: 0; box-shadow: var(--shadow); background: var(--surface); }
+[data-skin="sonoran"] .fact dt { color: var(--dusk-2); }
+
+[data-skin="sonoran"] .gallery-item { border-radius: 14px; }
+[data-skin="sonoran"] .gallery-group h2 a { color: var(--dusk-2); }
+
+[data-skin="sonoran"] .site-footer { background: var(--dusk-1); color: #d8cfe9; border-top: 0; }
+[data-skin="sonoran"] .site-footer a { color: #ffd27a; }
+
+/* Theme picker: an outlined pill that lights up like the active tab */
+[data-skin="sonoran"] .theme-btn { background: transparent; color: #fff6e9; border: 1.5px solid rgba(255, 246, 233, 0.45); }
+[data-skin="sonoran"] .theme-btn:hover, [data-skin="sonoran"] .theme-btn[aria-expanded="true"] { background: #fff6e9; color: var(--dusk-1); }
+[data-skin="sonoran"] .theme-menu { border: 0; }
+[data-skin="sonoran"] .theme-menu button[aria-checked="true"] { background: #fde0cc; }

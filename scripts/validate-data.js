@@ -130,6 +130,22 @@ if (assetLinks.length === 0) fail("index.html", "no CSS or JS links found");
 if (versions.has(undefined)) fail("index.html", "every CSS and JS link needs a ?v= tag");
 if (versions.size > 1) fail("index.html", `CSS and JS links use different ?v= tags: ${[...versions].join(", ")}`);
 
+// Themes: the early script in index.html and THEMES in js/app.js must list the same ids,
+// and every theme except "classic" (the base styles) needs its stylesheet linked.
+const appJs = fs.readFileSync(path.join(root, "js/app.js"), "utf8");
+const appThemes = [...appJs.matchAll(/\{ id: "([a-z-]+)", name: "[^"]+", note:/g)].map((m) => m[1]);
+const htmlThemesMatch = /var themes = \[([^\]]+)\]/.exec(indexHtml);
+const htmlThemes = htmlThemesMatch ? [...htmlThemesMatch[1].matchAll(/"([a-z-]+)"/g)].map((m) => m[1]) : [];
+if (appThemes.length === 0) fail("js/app.js", "no THEMES found");
+if (appThemes.join() !== htmlThemes.join()) {
+  fail("index.html", `theme list (${htmlThemes.join(", ")}) must match THEMES in js/app.js (${appThemes.join(", ")}) in the same order`);
+}
+for (const id of appThemes) {
+  if (id === "classic") continue;
+  if (!fs.existsSync(path.join(root, `css/themes/${id}.css`))) fail(`theme "${id}"`, `missing css/themes/${id}.css`);
+  if (!assetLinks.some((link) => link.startsWith(`css/themes/${id}.css`))) fail(`theme "${id}"`, "stylesheet is not linked in index.html");
+}
+
 if (warnings.length) {
   console.warn(`Warning(s):\n  - ${warnings.join("\n  - ")}`);
 }

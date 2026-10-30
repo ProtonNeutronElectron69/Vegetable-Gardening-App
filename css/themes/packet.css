@@ -1,0 +1,151 @@
+/* Theme draft 4: "Seed Packet" — vintage seed-packet print.
+   Slab-serif type, a paper background, heirloom inks (barn red, mustard, teal),
+   stamped labels and dashed "tear here" borders. */
+
+:root[data-skin="packet"] {
+  --bg: #f3ead3;
+  --surface: #fbf6e9;
+  --surface-2: #eadfc2;
+  --text: #2a2622;
+  --text-muted: #6a5f4f;
+  --border: #2a2622;
+  --brand: #2f6f6a;
+  --brand-strong: #235652;
+  --brand-soft: #d6e6df;
+  --accent: #b23a2e;
+  --m-seed: #4e8a3e;
+  --m-transplant: #d99a2b;
+  --m-sets: #8a4f7d;
+  --m-plant: #2f6f6a;
+  --season-warm: #b23a2e;
+  --season-warm-text: #fbf6e9;
+  --season-cool: #2f6f6a;
+  --season-cool-text: #fbf6e9;
+  --season-perennial: #8a4f7d;
+  --season-perennial-text: #fbf6e9;
+  --radius: 4px;
+  --shadow: none;
+  --font: "Zilla Slab", Georgia, serif;
+  --display: "Alfa Slab One", "Rockwell", Georgia, serif;
+  --mustard: #d99a2b;
+  color-scheme: light;
+}
+
+/* Paper grain from two faint repeating gradients */
+[data-skin="packet"] body {
+  background-color: var(--bg);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(120, 90, 40, 0.035) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(120, 90, 40, 0.03) 0 1px, transparent 1px 4px);
+  font-size: 17px;
+}
+[data-skin="packet"] h1, [data-skin="packet"] .brand-name, [data-skin="packet"] .now-title h2,
+[data-skin="packet"] .gallery-group h2 { font-family: var(--display); font-weight: 400; letter-spacing: 0.01em; }
+
+/* Header: barn-red band with a mustard rule, like the top of a seed packet */
+[data-skin="packet"] .site-header {
+  background: var(--accent);
+  border-bottom: 6px double var(--mustard);
+}
+[data-skin="packet"] .header-inner { padding-block: 20px; }
+[data-skin="packet"] .brand, [data-skin="packet"] .brand:hover { color: #fbf6e9; }
+[data-skin="packet"] .brand-icon {
+  color: var(--accent); background: #fbf6e9; border-radius: 50%; padding: 6px; width: 46px; height: 46px;
+  outline: 2px dashed #fbf6e9; outline-offset: 3px;
+}
+[data-skin="packet"] .brand-name { font-size: 1.6rem; text-transform: uppercase; }
+[data-skin="packet"] .brand-tag { color: #f5d9a8; font-style: italic; font-size: 0.95rem; }
+
+/* Tabs: stamped labels, each in a different heirloom ink */
+[data-skin="packet"] .site-nav { gap: 8px; }
+[data-skin="packet"] .site-nav a {
+  border-radius: 3px;
+  color: #fbf6e9;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 2px solid #fbf6e9;
+  padding: 7px 14px;
+}
+[data-skin="packet"] .site-nav a:hover { background: rgba(251, 246, 233, 0.15); color: #fbf6e9; }
+[data-skin="packet"] .site-nav a[aria-current="page"] { background: var(--mustard); color: var(--text); border-color: var(--mustard); transform: rotate(-1.5deg); }
+
+[data-skin="packet"] .page-head h1 { color: var(--accent); text-transform: uppercase; }
+[data-skin="packet"] .eyebrow { color: var(--brand); letter-spacing: 0.14em; }
+
+/* Plant-now panel: a seed packet with a dashed tear line */
+[data-skin="packet"] .now-panel {
+  background: var(--surface);
+  border: 2px solid var(--text);
+  outline: 2px dashed var(--text);
+  outline-offset: -10px;
+  padding: 26px 28px;
+}
+[data-skin="packet"] .now-title h2 { color: var(--brand); font-size: 1.8rem; }
+[data-skin="packet"] .icon-btn { border: 2px solid var(--text); background: var(--mustard); }
+[data-skin="packet"] .now-list a { border-radius: 3px; border: 1.5px solid var(--text); background: #fff9ec; }
+[data-skin="packet"] .now-list a:hover { background: var(--brand-soft); }
+[data-skin="packet"] .badge { border-radius: 2px; text-transform: uppercase; letter-spacing: 0.06em; text-shadow: none; }
+
+[data-skin="packet"] .segmented { border: 2px solid var(--text); border-radius: 3px; background: var(--surface); }
+[data-skin="packet"] .segmented button { border-radius: 2px; color: var(--text); }
+[data-skin="packet"] .segmented button[aria-pressed="true"] { background: var(--brand); color: #fbf6e9; box-shadow: none; }
+[data-skin="packet"] .search input, [data-skin="packet"] .jump select { border-radius: 3px; border: 2px solid var(--text); background: var(--surface); }
+
+/* Calendar table: teal header like a printed chart, mustard month stripes */
+[data-skin="packet"] .cal-scroll { border: 2px solid var(--text); border-radius: 3px; background: var(--surface); }
+[data-skin="packet"] .cal thead th { background: var(--brand); color: #fbf6e9; }
+[data-skin="packet"] .cal thead .cal-plant-col { color: #f5d9a8; font-family: var(--display); font-weight: 400; }
+[data-skin="packet"] .cal-month { color: #fbf6e9; text-transform: uppercase; letter-spacing: 0.06em; border-left-color: #4f8e88; }
+[data-skin="packet"] .cal-month.is-selected-month { color: var(--mustard); }
+[data-skin="packet"] .cal-half button { color: #b9d5cf; }
+[data-skin="packet"] .cal-half.is-selected button { background: var(--mustard); color: var(--text); border-radius: 2px 2px 0 0; }
+[data-skin="packet"] .cal tbody td:nth-child(4n), [data-skin="packet"] .cal tbody td:nth-child(4n+1) { background-color: #f1e6c9; }
+[data-skin="packet"] .cal tbody td.m-S { background: var(--m-seed); }
+[data-skin="packet"] .cal tbody td.m-T { background: var(--m-transplant); }
+[data-skin="packet"] .cal tbody td.m-B { background: linear-gradient(135deg, var(--m-seed) 50%, var(--m-transplant) 50%); }
+[data-skin="packet"] .cal tbody td.m-X { background: var(--m-sets); }
+[data-skin="packet"] .cal tbody td.m-P { background: var(--m-plant); }
+[data-skin="packet"] tbody .cal-plant-col { background: var(--surface); }
+[data-skin="packet"] .cal-group th { color: #fbf6e9; font-family: var(--display); font-weight: 400; letter-spacing: 0.08em; }
+[data-skin="packet"] .cal-group-warm th { background: var(--accent); }
+[data-skin="packet"] .cal-group-cool th { background: #3d6f8a; }
+[data-skin="packet"] .cal-group-perennial th { background: var(--m-sets); }
+[data-skin="packet"] .cal tbody tr:hover th.cal-plant-col { background: #f5d9a8; }
+
+/* Cards: each plant as a little seed packet */
+[data-skin="packet"] .card { border: 2px solid var(--text); border-radius: 3px; background: var(--surface); }
+[data-skin="packet"] .card-media { border-bottom: 2px dashed var(--text); padding: 8px; background: var(--surface); }
+[data-skin="packet"] .card-img { border: 1px solid var(--text); }
+[data-skin="packet"] .card-title { font-family: var(--display); font-weight: 400; text-transform: uppercase; color: var(--accent); letter-spacing: 0.02em; }
+[data-skin="packet"] .tag { border-radius: 2px; border: 1px solid currentColor; text-transform: uppercase; letter-spacing: 0.05em; }
+[data-skin="packet"] .tag-now { background: var(--mustard); color: var(--text); }
+
+[data-skin="packet"] .plant-photo { background: var(--surface); padding: 10px; border: 2px solid var(--text); }
+[data-skin="packet"] .plant-img { border-radius: 0; box-shadow: none; border: 1px solid var(--text); }
+[data-skin="packet"] .plant-intro h1 { color: var(--accent); text-transform: uppercase; }
+[data-skin="packet"] .when, [data-skin="packet"] .fact { border: 2px solid var(--text); border-radius: 3px; background: var(--surface); }
+[data-skin="packet"] .fact dt { color: var(--brand); }
+
+[data-skin="packet"] .gallery-item { border-radius: 2px; border: 2px solid var(--text); }
+[data-skin="packet"] .gallery-group h2 a { color: var(--accent); }
+
+[data-skin="packet"] .site-footer { background: var(--text); color: #e9dcbc; border-top: 6px double var(--mustard); }
+[data-skin="packet"] .site-footer a { color: var(--mustard); }
+
+@media (max-width: 760px) {
+  [data-skin="packet"] .site-nav { flex-wrap: nowrap; gap: 4px; }
+  [data-skin="packet"] .site-nav a { flex: 1; text-align: center; padding: 6px 2px; font-size: 0.72rem; letter-spacing: 0.04em; }
+  [data-skin="packet"] .brand-name { font-size: 1.05rem; }
+  [data-skin="packet"] .brand-icon { width: 36px; height: 36px; padding: 5px; }
+}
+
+/* Theme picker: a stamped label like the tabs */
+[data-skin="packet"] .theme-btn {
+  background: transparent; color: #fbf6e9; border: 2px solid #fbf6e9; border-radius: 3px;
+  text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; font-weight: 700;
+}
+[data-skin="packet"] .theme-btn:hover, [data-skin="packet"] .theme-btn[aria-expanded="true"] { background: var(--mustard); color: var(--text); border-color: var(--mustard); }
+[data-skin="packet"] .theme-menu { border: 2px solid var(--text); border-radius: 3px; outline: 2px dashed var(--text); outline-offset: -8px; padding: 12px; }
+[data-skin="packet"] .theme-menu button { border-radius: 2px; }
