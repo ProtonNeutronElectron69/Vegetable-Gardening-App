@@ -10,19 +10,19 @@
        The list of themes lives in js/app.js (THEMES); keep the two in sync. -->
   <script>
     (function () {
-      var themes = ["sonoran", "plot", "patch", "harvest", "packet", "classic"];
+      var themes = ["patch", "sonoran", "plot", "harvest", "packet", "classic"];
       var saved = null;
       try { saved = localStorage.getItem("garden-guide-theme"); } catch (e) {}
       document.documentElement.setAttribute("data-skin", themes.indexOf(saved) >= 0 ? saved : themes[0]);
     })();
   </script>
-  <link rel="stylesheet" href="css/styles.css?v=2026-10-30.2">
-  <link rel="stylesheet" href="css/fonts/fonts.css?v=2026-10-30.2">
-  <link rel="stylesheet" href="css/themes/sonoran.css?v=2026-10-30.2">
-  <link rel="stylesheet" href="css/themes/plot.css?v=2026-10-30.2">
-  <link rel="stylesheet" href="css/themes/patch.css?v=2026-10-30.2">
-  <link rel="stylesheet" href="css/themes/harvest.css?v=2026-10-30.2">
-  <link rel="stylesheet" href="css/themes/packet.css?v=2026-10-30.2">
+  <link rel="stylesheet" href="css/styles.css?v=2026-10-30.3">
+  <link rel="stylesheet" href="css/fonts/fonts.css?v=2026-10-30.3">
+  <link rel="stylesheet" href="css/themes/sonoran.css?v=2026-10-30.3">
+  <link rel="stylesheet" href="css/themes/plot.css?v=2026-10-30.3">
+  <link rel="stylesheet" href="css/themes/patch.css?v=2026-10-30.3">
+  <link rel="stylesheet" href="css/themes/harvest.css?v=2026-10-30.3">
+  <link rel="stylesheet" href="css/themes/packet.css?v=2026-10-30.3">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -82,9 +82,9 @@
 
   <!-- Plain scripts (not modules) so the app also works when opened straight from a file.
        The ?v= value makes browsers fetch fresh copies after an update; change it on every release. -->
-  <script src="js/data/sources.js?v=2026-10-30.2"></script>
-  <script src="js/data/plants.js?v=2026-10-30.2"></script>
-  <script src="js/data/photos.js?v=2026-10-30.2"></script>
-  <script src="js/app.js?v=2026-10-30.2"></script>
+  <script src="js/data/sources.js?v=2026-10-30.3"></script>
+  <script src="js/data/plants.js?v=2026-10-30.3"></script>
+  <script src="js/data/photos.js?v=2026-10-30.3"></script>
+  <script src="js/app.js?v=2026-10-30.3"></script>
 </body>
 </html>
