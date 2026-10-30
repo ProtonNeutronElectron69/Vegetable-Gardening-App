@@ -8,6 +8,11 @@ Reference app for vegetable and fruit gardening in the Phoenix, AZ metro area (l
 - Current scope is a read-only reference (no accounts, no saved user data). Primary target is a desktop browser; it must also work well on phone browsers.
 - Must keep working when `index.html` is opened directly from disk (`file://`): no ES modules, no `fetch()` of local files, no build step, no external CDNs. Data files set globals on `window` (`PLANTS`, `SOURCES`, `PHOTOS`) and are loaded with plain `<script>` tags.
 
+## Releases
+
+- The site is published with GitHub Pages from `main` (https://protonneutronelectron69.github.io/Vegetable-Gardening-App/). Pages tells browsers to cache files for 10 minutes.
+- Every CSS and JS link in `index.html` carries the same `?v=YYYY-MM-DD` tag. Change it in every PR that edits CSS, JS or data, so visitors never get a mix of old and new files (which breaks images). The validator checks that all tags match.
+
 ## Layout
 
 - `js/app.js`: single IIFE; hash routes `#/calendar`, `#/plants`, `#/plant/<id>`, `#/gallery`, `#/about`. Views render HTML strings into `<main>`; always pass data through `esc()`.
