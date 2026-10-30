@@ -136,7 +136,8 @@
 
 @media (max-width: 760px) {
   [data-skin="packet"] .site-nav { flex-wrap: nowrap; gap: 4px; }
-  [data-skin="packet"] .site-nav a { flex: 1; text-align: center; padding: 6px 2px; font-size: 0.72rem; letter-spacing: 0.04em; }
+  [data-skin="packet"] .site-nav a { flex: 1 1 auto; text-align: center; white-space: nowrap; padding: 6px 2px; font-size: 0.72rem; letter-spacing: 0.04em; }
+  :root[data-skin="packet"][lang="vi"] .site-nav a { font-size: 0.66rem; letter-spacing: 0.02em; }
   [data-skin="packet"] .brand-name { font-size: 1.05rem; }
   [data-skin="packet"] .brand-icon { width: 36px; height: 36px; padding: 5px; }
 }
@@ -149,3 +150,11 @@
 [data-skin="packet"] .theme-btn:hover, [data-skin="packet"] .theme-btn[aria-expanded="true"] { background: var(--mustard); color: var(--text); border-color: var(--mustard); }
 [data-skin="packet"] .theme-menu { border: 2px solid var(--text); border-radius: 3px; outline: 2px dashed var(--text); outline-offset: -8px; padding: 12px; }
 [data-skin="packet"] .theme-menu button { border-radius: 2px; }
+
+/* Language toggle: a stamped label like the tabs */
+[data-skin="packet"] .lang-toggle { background: transparent; border: 2px solid #fbf6e9; border-radius: 3px; }
+[data-skin="packet"] .lang-toggle button { color: #fbf6e9; }
+[data-skin="packet"] .lang-toggle button[aria-pressed="true"] { background: var(--mustard); color: var(--text); }
+
+/* Vietnamese: Zilla Slab has no Vietnamese letters, so body text uses Bitter, another slab serif */
+:root[data-skin="packet"][lang="vi"] { --font: "Bitter", Georgia, serif; }

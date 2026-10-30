@@ -44,15 +44,16 @@
     url("../../images/plants/chard/plant-1.jpg") center 40% / cover no-repeat;
 }
 [data-skin="harvest"] .header-inner { padding-block: 120px 28px; align-items: flex-end; }
+[data-skin="harvest"] .brand, [data-skin="harvest"] .brand:hover { color: #fff; }
+[data-skin="harvest"] .brand-icon { color: #c9e7a4; width: 42px; height: 42px; }
+[data-skin="harvest"] .brand-name { font-size: 2rem; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4); }
+[data-skin="harvest"] .brand-tag { color: #e9eedd; font-size: 0.9rem; }
+/* Phone sizes come after the desktop sizes so they win */
 @media (max-width: 760px) {
   [data-skin="harvest"] .header-inner { padding-block: 72px 16px; }
   [data-skin="harvest"] .brand-name { font-size: 1.45rem; }
   [data-skin="harvest"] .brand-icon { width: 32px; height: 32px; }
 }
-[data-skin="harvest"] .brand, [data-skin="harvest"] .brand:hover { color: #fff; }
-[data-skin="harvest"] .brand-icon { color: #c9e7a4; width: 42px; height: 42px; }
-[data-skin="harvest"] .brand-name { font-size: 2rem; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4); }
-[data-skin="harvest"] .brand-tag { color: #e9eedd; font-size: 0.9rem; }
 
 /* Tabs: frosted glass on the photo; the active one is solid white */
 [data-skin="harvest"] .site-nav {
@@ -129,3 +130,14 @@
 }
 [data-skin="harvest"] .theme-btn:hover, [data-skin="harvest"] .theme-btn[aria-expanded="true"] { background: #fff; color: var(--brand-strong); }
 [data-skin="harvest"] .theme-menu { border: 0; }
+
+/* Language toggle: frosted glass, like the tabs */
+[data-skin="harvest"] .lang-toggle {
+  background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+[data-skin="harvest"] .lang-toggle button { color: #fff; }
+[data-skin="harvest"] .lang-toggle button[aria-pressed="true"] { background: #fff; color: var(--brand-strong); }
+
+/* Vietnamese: DM Serif Display has no Vietnamese letters, so headings use Playfair Display */
+:root[data-skin="harvest"][lang="vi"] { --display: "Playfair Display", Georgia, serif; }

@@ -18,6 +18,7 @@ That's it. Bookmark the page to come back to it.
 - **Gallery**: about 230 photos. Each crop has at least three photos of the harvest and three of the whole plant, so you can see its size and shape. Leafy greens and herbs have wide shots and close-ups instead. Filter by plant type or photo type, jump straight to a plant, and view any photo full screen. Each plant's page also shows its own photos.
 - **About**: how Phoenix's two growing seasons work, watering basics, sources and photo credits.
 - **Themes**: pick a look from the **Theme** button in the top corner: Sunny Patch (the default), Sonoran Sunset, Garden Plot, Raised Bed, Seed Packet or Classic. Your browser remembers the choice.
+- **Tiếng Việt**: the **EN / VI** switch in the top right shows the whole site in Vietnamese (Southern dialect), including every plant guide, the calendar and photo captions. Browsers set to Vietnamese open in Vietnamese automatically, and the choice is remembered.
 
 ## Where the information comes from
 
@@ -37,8 +38,11 @@ The app is plain HTML, CSS and JavaScript with no build step or dependencies.
 | `css/themes/` | One stylesheet per selectable theme |
 | `css/fonts/` | Bundled fonts and their licenses |
 | `js/app.js` | The app: calendar, plant list, plant pages, gallery, about |
+| `js/i18n.js` | Interface text in English and Vietnamese |
 | `js/data/plants.js` | One entry per plant: planting windows, growing facts, tips |
+| `js/data/plants.vi.js` | Vietnamese text for each plant |
 | `js/data/sources.js` | Reference publications cited by plants |
+| `js/data/sources.vi.js` | Vietnamese notes for each source |
 | `js/data/photos.js` | Photo files, photo type and credits for each plant |
 | `images/plants/<plant>/` | Plant photos (with smaller versions in `thumbs/`) |
 | `scripts/validate-data.js` | Checks the data files for mistakes |

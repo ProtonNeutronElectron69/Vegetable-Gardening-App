@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
-  Checks the plant, source and photo data for mistakes.
+  Checks the plant, source, photo and translation data for mistakes.
   Run with:  node scripts/validate-data.js
 */
 "use strict";
@@ -12,10 +12,12 @@ const vm = require("vm");
 const root = path.join(__dirname, "..");
 const context = { window: {} };
 vm.createContext(context);
-for (const file of ["js/data/sources.js", "js/data/plants.js", "js/data/photos.js"]) {
+const DATA_FILES = ["js/i18n.js", "js/data/sources.js", "js/data/sources.vi.js", "js/data/plants.js",
+  "js/data/plants.vi.js", "js/data/photos.js"];
+for (const file of DATA_FILES) {
   vm.runInContext(fs.readFileSync(path.join(root, file), "utf8"), context, { filename: file });
 }
-const { PLANTS, SOURCES, PHOTOS } = context.window;
+const { PLANTS, SOURCES, PHOTOS, I18N, PLANTS_VI, SOURCES_VI } = context.window;
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -133,7 +135,7 @@ if (versions.size > 1) fail("index.html", `CSS and JS links use different ?v= ta
 // Themes: the early script in index.html and THEMES in js/app.js must list the same ids,
 // and every theme except "classic" (the base styles) needs its stylesheet linked.
 const appJs = fs.readFileSync(path.join(root, "js/app.js"), "utf8");
-const appThemes = [...appJs.matchAll(/\{ id: "([a-z-]+)", name: "[^"]+", note:/g)].map((m) => m[1]);
+const appThemes = [...appJs.matchAll(/\{ id: "([a-z-]+)", colors:/g)].map((m) => m[1]);
 const htmlThemesMatch = /var themes = \[([^\]]+)\]/.exec(indexHtml);
 const htmlThemes = htmlThemesMatch ? [...htmlThemesMatch[1].matchAll(/"([a-z-]+)"/g)].map((m) => m[1]) : [];
 if (appThemes.length === 0) fail("js/app.js", "no THEMES found");
@@ -144,6 +146,58 @@ for (const id of appThemes) {
   if (id === "classic") continue;
   if (!fs.existsSync(path.join(root, `css/themes/${id}.css`))) fail(`theme "${id}"`, `missing css/themes/${id}.css`);
   if (!assetLinks.some((link) => link.startsWith(`css/themes/${id}.css`))) fail(`theme "${id}"`, "stylesheet is not linked in index.html");
+}
+
+// ---------------------------------------------------------------- translations
+const LANGS = ["en", "vi"];
+
+// Interface text: every key has English and Vietnamese of the same shape.
+// A blank value is allowed only where English has nothing to add ("source.english").
+for (const [key, entry] of Object.entries(I18N || {})) {
+  for (const l of LANGS) {
+    if (!(l in entry)) fail(`i18n "${key}"`, `missing ${l}`);
+  }
+  const en = entry.en, vi = entry.vi;
+  if (Array.isArray(en) !== Array.isArray(vi)) fail(`i18n "${key}"`, "en and vi must both be text or both be lists");
+  else if (Array.isArray(en)) {
+    if (en.length !== vi.length) fail(`i18n "${key}"`, `en has ${en.length} items but vi has ${vi.length}`);
+    if (vi.some((s) => typeof s !== "string" || !s.trim())) fail(`i18n "${key}"`, "vi has an empty item");
+  } else if (typeof vi !== "string" || (!vi.trim() && en.trim())) {
+    fail(`i18n "${key}"`, "vi is empty");
+  }
+}
+// Every key the app or the page asks for must exist.
+const usedKeys = new Set([
+  ...[...appJs.matchAll(/\bt\("([a-zA-Z0-9.]*[a-zA-Z0-9])"/g)].map((m) => m[1]),
+  ...[...indexHtml.matchAll(/data-i18n(?:-html|-aria)?="([a-zA-Z0-9.]+)"/g)].map((m) => m[1])
+]);
+for (const p of ["kind.", "method.", "season.", "group.", "category.", "theme."]) {
+  // Built from a prefix plus an id in app.js; check the ids that can occur.
+  const ids = { "kind.": ["produce", "plant", "closeup"], "method.": METHODS, "season.": SEASONS, "group.": SEASONS,
+    "category.": CATEGORIES, "theme.": appThemes }[p];
+  ids.forEach((id) => usedKeys.add(p + id));
+}
+for (const key of usedKeys) {
+  if (!I18N[key]) fail("js/i18n.js", `missing key "${key}" used by the app`);
+}
+
+// Vietnamese plant text: every plant, every field, same number of tips as English.
+for (const p of PLANTS || []) {
+  const vi = PLANTS_VI[p.id];
+  const where = `plants.vi.js "${p.id}"`;
+  if (!vi) { fail(where, "missing (every plant needs Vietnamese text)"); continue; }
+  for (const f of TEXT_FIELDS) {
+    if (typeof vi[f] !== "string" || !vi[f].trim()) fail(where, `missing "${f}"`);
+  }
+  if (!Array.isArray(vi.tips) || vi.tips.length !== p.tips.length) {
+    fail(where, `needs ${p.tips.length} tips to match English (has ${Array.isArray(vi.tips) ? vi.tips.length : 0})`);
+  }
+}
+for (const id of Object.keys(PLANTS_VI || {})) {
+  if (!PLANTS.some((p) => p.id === id)) fail(`plants.vi.js "${id}"`, "does not match any plant id");
+}
+for (const key of Object.keys(SOURCES || {})) {
+  if (typeof SOURCES_VI[key] !== "string" || !SOURCES_VI[key].trim()) fail(`sources.vi.js "${key}"`, "missing Vietnamese note");
 }
 
 if (warnings.length) {

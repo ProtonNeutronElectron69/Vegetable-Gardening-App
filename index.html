@@ -6,51 +6,67 @@
   <title>Phoenix Garden Guide</title>
   <meta name="description" content="Planting calendar and growing guide for vegetables and fruit in the Phoenix, Arizona metro area.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30V15' stroke='%234d7c32' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M16 16C16 9 11 5 4 5c0 7 5 11 12 11zM16 13c0-6 4-10 11-10 0 6-4 10-11 10z' fill='%236a9f45'/%3E%3C/svg%3E">
-  <!-- Apply the visitor's saved theme before anything draws, so the page never flashes the wrong look.
-       The list of themes lives in js/app.js (THEMES); keep the two in sync. -->
+  <!-- Apply the visitor's saved theme and language before anything draws, so the page never
+       flashes the wrong look. The theme list lives in js/app.js (THEMES); keep the two in sync.
+       Language: the saved choice, else Vietnamese if the browser prefers it, else English. -->
   <script>
     (function () {
       var themes = ["patch", "sonoran", "plot", "harvest", "packet", "classic"];
       var saved = null;
       try { saved = localStorage.getItem("garden-guide-theme"); } catch (e) {}
       document.documentElement.setAttribute("data-skin", themes.indexOf(saved) >= 0 ? saved : themes[0]);
+
+      var lang = null;
+      try { lang = localStorage.getItem("garden-guide-lang"); } catch (e) {}
+      if (lang !== "en" && lang !== "vi") {
+        var prefs = navigator.languages || [navigator.language || ""];
+        lang = /^vi\b/i.test(prefs[0] || "") ? "vi" : "en";
+      }
+      document.documentElement.setAttribute("lang", lang);
     })();
   </script>
-  <link rel="stylesheet" href="css/styles.css?v=2026-10-30.3">
-  <link rel="stylesheet" href="css/fonts/fonts.css?v=2026-10-30.3">
-  <link rel="stylesheet" href="css/themes/sonoran.css?v=2026-10-30.3">
-  <link rel="stylesheet" href="css/themes/plot.css?v=2026-10-30.3">
-  <link rel="stylesheet" href="css/themes/patch.css?v=2026-10-30.3">
-  <link rel="stylesheet" href="css/themes/harvest.css?v=2026-10-30.3">
-  <link rel="stylesheet" href="css/themes/packet.css?v=2026-10-30.3">
+  <link rel="stylesheet" href="css/styles.css?v=2026-10-30.4">
+  <link rel="stylesheet" href="css/fonts/fonts.css?v=2026-10-30.4">
+  <link rel="stylesheet" href="css/themes/sonoran.css?v=2026-10-30.4">
+  <link rel="stylesheet" href="css/themes/plot.css?v=2026-10-30.4">
+  <link rel="stylesheet" href="css/themes/patch.css?v=2026-10-30.4">
+  <link rel="stylesheet" href="css/themes/harvest.css?v=2026-10-30.4">
+  <link rel="stylesheet" href="css/themes/packet.css?v=2026-10-30.4">
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
+  <!-- Text marked data-i18n / data-i18n-html / data-i18n-aria is replaced from js/i18n.js
+       in the visitor's language; the English here is the fallback. -->
+  <a class="skip-link" href="#main" data-i18n="site.skip">Skip to content</a>
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="#/calendar" aria-label="Phoenix Garden Guide home">
+      <a class="brand" href="#/calendar" aria-label="Phoenix Garden Guide home" data-i18n-aria="site.home">
         <svg class="brand-icon" viewBox="0 0 32 32" aria-hidden="true">
           <path d="M16 30V15" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
           <path d="M16 16C16 9 11 5 4 5c0 7 5 11 12 11zM16 13c0-6 4-10 11-10 0 6-4 10-11 10z" fill="currentColor"/>
         </svg>
         <span class="brand-text">
-          <span class="brand-name">Phoenix Garden Guide</span>
-          <span class="brand-tag">Vegetables &amp; fruit for the low desert</span>
+          <span class="brand-name" data-i18n="site.name">Phoenix Garden Guide</span>
+          <span class="brand-tag" data-i18n="site.tag">Vegetables &amp; fruit for the low desert</span>
         </span>
       </a>
-      <nav class="site-nav" aria-label="Main">
-        <a href="#/calendar" data-nav="calendar">Calendar</a>
-        <a href="#/plants" data-nav="plants">Plants</a>
-        <a href="#/gallery" data-nav="gallery">Gallery</a>
-        <a href="#/about" data-nav="about">About</a>
+      <nav class="site-nav" aria-label="Main" data-i18n-aria="nav.label">
+        <a href="#/calendar" data-nav="calendar" data-i18n="nav.calendar">Calendar</a>
+        <a href="#/plants" data-nav="plants" data-i18n="nav.plants">Plants</a>
+        <a href="#/gallery" data-nav="gallery" data-i18n="nav.gallery">Gallery</a>
+        <a href="#/about" data-nav="about" data-i18n="nav.about">About</a>
       </nav>
       <div class="theme-picker">
         <button type="button" class="theme-btn" id="theme-btn" aria-haspopup="true" aria-expanded="false" aria-controls="theme-menu">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 0 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.8-.4-1.1-.3-.3-.4-.6-.4-1 0-.9.7-1.6 1.6-1.6H16a5 5 0 0 0 5-5C21 6.6 17 3 12 3Zm-5.5 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"/></svg>
-          <span class="theme-btn-label">Theme</span>
+          <span class="theme-btn-label" data-i18n="theme.button">Theme</span>
         </button>
-        <div class="theme-menu" id="theme-menu" role="menu" aria-label="Choose a theme" hidden></div>
+        <div class="theme-menu" id="theme-menu" role="menu" aria-label="Choose a theme" data-i18n-aria="theme.menu" hidden></div>
+      </div>
+      <!-- Each language button is labeled in its own language so either reader can find it. -->
+      <div class="lang-toggle" role="group" aria-label="Language" data-i18n-aria="lang.group">
+        <button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
+        <button type="button" data-lang="vi" lang="vi" aria-label="Tiếng Việt" aria-pressed="false">VI</button>
       </div>
     </div>
   </header>
@@ -58,33 +74,37 @@
   <main id="main" class="site-main" tabindex="-1">
     <noscript>
       <p class="notice">This guide needs JavaScript turned on in your browser.</p>
+      <p class="notice" lang="vi">Cẩm nang này cần bật JavaScript trong trình duyệt.</p>
     </noscript>
   </main>
 
   <footer class="site-footer">
-    <p>
+    <p data-i18n-html="site.footerHtml">
       Planting dates follow University of Arizona Cooperative Extension guides for Maricopa County.
       Photos from Wikimedia Commons; see <a href="#/about">About</a> for sources and credits.
     </p>
   </footer>
 
-  <dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
+  <dialog class="lightbox" id="lightbox" aria-label="Photo viewer" data-i18n-aria="viewer.label">
     <div class="lightbox-inner">
-      <button class="lightbox-close" type="button" data-lightbox="close" aria-label="Close photo viewer">&times;</button>
-      <button class="lightbox-nav lightbox-prev" type="button" data-lightbox="prev" aria-label="Previous photo">&#8249;</button>
+      <button class="lightbox-close" type="button" data-lightbox="close" aria-label="Close photo viewer" data-i18n-aria="viewer.close">&times;</button>
+      <button class="lightbox-nav lightbox-prev" type="button" data-lightbox="prev" aria-label="Previous photo" data-i18n-aria="viewer.prev">&#8249;</button>
       <figure class="lightbox-figure">
         <img class="lightbox-img" alt="">
         <figcaption class="lightbox-caption"></figcaption>
       </figure>
-      <button class="lightbox-nav lightbox-next" type="button" data-lightbox="next" aria-label="Next photo">&#8250;</button>
+      <button class="lightbox-nav lightbox-next" type="button" data-lightbox="next" aria-label="Next photo" data-i18n-aria="viewer.next">&#8250;</button>
     </div>
   </dialog>
 
   <!-- Plain scripts (not modules) so the app also works when opened straight from a file.
        The ?v= value makes browsers fetch fresh copies after an update; change it on every release. -->
-  <script src="js/data/sources.js?v=2026-10-30.3"></script>
-  <script src="js/data/plants.js?v=2026-10-30.3"></script>
-  <script src="js/data/photos.js?v=2026-10-30.3"></script>
-  <script src="js/app.js?v=2026-10-30.3"></script>
+  <script src="js/i18n.js?v=2026-10-30.4"></script>
+  <script src="js/data/sources.js?v=2026-10-30.4"></script>
+  <script src="js/data/sources.vi.js?v=2026-10-30.4"></script>
+  <script src="js/data/plants.js?v=2026-10-30.4"></script>
+  <script src="js/data/plants.vi.js?v=2026-10-30.4"></script>
+  <script src="js/data/photos.js?v=2026-10-30.4"></script>
+  <script src="js/app.js?v=2026-10-30.4"></script>
 </body>
 </html>
