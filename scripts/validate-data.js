@@ -121,6 +121,15 @@ for (const [key, s] of Object.entries(SOURCES || {})) {
   if (!s.title || !/^https:\/\//.test(s.url || "")) fail(`source "${key}"`, "needs a title and an https url");
 }
 
+// Every local CSS and JS link in index.html needs the same ?v= tag, so browsers
+// fetch a matching set after an update instead of mixing old and new files.
+const indexHtml = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const assetLinks = [...indexHtml.matchAll(/(?:href|src)="((?:css|js)\/[^"]+)"/g)].map((m) => m[1]);
+const versions = new Set(assetLinks.map((link) => (/\?v=([^"&]+)$/.exec(link) || [])[1]));
+if (assetLinks.length === 0) fail("index.html", "no CSS or JS links found");
+if (versions.has(undefined)) fail("index.html", "every CSS and JS link needs a ?v= tag");
+if (versions.size > 1) fail("index.html", `CSS and JS links use different ?v= tags: ${[...versions].join(", ")}`);
+
 if (warnings.length) {
   console.warn(`Warning(s):\n  - ${warnings.join("\n  - ")}`);
 }
