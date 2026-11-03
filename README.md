@@ -27,7 +27,7 @@ That's it. Bookmark the page to come back to it.
 - Fruit planting dates come from other University of Arizona Extension guides (strawberries, citrus, figs, grapes, low-chill fruit trees). Each plant page lists its sources.
 - Spacing, watering, yield and tips are general home-garden guidance and will vary with variety, soil and weather.
 - Monthly tasks and pest advice come from University of Arizona Cooperative Extension publications, including its monthly garden reminders. Watering frequencies come from *Landscape Watering by the Numbers*, the guide used by Phoenix-area cities, and the Extension's citrus watering guide.
-- Photos are from [Wikimedia Commons](https://commons.wikimedia.org/) under free licenses. Credits are on the About page and in [`images/plants/CREDITS.md`](images/plants/CREDITS.md) and [`images/pests/CREDITS.md`](images/pests/CREDITS.md).
+- Plant photos are from [Wikimedia Commons](https://commons.wikimedia.org/); pest photos are from [iNaturalist](https://www.inaturalist.org/) and [Flickr](https://www.flickr.com/). All use free licenses. Credits are on the About page and in [`images/plants/CREDITS.md`](images/plants/CREDITS.md) and [`images/pests/CREDITS.md`](images/pests/CREDITS.md).
 
 ## For contributors
 

@@ -22,8 +22,8 @@ window.I18N = {
   "site.skip": { en: "Skip to content", vi: "Chuyển tới nội dung chính" },
   "site.noscript": { en: "This guide needs JavaScript turned on in your browser.", vi: "Cẩm nang này cần bật JavaScript trong trình duyệt." },
   "site.footerHtml": {
-    en: 'Planting dates follow University of Arizona Cooperative Extension guides for Maricopa County. Photos from Wikimedia Commons; see <a href="#/about">About</a> for sources and credits.',
-    vi: 'Thời điểm trồng theo hướng dẫn của Cooperative Extension, Đại học Arizona, cho quận Maricopa. Hình ảnh từ Wikimedia Commons; coi trang <a href="#/about">Giới thiệu</a> để biết nguồn và tác giả.'
+    en: 'Planting dates follow University of Arizona Cooperative Extension guides for Maricopa County. Photos from Wikimedia Commons, iNaturalist and Flickr; see <a href="#/about">About</a> for sources and credits.',
+    vi: 'Thời điểm trồng theo hướng dẫn của Cooperative Extension, Đại học Arizona, cho quận Maricopa. Hình ảnh từ Wikimedia Commons, iNaturalist và Flickr; coi trang <a href="#/about">Giới thiệu</a> để biết nguồn và tác giả.'
   },
 
   "nav.label": { en: "Main", vi: "Điều hướng chính" },
@@ -256,8 +256,8 @@ window.I18N = {
   },
   "about.credits": { en: "Photo credits", vi: "Nguồn hình ảnh" },
   "about.creditsIntro": {
-    en: "All photos are from Wikimedia Commons and are used under the license shown.",
-    vi: "Tất cả hình ảnh lấy từ Wikimedia Commons và được dùng theo giấy phép ghi kèm."
+    en: "Plant photos are from Wikimedia Commons; pest photos are from iNaturalist and Flickr. All are used under the free license shown.",
+    vi: "Hình cây trồng lấy từ Wikimedia Commons; hình sâu bệnh lấy từ iNaturalist và Flickr. Tất cả đều được dùng theo giấy phép tự do ghi kèm."
   },
   "about.creditsShow": { en: "Show credits for all {n} photos", vi: "Hiện nguồn của tất cả {n} hình" },
 

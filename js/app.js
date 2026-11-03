@@ -235,13 +235,20 @@
     }).join("") + "</ul>";
   }
 
+  // Where a photo came from, named after its source page's site.
+  function photoSite(url) {
+    if (/inaturalist\.org/.test(url)) return "iNaturalist";
+    if (/flickr\.com/.test(url)) return "Flickr";
+    return "Wikimedia Commons";
+  }
+
   function photoCredit(ph) {
     if (!ph) return "";
     var lic = ph.licenseUrl
       ? '<a href="' + esc(ph.licenseUrl) + '" target="_blank" rel="noopener">' + esc(ph.license) + "</a>"
       : esc(ph.license);
     return esc(t("photo.credit", { artist: ph.artist || t("photo.unknown") })) + " · " + lic +
-      ' · <a href="' + esc(ph.sourceUrl) + '" target="_blank" rel="noopener">Wikimedia Commons</a>';
+      ' · <a href="' + esc(ph.sourceUrl) + '" target="_blank" rel="noopener">' + photoSite(ph.sourceUrl) + "</a>";
   }
 
   function sourceLink(k) {
