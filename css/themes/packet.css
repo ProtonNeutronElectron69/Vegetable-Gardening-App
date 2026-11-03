@@ -89,8 +89,8 @@
 [data-skin="packet"] .badge { border-radius: 2px; text-transform: uppercase; letter-spacing: 0.06em; text-shadow: none; }
 
 [data-skin="packet"] .segmented { border: 2px solid var(--text); border-radius: 3px; background: var(--surface); }
-[data-skin="packet"] .segmented button { border-radius: 2px; color: var(--text); }
-[data-skin="packet"] .segmented button[aria-pressed="true"] { background: var(--brand); color: #fbf6e9; box-shadow: none; }
+[data-skin="packet"] .segmented button, [data-skin="packet"] .segmented a { border-radius: 2px; color: var(--text); }
+[data-skin="packet"] .segmented button[aria-pressed="true"], [data-skin="packet"] .segmented a[aria-current="page"] { background: var(--brand); color: #fbf6e9; box-shadow: none; }
 [data-skin="packet"] .search input, [data-skin="packet"] .jump select { border-radius: 3px; border: 2px solid var(--text); background: var(--surface); }
 
 /* Calendar table: teal header like a printed chart, mustard month stripes */
@@ -158,3 +158,8 @@
 
 /* Vietnamese: Zilla Slab has no Vietnamese letters, so body text uses Bitter, another slab serif */
 :root[data-skin="packet"][lang="vi"] { --font: "Bitter", Georgia, serif; }
+
+/* Garden care pages */
+[data-skin="packet"] .task-group, [data-skin="packet"] .table-scroll { border: 2px solid var(--text); border-radius: 3px; }
+[data-skin="packet"] .chip-list a { border: 1.5px solid var(--text); border-radius: 3px; background: #fff9ec; }
+[data-skin="packet"] .task-group h3 { text-transform: uppercase; letter-spacing: 0.05em; }

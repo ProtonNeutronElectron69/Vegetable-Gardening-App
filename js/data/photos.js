@@ -2408,3 +2408,10 @@ window.PHOTOS = {
     }
   ]
 };
+
+/*
+  Photos for each pest or problem in pests.js (keyed by pest id), same fields as above.
+  kind: "pest" = what it looks like, "damage" = the damage it causes.
+  Keep images/pests/CREDITS.md in sync.
+*/
+window.PEST_PHOTOS = {};

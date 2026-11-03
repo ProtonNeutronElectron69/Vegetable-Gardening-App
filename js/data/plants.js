@@ -847,7 +847,7 @@ window.PLANTS = [
       "Fruit does not ripen after picking; taste-test before harvesting the whole tree.",
       "Leave the lower branches (the 'skirt') on; they shade the trunk."
     ],
-    sources: ["az1001", "monthly-march", "az1222"]
+    sources: ["az1001", "reminders-mar", "az1222"]
   },
   {
     id: "fig",
@@ -871,7 +871,7 @@ window.PLANTS = [
       "Figs do not ripen after picking; harvest when soft and drooping on the stem.",
       "Birds love figs; netting helps."
     ],
-    sources: ["figs-low-desert", "az1269", "monthly-march"]
+    sources: ["figs-low-desert", "az1269", "reminders-mar"]
   },
   {
     id: "pomegranate",
@@ -894,7 +894,7 @@ window.PLANTS = [
       "Harvest when the skin is fully colored and the fruit sounds metallic when tapped.",
       "The bright orange-red flowers in spring are a bonus."
     ],
-    sources: ["monthly-march"]
+    sources: ["reminders-mar"]
   },
   {
     id: "grapes",
@@ -939,7 +939,7 @@ window.PLANTS = [
       "Plant bare-root trees in winter while dormant.",
       "Thin small fruit to 6 to 8 inches apart in spring for bigger peaches."
     ],
-    sources: ["az1269", "monthly-january", "monthly-march"]
+    sources: ["az1269", "monthly-january", "reminders-mar"]
   },
   {
     id: "apricot",
@@ -961,6 +961,6 @@ window.PLANTS = [
       "The low desert averages about 300 to 400 chill hours a year, so lower-chill varieties are safer.",
       "Plant bare-root trees in winter while dormant."
     ],
-    sources: ["az1269", "monthly-january", "monthly-march"]
+    sources: ["az1269", "monthly-january", "reminders-mar"]
   }
 ];
