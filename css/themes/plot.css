@@ -58,6 +58,7 @@
 }
 [data-skin="plot"] .site-nav a[data-nav="calendar"] { background: var(--c-tomato); }
 [data-skin="plot"] .site-nav a[data-nav="plants"] { background: var(--c-sky); }
+[data-skin="plot"] .site-nav a[data-nav="care"] { background: #8a5a2b; }
 [data-skin="plot"] .site-nav a[data-nav="gallery"] { background: var(--c-plum); }
 [data-skin="plot"] .site-nav a[data-nav="about"] { background: #1d2a22; }
 [data-skin="plot"] .site-nav a:hover { color: #fff; transform: translateY(-2px); }
@@ -89,9 +90,9 @@
 
 /* Segmented filters: square buttons with solid fills when chosen */
 [data-skin="plot"] .segmented { border-radius: 0; background: transparent; padding: 0; gap: 0; border: 2px solid #1d2a22; }
-[data-skin="plot"] .segmented button { border-radius: 0; color: #1d2a22; padding: 8px 14px; }
-[data-skin="plot"] .segmented button + button { border-left: 2px solid #1d2a22; }
-[data-skin="plot"] .segmented button[aria-pressed="true"] { background: var(--c-leaf); color: #fff; box-shadow: none; }
+[data-skin="plot"] .segmented button, [data-skin="plot"] .segmented a { border-radius: 0; color: #1d2a22; padding: 8px 14px; }
+[data-skin="plot"] .segmented button + button, [data-skin="plot"] .segmented a + a { border-left: 2px solid #1d2a22; }
+[data-skin="plot"] .segmented button[aria-pressed="true"], [data-skin="plot"] .segmented a[aria-current="page"] { background: var(--c-leaf); color: #fff; box-shadow: none; }
 [data-skin="plot"] .search input { border-radius: 0; border: 2px solid #1d2a22; }
 [data-skin="plot"] .badge { border-radius: 0; text-shadow: none; }
 [data-skin="plot"] .swatch { border-radius: 50%; }
@@ -154,3 +155,11 @@
 [data-skin="plot"] .lang-toggle { border-radius: 0; border: 2px solid #1d2a22; background: #fff; }
 [data-skin="plot"] .lang-toggle button { color: #1d2a22; }
 [data-skin="plot"] .lang-toggle button[aria-pressed="true"] { background: var(--c-sun); color: #1d2a22; }
+
+/* Garden care pages */
+[data-skin="plot"] .task-group, [data-skin="plot"] .table-scroll { border: 2px solid #1d2a22; border-radius: 0; }
+[data-skin="plot"] .chip-list a { border: 2px solid #1d2a22; border-radius: 0; }
+[data-skin="plot"] .data-table thead th { background: #1d2a22; color: #fff; }
+[data-skin="plot"] .data-table thead th .th-sub { color: #b9c4bc; }
+[data-skin="plot"] .data-table thead .is-now { background: var(--c-sun); color: #1d2a22; box-shadow: none; }
+[data-skin="plot"] .data-table thead .is-now .th-sub { color: #1d2a22; }

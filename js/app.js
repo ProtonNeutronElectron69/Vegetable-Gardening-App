@@ -1,8 +1,9 @@
 /*
   Phoenix Garden Guide: a small single-page app with no build step.
-  Views are chosen by the URL hash: #/calendar, #/plants, #/plant/<id>, #/gallery, #/about.
-  All visible text comes from js/i18n.js (interface) and js/data/plants.vi.js /
-  sources.vi.js (Vietnamese plant and source text); English plant text is in plants.js.
+  Views are chosen by the URL hash: #/calendar, #/plants, #/plant/<id>, #/care[/<month>],
+  #/water, #/pests, #/pest/<id>, #/gallery, #/about.
+  All visible text comes from js/i18n.js (interface) and the *.vi.js files in js/data/
+  (Vietnamese plant, source, task and pest text); English text is in the data files.
 */
 (function () {
   "use strict";
@@ -13,6 +14,12 @@
   var I18N = window.I18N || {};
   var PLANTS_VI = window.PLANTS_VI || {};
   var SOURCES_VI = window.SOURCES_VI || {};
+  var TASKS = window.TASKS || [];
+  var TASKS_VI = window.TASKS_VI || [];
+  var PESTS = window.PESTS || [];
+  var PESTS_VI = window.PESTS_VI || {};
+  var PEST_PHOTOS = window.PEST_PHOTOS || {};
+  var WATERING = window.WATERING || { seasons: [], seasonOfMonth: [], rows: [], citrusPeriods: [], citrus: [], sources: [] };
 
   // Month abbreviations as written in plants.js ("Feb 15"); display names come from i18n.js.
   var DATA_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -59,6 +66,13 @@
     return vi && vi[field] != null ? vi[field] : p[field];
   }
   function pname(p) { return pt(p, "name"); }
+
+  // The same for pests (English text lives on the pest in pests.js).
+  function xt(x, field) {
+    var vi = lang === "vi" && PESTS_VI[x.id];
+    return vi && vi[field] != null ? vi[field] : x[field];
+  }
+  function xname(x) { return xt(x, "name"); }
 
   function lowerFirst(s) { return s.charAt(0).toLocaleLowerCase(lang) + s.slice(1); }
 
@@ -121,6 +135,8 @@
 
   var PLANT_BY_ID = {};
   PLANTS.forEach(function (p) { PLANT_BY_ID[p.id] = p; });
+  var PEST_BY_ID = {};
+  PESTS.forEach(function (x) { PEST_BY_ID[x.id] = x; });
 
   function byName(a, b) { return pname(a).localeCompare(pname(b), lang); }
 
@@ -133,7 +149,10 @@
     query: "",
     plantableOnly: false,
     galleryCategory: "all",
-    galleryKind: "all"
+    galleryKind: "all",
+    careMonth: new Date().getMonth(),
+    pestType: "all",
+    pestPlant: ""
   };
 
   function matchesFilters(p) {
@@ -170,33 +189,57 @@
   }
 
   function photosOf(p) { return PHOTOS[p.id] || []; }
+  function pestPhotosOf(x) { return PEST_PHOTOS[x.id] || []; }
 
-  function photoAlt(p, ph) {
-    return lang === "en" ? ph.alt : pname(p) + ": " + kindLower(ph.kind);
+  // A photo as the grids and the viewer show it: whose it is, its label, alt text and link.
+  function plantPhoto(p, ph) {
+    return { photo: ph, name: pname(p), label: kindLabel(ph.kind), lower: kindLower(ph.kind),
+      alt: lang === "en" ? ph.alt : pname(p) + ": " + kindLower(ph.kind),
+      href: "#/plant/" + p.id, link: t("viewer.guide") };
+  }
+  function pestPhoto(x, ph) {
+    var kind = t("pestKind." + ph.kind);
+    return { photo: ph, name: xname(x), label: kind[0], lower: kind[1],
+      alt: lang === "en" ? ph.alt : xname(x) + ": " + kind[1],
+      href: "#/pest/" + x.id, link: t("viewer.pestGuide") };
   }
 
-  function imgTag(p, ph, cls, useThumb) {
-    return '<img class="' + cls + '" src="' + esc(useThumb ? ph.thumb : ph.src) + '" alt="' + esc(photoAlt(p, ph)) +
+  function imgTag(item, cls, useThumb) {
+    return '<img class="' + cls + '" src="' + esc(useThumb ? item.photo.thumb : item.photo.src) + '" alt="' + esc(item.alt) +
       '" loading="lazy" decoding="async">';
   }
 
-  // The plant's first photo is its cover, used on cards and at the top of its page.
+  // The first photo is the cover, used on cards and at the top of a plant or pest page.
+  function coverImg(item, name, cls, useThumb) {
+    if (!item) {
+      return '<div class="' + cls + ' photo-missing" aria-hidden="true"><span>' + esc(name.charAt(0)) + "</span></div>";
+    }
+    return imgTag(item, cls, useThumb);
+  }
   function photoImg(p, cls, useThumb) {
     var ph = photosOf(p)[0];
-    if (!ph) {
-      return '<div class="' + cls + ' photo-missing" aria-hidden="true"><span>' + esc(pname(p).charAt(0)) + "</span></div>";
-    }
-    return imgTag(p, ph, cls, useThumb);
+    return coverImg(ph && plantPhoto(p, ph), pname(p), cls, useThumb);
+  }
+  function pestImg(x, cls, useThumb) {
+    var ph = pestPhotosOf(x)[0];
+    return coverImg(ph && pestPhoto(x, ph), xname(x), cls, useThumb);
   }
 
   // A clickable grid of photos; indexes point into lightboxItems.
   function photoGrid(items, offset) {
     return '<ul class="gallery">' + items.map(function (it, i) {
       return '<li><button type="button" class="gallery-item" data-photo="' + (offset + i) + '" aria-label="' +
-        esc(t("photo.viewLarger", { plant: pname(it.plant), kind: kindLower(it.photo.kind) })) + '">' +
-        imgTag(it.plant, it.photo, "gallery-img", true) +
-        '<span class="gallery-label">' + esc(kindLabel(it.photo.kind)) + "</span></button></li>";
+        esc(t("photo.viewLarger", { plant: it.name, kind: it.lower })) + '">' +
+        imgTag(it, "gallery-img", true) +
+        '<span class="gallery-label">' + esc(it.label) + "</span></button></li>";
     }).join("") + "</ul>";
+  }
+
+  // Where a photo came from, named after its source page's site.
+  function photoSite(url) {
+    if (/inaturalist\.org/.test(url)) return "iNaturalist";
+    if (/flickr\.com/.test(url)) return "Flickr";
+    return "Wikimedia Commons";
   }
 
   function photoCredit(ph) {
@@ -205,7 +248,7 @@
       ? '<a href="' + esc(ph.licenseUrl) + '" target="_blank" rel="noopener">' + esc(ph.license) + "</a>"
       : esc(ph.license);
     return esc(t("photo.credit", { artist: ph.artist || t("photo.unknown") })) + " · " + lic +
-      ' · <a href="' + esc(ph.sourceUrl) + '" target="_blank" rel="noopener">Wikimedia Commons</a>';
+      ' · <a href="' + esc(ph.sourceUrl) + '" target="_blank" rel="noopener">' + photoSite(ph.sourceUrl) + "</a>";
   }
 
   function sourceLink(k) {
@@ -275,6 +318,7 @@
       (isToday ? "" : '<button type="button" class="link-btn" data-today>' + esc(t("cal.backToday")) + "</button>") +
       '<p class="now-count">' + esc(count) + "</p>" +
       nowList +
+      '<p class="panel-link"><a href="#/care">' + esc(t("cal.careLink")) + "</a></p>" +
       "</section>" +
 
       filterToolbar({ plantableLabel: t("cal.onlyFor", halfParams(h)) }) +
@@ -379,7 +423,7 @@
     var p = PLANT_BY_ID[id];
     if (!p) return renderNotFound();
     var ph = photosOf(p)[0];
-    lightboxItems = photosOf(p).map(function (photo) { return { plant: p, photo: photo }; });
+    lightboxItems = photosOf(p).map(function (photo) { return plantPhoto(p, photo); });
     var sorted = PLANTS.slice().sort(byName);
     var idx = sorted.indexOf(p);
     var prev = sorted[(idx - 1 + sorted.length) % sorted.length];
@@ -415,6 +459,8 @@
       return SOURCES[k] ? "<li>" + sourceLink(k) + "</li>" : "";
     }).join("");
 
+    var pests = PESTS.filter(function (x) { return x.plants.indexOf(p.id) >= 0; });
+
     var html = '<article class="page plant">' +
       '<nav class="crumbs" aria-label="' + esc(t("plant.breadcrumb")) + '"><a href="#/plants">' + esc(t("plant.back")) + "</a></nav>" +
       '<div class="plant-hero">' +
@@ -436,10 +482,15 @@
       fact("fact.sun", "sun") +
       fact("fact.growth", "growth") +
       fact("fact.yield", "yield") +
-      "</dl></section>" +
+      '</dl><p class="more-link"><a href="#/water">' + esc(t("plant.waterLink")) + "</a></p></section>" +
 
       '<section aria-labelledby="tips-title"><h2 id="tips-title">' + esc(t("plant.tips")) + '</h2><ul class="tips">' +
       pt(p, "tips").map(function (tip) { return "<li>" + esc(tip) + "</li>"; }).join("") + "</ul></section>" +
+
+      (pests.length
+        ? '<section class="plant-pests" aria-labelledby="pests-title"><h2 id="pests-title">' + esc(t("plant.watchFor")) + "</h2>" +
+          pestLinks(pests) + "</section>"
+        : "") +
 
       (lightboxItems.length
         ? '<section class="plant-gallery" aria-labelledby="photos-title"><h2 id="photos-title">' + esc(t("plant.photos")) + "</h2>" +
@@ -455,6 +506,316 @@
       "</article>";
 
     setView(html, pname(p));
+  }
+
+  // ------------------------------------------------------------ garden care
+
+  var CARE_TABS = [["care", "care.tabMonth"], ["water", "care.tabWater"], ["pests", "care.tabPests"]];
+  var TASK_GROUPS = ["protect", "water", "feed", "pests", "care"];
+  var PEST_TYPES = ["insect", "animal", "disease", "condition"];
+
+  // Heading shared by the three garden care pages, with links between them.
+  function careHead(active, title, intro) {
+    return '<div class="page-head"><span class="eyebrow">' + esc(t("care.eyebrow")) + "</span><h1>" + esc(title) + "</h1>" +
+      "<p>" + esc(intro) + "</p></div>" +
+      '<nav class="segmented care-nav" aria-label="' + esc(t("care.sections")) + '">' +
+      CARE_TABS.map(function (tab) {
+        return '<a href="#/' + tab[0] + '"' + (tab[0] === active ? ' aria-current="page"' : "") + ">" + esc(t(tab[1])) + "</a>";
+      }).join("") + "</nav>";
+  }
+
+  function sourceList(keys, note) {
+    var seen = {};
+    var items = keys.filter(function (k) {
+      if (seen[k] || !SOURCES[k]) return false;
+      seen[k] = true;
+      return true;
+    }).map(function (k) { return "<li>" + sourceLink(k) + "</li>"; }).join("");
+    return "<ul>" + items + "</ul>" + (note ? '<p class="fine">' + esc(note) + "</p>" : "");
+  }
+
+  // Links to pest pages (chips; .now-list is only for inside the colored panels).
+  function pestLinks(list) {
+    return '<ul class="chip-list">' + list.map(function (x) {
+      return '<li><a href="#/pest/' + x.id + '"><span class="now-name">' + esc(xname(x)) + "</span>" +
+        '<span class="tag">' + esc(t("pests.type." + x.type)) + "</span></a></li>";
+    }).join("") + "</ul>";
+  }
+
+  function plantLinks(ids) {
+    return '<ul class="chip-list">' + ids.map(function (id) {
+      var p = PLANT_BY_ID[id];
+      return p ? '<li><a href="#/plant/' + p.id + '"><span class="now-name">' + esc(pname(p)) + "</span></a></li>" : "";
+    }).join("") + "</ul>";
+  }
+
+  function pestCard(x, month) {
+    return '<a class="card" href="#/pest/' + x.id + '">' +
+      '<div class="card-media">' + pestImg(x, "card-img", true) + "</div>" +
+      '<div class="card-body"><h2 class="card-title">' + esc(xname(x)) + "</h2>" +
+      '<div class="tags"><span class="tag pest-' + x.type + '">' + esc(t("pests.type." + x.type)) + "</span>" +
+      (x.months.length < 12 && x.months.indexOf(month + 1) >= 0 ? '<span class="tag tag-now">' + esc(t("pests.watchNow")) + "</span>" : "") +
+      "</div>" + '<p class="card-text">' + esc(xt(x, "summary")) + "</p></div></a>";
+  }
+
+  // ---- month by month (#/care, #/care/<1-12>)
+
+  function renderCare() {
+    var m = state.careMonth;
+    var now = new Date().getMonth();
+    var data = TASKS[m] || { weather: "", tasks: [] };
+    var vi = lang === "vi" ? TASKS_VI[m] : null;
+    var params = monthParams(m);
+
+    var plantable = PLANTS.filter(function (p) { return p.cells[m * 2] || p.cells[m * 2 + 1]; }).sort(byName);
+    var plantList = plantable.length
+      ? '<ul class="now-list">' + plantable.map(function (p) {
+          return '<li><a href="#/plant/' + p.id + '"><span class="now-name">' + esc(pname(p)) + "</span>" +
+            methodBadge(p.cells[m * 2] || p.cells[m * 2 + 1]) + "</a></li>";
+        }).join("") + "</ul>"
+      : '<p class="empty">' + esc(t("tasks.plantNone")) + "</p>";
+
+    var groups = TASK_GROUPS.map(function (g) {
+      var items = data.tasks.map(function (task, i) { return { task: task, text: vi ? vi.tasks[i] : task.text }; })
+        .filter(function (it) { return it.task.group === g; });
+      if (!items.length) return "";
+      return '<section class="task-group task-' + g + '"><h3>' + esc(t("tasks.group." + g)) + '</h3><ul class="task-list">' +
+        items.map(function (it) {
+          var links = (it.task.pests || []).map(function (id) {
+            var x = PEST_BY_ID[id];
+            return x ? '<a href="#/pest/' + x.id + '">' + esc(xname(x)) + "</a>" : "";
+          }).concat((it.task.plants || []).map(function (id) {
+            var p = PLANT_BY_ID[id];
+            return p ? '<a href="#/plant/' + p.id + '">' + esc(pname(p)) + "</a>" : "";
+          })).filter(Boolean);
+          return "<li>" + esc(it.text) +
+            (links.length ? ' <span class="task-links">' + esc(t("tasks.see")) + " " + links.join(", ") + "</span>" : "") + "</li>";
+        }).join("") + "</ul></section>";
+    }).join("");
+
+    var watch = PESTS.filter(function (x) { return x.months.indexOf(m + 1) >= 0; });
+    var sources = [];
+    data.tasks.forEach(function (task) { sources = sources.concat(task.sources); });
+
+    var html = '<section class="page care">' +
+      careHead("care", t("tasks.title"), t("tasks.intro")) +
+
+      '<section class="now-panel month-panel" aria-labelledby="month-title">' +
+      '<div class="now-head">' +
+      '<button type="button" class="icon-btn" data-month-step="-1" aria-label="' + esc(t("tasks.prev")) + '">&#8249;</button>' +
+      '<div class="now-title"><span class="eyebrow">' + esc(m === now ? t("tasks.eyebrowNow") : t("tasks.eyebrow")) + "</span>" +
+      '<h2 id="month-title">' + esc(t("tasks.monthTitle", params)) + "</h2></div>" +
+      '<button type="button" class="icon-btn" data-month-step="1" aria-label="' + esc(t("tasks.next")) + '">&#8250;</button>' +
+      "</div>" +
+      (m === now ? "" : '<button type="button" class="link-btn" data-month-now>' + esc(t("tasks.backNow")) + "</button>") +
+      '<p class="month-weather">' + esc(vi ? vi.weather : data.weather) + "</p>" +
+      '<h3 class="month-plant-title">' + esc(t("tasks.plantTitle")) + "</h3>" +
+      plantList +
+      '<p class="fine">' + esc(t("tasks.plantIntro")) + "</p>" +
+      "</section>" +
+
+      segmented("careMonth", t("months.short").map(function (name, i) { return [String(i), name]; }), String(m), t("tasks.pickMonth")) +
+
+      '<section class="month-todo" aria-labelledby="todo-title"><h2 id="todo-title">' + esc(t("tasks.todoTitle")) + "</h2>" +
+      '<div class="task-groups">' + groups + "</div></section>" +
+
+      '<section aria-labelledby="watch-title"><h2 id="watch-title">' + esc(t("tasks.watchTitle")) + "</h2>" +
+      '<div class="card-grid card-grid-small">' + watch.map(function (x) { return pestCard(x, m); }).join("") + "</div></section>" +
+
+      '<section class="plant-sources" aria-labelledby="src-title"><h2 id="src-title">' + esc(t("tasks.sources")) + "</h2>" +
+      sourceList(sources, t("tasks.note")) + "</section>" +
+      "</section>";
+    setView(html, t("tasks.title"));
+  }
+
+  function setCareMonth(m) {
+    state.careMonth = (m + 12) % 12;
+    // Keep the address in step without a hashchange, so the page doesn't jump to the top.
+    lastRoute = "care/" + (state.careMonth + 1);
+    if (history.replaceState) history.replaceState(null, "", "#/" + lastRoute);
+    var y = window.scrollY;
+    var active = document.activeElement;
+    var focus = active && active.getAttribute ? active.getAttribute("data-month-step") : null;
+    renderCare();
+    window.scrollTo(0, y);
+    var el = focus !== null && main.querySelector('[data-month-step="' + focus + '"]');
+    if (el) el.focus({ preventScroll: true });
+  }
+
+  // ---- watering guide (#/water)
+
+  function dayRange(r) {
+    return r[0] === r[1] ? t("water.daysSame", { a: r[0] }) : t("water.days", { a: r[0], b: r[1] });
+  }
+
+  function monthSpan(a, b) {
+    var short = t("months.short");
+    return short[a - 1] + "–" + short[b - 1];
+  }
+
+  function renderWater() {
+    var month = new Date().getMonth() + 1;
+    var season = WATERING.seasonOfMonth[month - 1];
+    var seasonSpans = { spring: [3, 5], summer: [5, 10], fall: [10, 12], winter: [12, 3] };
+    var cm = function (inches) { return Math.round(inches * 2.54 / 5) * 5; };
+
+    var head = '<tr><th scope="col">' + esc(t("water.plantCol")) + "</th>" + WATERING.seasons.map(function (s) {
+      var span = seasonSpans[s];
+      return '<th scope="col"' + (s === season ? ' class="is-now"' : "") + ">" + esc(t("water.season." + s)) +
+        '<span class="th-sub">' + esc(monthSpan(span[0], span[1])) + "</span>" +
+        (s === season ? '<span class="tag tag-now">' + esc(t("water.now")) + "</span>" : "") + "</th>";
+    }).join("") + '<th scope="col">' + esc(t("water.depthCol")) + "</th></tr>";
+    // data-label repeats the column heading for the stacked layout on phones.
+    var rows = WATERING.rows.map(function (r) {
+      return '<tr><th scope="row">' + esc(t("water.row." + r.id)) + '<span class="th-sub">' + esc(t("water.row." + r.id + "Note")) + "</span></th>" +
+        r.days.map(function (d, i) {
+          var s = WATERING.seasons[i], span = seasonSpans[s];
+          return '<td data-label="' + esc(t("water.season." + s) + " (" + monthSpan(span[0], span[1]) + ")") + '"' +
+            (s === season ? ' class="is-now"' : "") + ">" + esc(dayRange(d)) + "</td>";
+        }).join("") +
+        '<td data-label="' + esc(t("water.depthCol")) + '">' +
+        esc(t("water.depth", { a: r.depth[0], b: r.depth[1], ca: cm(r.depth[0]), cb: cm(r.depth[1]) })) + "</td></tr>";
+    }).join("");
+
+    var inPeriod = function (pr) { return pr[0] <= pr[1] ? month >= pr[0] && month <= pr[1] : month >= pr[0] || month <= pr[1]; };
+    var citrusHead = '<tr><th scope="col">' + esc(t("water.ageCol")) + "</th>" + WATERING.citrusPeriods.map(function (pr) {
+      return '<th scope="col"' + (inPeriod(pr) ? ' class="is-now"' : "") + ">" + esc(monthSpan(pr[0], pr[1])) +
+        (inPeriod(pr) ? '<span class="tag tag-now">' + esc(t("water.now")) + "</span>" : "") + "</th>";
+    }).join("") + "</tr>";
+    var citrusRows = WATERING.citrus.map(function (r) {
+      var cells = r.allYear
+        ? '<td colspan="' + WATERING.citrusPeriods.length + '">' + esc(t("water.allYear", { a: r.allYear[0], b: r.allYear[1] })) + "</td>"
+        : r.days.map(function (d, i) {
+            var pr = WATERING.citrusPeriods[i];
+            return '<td data-label="' + esc(monthSpan(pr[0], pr[1])) + '"' + (inPeriod(pr) ? ' class="is-now"' : "") + ">" +
+              esc(dayRange(d)) + "</td>";
+          }).join("");
+      return '<tr><th scope="row">' + esc(t("water.age." + r.age)) + "</th>" + cells + "</tr>";
+    }).join("");
+
+    function list(key) { return "<ul>" + t(key).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ul>"; }
+
+    var html = '<section class="page care">' +
+      careHead("water", t("water.title"), t("water.intro")) +
+
+      '<section aria-labelledby="basics-title"><h2 id="basics-title">' + esc(t("water.basics")) + '</h2><ul class="tips">' +
+      t("water.tips").map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ul></section>" +
+
+      '<section aria-labelledby="schedule-title"><h2 id="schedule-title">' + esc(t("water.scheduleTitle")) + "</h2>" +
+      "<p>" + esc(t("water.scheduleIntro")) + "</p>" +
+      '<div class="table-scroll" tabindex="0" aria-label="' + esc(t("water.tableLabel")) + '"><table class="data-table">' +
+      "<thead>" + head + "</thead><tbody>" + rows + "</tbody></table></div></section>" +
+
+      '<section aria-labelledby="citrus-title"><h2 id="citrus-title">' + esc(t("water.citrusTitle")) + "</h2>" +
+      "<p>" + esc(t("water.citrusIntro")) + "</p>" +
+      '<div class="table-scroll" tabindex="0" aria-label="' + esc(t("water.citrusLabel")) + '"><table class="data-table">' +
+      "<thead>" + citrusHead + "</thead><tbody>" + citrusRows + "</tbody></table></div>" +
+      '<p class="fine">' + esc(t("water.citrusSign")) + "</p></section>" +
+
+      '<section aria-labelledby="signs-title"><h2 id="signs-title">' + esc(t("water.signsTitle")) + '</h2><div class="sign-cols">' +
+      '<div class="fact sign-under"><h3>' + esc(t("water.under")) + "</h3>" + list("water.underList") + "</div>" +
+      '<div class="fact sign-over"><h3>' + esc(t("water.over")) + "</h3>" + list("water.overList") + "</div>" +
+      "</div></section>" +
+
+      '<section class="plant-sources" aria-labelledby="src-title"><h2 id="src-title">' + esc(t("plant.sources")) + "</h2>" +
+      sourceList(WATERING.sources, t("water.sourcesNote")) + "</section>" +
+      "</section>";
+    setView(html, t("water.title"));
+  }
+
+  // ---- pests and problems (#/pests, #/pest/<id>)
+
+  function pestCards() {
+    var month = new Date().getMonth();
+    var list = PESTS.filter(function (x) {
+      if (state.pestType !== "all" && x.type !== state.pestType) return false;
+      if (state.pestPlant && x.plants.length && x.plants.indexOf(state.pestPlant) < 0) return false;
+      return true;
+    });
+    if (!list.length) return '<p class="empty">' + esc(t("pests.none")) + "</p>";
+    return list.map(function (x) { return pestCard(x, month); }).join("");
+  }
+
+  function renderPests() {
+    var plantIds = {};
+    PESTS.forEach(function (x) { x.plants.forEach(function (id) { plantIds[id] = true; }); });
+    var plants = Object.keys(plantIds).map(function (id) { return PLANT_BY_ID[id]; }).filter(Boolean).sort(byName);
+    var select = '<label class="jump"><span class="visually-hidden">' + esc(t("pests.plantLabel")) + '</span><select data-filter="pestPlant">' +
+      '<option value="">' + esc(t("pests.plantLabel") + ": " + t("pests.anyPlant")) + "</option>" +
+      plants.map(function (p) {
+        return '<option value="' + p.id + '"' + (p.id === state.pestPlant ? " selected" : "") + ">" +
+          esc(t("pests.plantLabel") + ": " + pname(p)) + "</option>";
+      }).join("") + "</select></label>";
+
+    var html = '<section class="page care">' +
+      careHead("pests", t("pests.title"), t("pests.intro")) +
+      '<div class="toolbar">' +
+      segmented("pestType", [["all", t("pests.typeAll")]].concat(PEST_TYPES.map(function (k) { return [k, t("pests.type." + k)]; })),
+        state.pestType, t("pests.typeLabel")) +
+      select + "</div>" +
+      '<div class="card-grid" id="pest-grid">' + pestCards() + "</div></section>";
+    setView(html, t("pests.title"));
+  }
+
+  function renderPest(id) {
+    var x = PEST_BY_ID[id];
+    if (!x) return renderNotFound();
+    var month = new Date().getMonth();
+    var ph = pestPhotosOf(x)[0];
+    lightboxItems = pestPhotosOf(x).map(function (photo) { return pestPhoto(x, photo); });
+    var idx = PESTS.indexOf(x);
+    var prev = PESTS[(idx - 1 + PESTS.length) % PESTS.length];
+    var next = PESTS[(idx + 1) % PESTS.length];
+    var short = t("months.short"), tiny = t("months.tiny");
+    var allYear = x.months.length === 12;
+
+    var strip = '<div class="strip" role="img" aria-label="' + esc(t("pest.months", { name: xname(x) })) + '">' +
+      short.map(function (name, mi) {
+        var on = x.months.indexOf(mi + 1) >= 0;
+        return '<div class="strip-month' + (mi === month ? " is-now" : "") + '"><div class="strip-cells">' +
+          '<span class="strip-cell' + (on ? " is-watch" : "") + '"></span><span class="strip-cell' + (on ? " is-watch" : "") + '"></span></div>' +
+          '<span class="strip-label"><span class="strip-label-full">' + esc(name) + '</span><span class="strip-label-tiny">' +
+          esc(tiny[mi]) + "</span></span></div>";
+      }).join("") + "</div>";
+    var note = allYear ? t("pest.allYear")
+      : x.months.indexOf(month + 1) >= 0 ? t("pest.watchYes") : t("pest.watchNo", monthParams(month));
+
+    function list(field) { return '<ul class="tips">' + xt(x, field).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ul>"; }
+
+    var html = '<article class="page plant pest">' +
+      '<nav class="crumbs" aria-label="' + esc(t("plant.breadcrumb")) + '"><a href="#/pests">' + esc(t("pest.back")) + "</a></nav>" +
+      '<div class="plant-hero">' +
+      '<figure class="plant-photo">' + pestImg(x, "plant-img", false) +
+      (ph ? '<figcaption class="credit">' + photoCredit(ph) + "</figcaption>" : "") + "</figure>" +
+      '<div class="plant-intro">' +
+      '<div class="tags"><span class="tag pest-' + x.type + '">' + esc(t("pests.type." + x.type)) + "</span></div>" +
+      "<h1>" + esc(xname(x)) + "</h1>" +
+      '<p class="lead">' + esc(xt(x, "summary")) + "</p>" +
+      '<section class="when" aria-labelledby="when-title"><h2 id="when-title">' + esc(t("pest.when")) + "</h2>" +
+      strip + '<p class="now-note' + (x.months.indexOf(month + 1) >= 0 ? " yes" : "") + '">' + esc(note) + "</p></section>" +
+      "</div></div>" +
+
+      '<div class="pest-cols">' +
+      '<section aria-labelledby="signs-title"><h2 id="signs-title">' + esc(t("pest.signs")) + "</h2>" + list("signs") + "</section>" +
+      '<section aria-labelledby="control-title"><h2 id="control-title">' + esc(t("pest.control")) + "</h2>" + list("control") + "</section>" +
+      "</div>" +
+
+      '<section class="plant-pests" aria-labelledby="affects-title"><h2 id="affects-title">' + esc(t("pest.plants")) + "</h2>" +
+      (x.plants.length ? plantLinks(x.plants) : "<p>" + esc(t("pest.plantsAll")) + "</p>") + "</section>" +
+
+      (lightboxItems.length
+        ? '<section class="plant-gallery" aria-labelledby="photos-title"><h2 id="photos-title">' + esc(t("plant.photos")) + "</h2>" +
+          photoGrid(lightboxItems, 0) + "</section>"
+        : "") +
+
+      '<section class="plant-sources" aria-labelledby="src-title"><h2 id="src-title">' + esc(t("plant.sources")) + "</h2>" +
+      sourceList(x.sources, t("pest.sourcesNote")) + "</section>" +
+
+      '<nav class="pager" aria-label="' + esc(t("pest.more")) + '">' +
+      '<a href="#/pest/' + prev.id + '">← ' + esc(xname(prev)) + "</a>" +
+      '<a href="#/pest/' + next.id + '">' + esc(xname(next)) + " →</a></nav>" +
+      "</article>";
+    setView(html, xname(x));
   }
 
   // ------------------------------------------------------------ gallery
@@ -477,7 +838,7 @@
     var groups = "";
     plants.forEach(function (p) {
       var items = photosOf(p).filter(function (ph) { return kindMatches(ph.kind); })
-        .map(function (ph) { return { plant: p, photo: ph }; });
+        .map(function (ph) { return plantPhoto(p, ph); });
       if (!items.length) return;
       groups += '<section class="gallery-group" id="g-' + p.id + '">' +
         '<h2><a href="#/plant/' + p.id + '">' + esc(pname(p)) + "</a></h2>" +
@@ -508,16 +869,15 @@
   function showPhoto(i) {
     if (!lightboxItems.length) return;
     lightboxIndex = (i + lightboxItems.length) % lightboxItems.length;
-    var p = lightboxItems[lightboxIndex].plant;
-    var ph = lightboxItems[lightboxIndex].photo;
+    var it = lightboxItems[lightboxIndex];
     var img = lightbox.querySelector(".lightbox-img");
-    img.src = ph.src;
-    img.alt = photoAlt(p, ph);
+    img.src = it.photo.src;
+    img.alt = it.alt;
     lightbox.querySelector(".lightbox-caption").innerHTML =
-      "<strong>" + esc(pname(p)) + '<span class="lightbox-kind"> · ' + esc(kindLabel(ph.kind)) + "</span></strong>" +
+      "<strong>" + esc(it.name) + '<span class="lightbox-kind"> · ' + esc(it.label) + "</span></strong>" +
       '<span class="lightbox-count">' + esc(t("viewer.count", { i: lightboxIndex + 1, n: lightboxItems.length })) + "</span>" +
-      '<a class="lightbox-link" href="#/plant/' + p.id + '" data-lightbox="close">' + esc(t("viewer.guide")) + "</a>" +
-      '<span class="credit">' + photoCredit(ph) + "</span>";
+      '<a class="lightbox-link" href="' + it.href + '" data-lightbox="close">' + esc(it.link) + "</a>" +
+      '<span class="credit">' + photoCredit(it.photo) + "</span>";
   }
 
   function openLightbox(i) {
@@ -559,9 +919,27 @@
         return "<li>" + esc(kindLabel(ph.kind)) + ": " + photoCredit(ph) + "</li>";
       }).join("") + "</ul></li>";
     }).join("");
-    var sources = Object.keys(SOURCES).map(function (k) {
-      var note = lang === "vi" && SOURCES_VI[k] ? SOURCES_VI[k] : SOURCES[k].note;
-      return "<li>" + sourceLink(k) + (note ? '<span class="fine"> ' + esc(note) + "</span>" : "") + "</li>";
+    credits += PESTS.filter(function (x) { return pestPhotosOf(x).length; }).map(function (x) {
+      photoCount += pestPhotosOf(x).length;
+      return "<li><strong>" + esc(xname(x)) + "</strong><ul>" + pestPhotosOf(x).map(function (ph) {
+        return "<li>" + esc(t("pestKind." + ph.kind)[0]) + ": " + photoCredit(ph) + "</li>";
+      }).join("") + "</ul></li>";
+    }).join("");
+    // Sources grouped by what they're used for (the "group" field in sources.js).
+    var sources = ["plants", "care", "pests", "monthly"].map(function (g) {
+      var keys = Object.keys(SOURCES).filter(function (k) { return SOURCES[k].group === g; });
+      if (g === "monthly") {
+        // Twelve sheets from the same series: one line of month links and a shared note.
+        return "<h3>" + esc(t("sourceGroup." + g)) + "</h3><p>" + keys.map(function (k, i) {
+          var s = SOURCES[k];
+          return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener" title="' + esc(s.title) + '">' +
+            esc(t("months.short")[i]) + "</a>";
+        }).join(" · ") + esc(t("source.english")) + '<br><span class="fine">' + esc(t("sourceGroup.monthlyNote")) + "</span></p>";
+      }
+      return "<h3>" + esc(t("sourceGroup." + g)) + '</h3><ul class="source-list">' + keys.map(function (k) {
+        var note = lang === "vi" && SOURCES_VI[k] ? SOURCES_VI[k] : SOURCES[k].note;
+        return "<li>" + sourceLink(k) + (note ? '<span class="fine"> ' + esc(note) + "</span>" : "") + "</li>";
+      }).join("") + "</ul>";
     }).join("");
 
     var html = '<article class="page prose">' +
@@ -579,13 +957,11 @@
       legend() +
       "<p>" + esc(t("about.readEmpty")) + "</p>" +
 
-      "<h2>" + esc(t("about.water")) + "</h2><ul>" +
-      ["about.water1", "about.water2", "about.water3", "about.water4"].map(function (k) {
-        return "<li>" + esc(t(k)) + "</li>";
-      }).join("") + "</ul>" +
+      "<h2>" + esc(t("about.care")) + "</h2>" +
+      "<p>" + t("about.careHtml") + "</p>" +
 
       "<h2>" + esc(t("about.sources")) + "</h2>" +
-      "<p>" + t("about.sourcesHtml") + '</p><ul class="source-list">' + sources + "</ul>" +
+      "<p>" + t("about.sourcesHtml") + "</p>" + sources +
       '<p class="fine">' + esc(t("about.sourcesNote")) + "</p>" +
 
       "<h2>" + esc(t("about.credits")) + "</h2>" +
@@ -613,11 +989,20 @@
     if (view === "calendar") renderCalendar();
     else if (view === "plants") renderPlants();
     else if (view === "plant") renderPlant(parts[1]);
+    else if (view === "care") {
+      // "#/care" alone is always this month; "#/care/3" is March.
+      var m = parseInt(parts[1], 10);
+      state.careMonth = m >= 1 && m <= 12 ? m - 1 : new Date().getMonth();
+      renderCare();
+    }
+    else if (view === "water") renderWater();
+    else if (view === "pests") renderPests();
+    else if (view === "pest") renderPest(parts[1]);
     else if (view === "gallery") renderGallery();
     else if (view === "about") renderAbout();
     else renderNotFound();
 
-    var navKey = view === "plant" ? "plants" : view;
+    var navKey = { plant: "plants", water: "care", pests: "care", pest: "care" }[view] || view;
     document.querySelectorAll("[data-nav]").forEach(function (a) {
       if (a.getAttribute("data-nav") === navKey) a.setAttribute("aria-current", "page");
       else a.removeAttribute("aria-current");
@@ -639,6 +1024,9 @@
     } else if (view === "plants") {
       var grid = document.getElementById("plant-grid");
       if (grid) grid.innerHTML = plantCards();
+    } else if (view === "pests") {
+      var pestGrid = document.getElementById("pest-grid");
+      if (pestGrid) pestGrid.innerHTML = pestCards();
     }
   }
 
@@ -660,6 +1048,10 @@
       state.plantableOnly = e.target.checked;
       refresh();
     }
+    if (e.target.matches('[data-filter="pestPlant"]')) {
+      state.pestPlant = e.target.value;
+      refresh();
+    }
   });
 
   main.addEventListener("click", function (e) {
@@ -673,7 +1065,18 @@
         b.setAttribute("aria-pressed", String(b === seg));
       });
       if (name === "galleryCategory" || name === "galleryKind") renderGallery();
+      else if (name === "careMonth") setCareMonth(parseInt(state.careMonth, 10));
       else refresh();
+      return;
+    }
+
+    var monthStep = target.closest("[data-month-step]");
+    if (monthStep) {
+      setCareMonth(state.careMonth + parseInt(monthStep.getAttribute("data-month-step"), 10));
+      return;
+    }
+    if (target.closest("[data-month-now]")) {
+      setCareMonth(new Date().getMonth());
       return;
     }
 

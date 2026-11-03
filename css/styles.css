@@ -175,6 +175,17 @@ button { font: inherit; color: inherit; }
   border-radius: 999px;
 }
 .site-nav a:hover { background: var(--surface-2); color: var(--text); }
+/* Short tab names (index.html) replace the full ones on small phones */
+.nav-short { display: none; }
+@media (max-width: 400px) {
+  .nav-full { display: none; }
+  .nav-short { display: inline; }
+}
+/* The narrowest phones: tighten the English tabs in every theme (Vietnamese and Seed Packet already have smaller sizes) */
+@media (max-width: 340px) {
+  html:not([lang="vi"]):not([data-skin="packet"]) .site-header .site-nav { gap: 3px; }
+  html:not([lang="vi"]):not([data-skin="packet"]) .site-header .site-nav a { font-size: 0.78rem; padding-inline: 3px; }
+}
 .site-nav a[aria-current="page"] { background: var(--brand-soft); color: var(--brand-strong); }
 
 /* When the header doesn't fit on one line (long Vietnamese labels, big theme fonts, narrow
@@ -325,7 +336,7 @@ button { font: inherit; color: inherit; }
   padding: 3px;
   flex-wrap: wrap;
 }
-.segmented button {
+.segmented button, .segmented a {
   border: 0;
   background: transparent;
   padding: 6px 12px;
@@ -334,7 +345,8 @@ button { font: inherit; color: inherit; }
   font-size: 0.9rem;
   color: var(--text-muted);
 }
-.segmented button[aria-pressed="true"] {
+.segmented a { display: inline-block; text-decoration: none; }
+.segmented button[aria-pressed="true"], .segmented a[aria-current="page"] {
   background: var(--surface);
   color: var(--text);
   font-weight: 600;
@@ -681,6 +693,104 @@ tbody .cal-plant-col a:hover { color: var(--brand-strong); text-decoration: unde
 }
 .pager a { text-decoration: none; font-weight: 600; }
 
+/* ------------------------------------------------------------ garden care */
+
+/* Accent colors for the to-do groups (not the planting colors, which keep their meaning) */
+:root {
+  --task-protect: #5b7fb5;
+  --task-water: #2f8fa0;
+  --task-feed: #6b8e23;
+  --task-pests: #c0622f;
+  --task-care: #8a6d3b;
+}
+
+.care-nav { margin: 2px 0 6px; }
+.care-nav a { font-size: 0.95rem; padding: 8px 16px; }
+
+.panel-link { text-align: center; margin: 14px 0 0; font-size: 0.92rem; }
+.panel-link a { font-weight: 600; }
+.more-link { margin: -16px 0 28px; font-size: 0.92rem; }
+.more-link a { font-weight: 600; }
+
+.month-weather { text-align: center; max-width: 70ch; margin: 8px auto 16px; }
+.month-plant-title { text-align: center; font-size: 1rem; margin: 0 0 10px; }
+.month-panel .fine { text-align: center; margin: 12px 0 0; }
+.month-panel + .segmented { margin: 14px 0 6px; }
+
+.task-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 28px;
+}
+.task-group {
+  --group: var(--task-care);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 18px 6px;
+}
+.task-protect { --group: var(--task-protect); }
+.task-water { --group: var(--task-water); }
+.task-feed { --group: var(--task-feed); }
+.task-pests { --group: var(--task-pests); }
+/* Extra specificity so the colored top edge survives the themes' border rules */
+.task-groups > .task-group[class*="task-"], .sign-cols > .fact[class*="sign-"] { border-top: 5px solid var(--group); }
+.task-group h3 { font-size: 1rem; margin: 0 0 8px; }
+.task-list { padding-left: 1.1em; margin: 0 0 8px; }
+.task-list li { margin-bottom: 8px; }
+.task-links { font-size: 0.85rem; color: var(--text-muted); }
+.task-links a { font-weight: 600; }
+
+.card-grid-small { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); margin-bottom: 28px; }
+.card-grid-small .card-title { font-size: 1rem; }
+.card-grid-small .card-text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+.chip-list { list-style: none; padding: 0; margin: 0 0 28px; display: flex; flex-wrap: wrap; gap: 8px; }
+.chip-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.chip-list a:hover { background: var(--brand-soft); color: var(--text); }
+
+.table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  margin-bottom: 10px;
+}
+.data-table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.92rem; }
+.data-table th, .data-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+.data-table tbody tr:last-child th, .data-table tbody tr:last-child td { border-bottom: 0; }
+.data-table thead th { background: var(--surface-2); white-space: nowrap; }
+.data-table tbody th { width: 34%; }
+.data-table td { white-space: nowrap; }
+.data-table .is-now { background: var(--brand-soft); }
+.data-table thead .is-now { box-shadow: inset 0 -3px 0 var(--brand); }
+.data-table .tag { margin-left: 6px; vertical-align: middle; }
+.th-sub { display: block; font-weight: 400; font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; white-space: normal; }
+
+.sign-cols, .pest-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+.sign-cols h3 { font-size: 1rem; margin: 0 0 6px; }
+.sign-cols ul { padding-left: 1.1em; margin: 0; }
+.sign-cols li { margin-bottom: 4px; }
+.sign-under { --group: var(--task-pests); }
+.sign-over { --group: var(--task-water); }
+.pest-cols .tips { margin-bottom: 0; }
+
+.strip-cell.is-watch { background: var(--accent); }
+
 /* ------------------------------------------------------------ gallery */
 
 .gallery {
@@ -818,6 +928,20 @@ details.credits summary { cursor: pointer; font-weight: 600; color: var(--brand-
   .site-main { padding: 16px 16px 40px; }
 
   .plant-hero { grid-template-columns: 1fr; gap: 18px; }
+  .sign-cols, .pest-cols { grid-template-columns: 1fr; }
+  /* Watering tables become one card per row, each value labeled with its column */
+  .table-scroll { overflow: visible; }
+  .data-table { min-width: 0; }
+  .data-table thead { display: none; }
+  .data-table tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  .data-table tbody tr:last-child { border-bottom: 0; }
+  .data-table th, .data-table td { display: block; border: 0; padding: 4px 14px; white-space: normal; }
+  .data-table tbody th { width: auto; }
+  .data-table td[data-label] { display: flex; justify-content: space-between; gap: 12px; }
+  .data-table td[data-label]::before { content: attr(data-label); color: var(--text-muted); }
+  .data-table td.is-now { font-weight: 700; border-radius: 6px; }
+  .task-groups { grid-template-columns: 1fr; }
+  .care-nav a { padding: 7px 10px; font-size: 0.88rem; }
   .strip-label-full { display: none; }
   .strip-label-tiny { display: inline; }
   .window-list .badge { min-width: 0; }

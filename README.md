@@ -15,6 +15,7 @@ That's it. Bookmark the page to come back to it.
 
 - **Planting calendar**: shows what you can plant right now and lays out a full-year chart for every crop. Click any column to see what to plant in that half of the month, and filter by vegetables, fruit, herbs or season.
 - **Plant guides**: a page for each plant with planting dates, spacing, watering, sun, growth, typical yield and Phoenix-specific tips.
+- **Garden care**: a month-by-month to-do list (watering, feeding, frost and heat protection, pests, pruning and harvest, plus what to plant), a seasonal watering guide with how often to water vegetables, fruit trees and citrus, and a guide to common pests and problems with photos, signs to look for and what to do. Plant pages link to the pests that affect them.
 - **Gallery**: about 230 photos. Each crop has at least three photos of the harvest and three of the whole plant, so you can see its size and shape. Leafy greens and herbs have wide shots and close-ups instead. Filter by plant type or photo type, jump straight to a plant, and view any photo full screen. Each plant's page also shows its own photos.
 - **About**: how Phoenix's two growing seasons work, watering basics, sources and photo credits.
 - **Themes**: pick a look from the **Theme** button in the top corner: Sunny Patch (the default), Sonoran Sunset, Garden Plot, Raised Bed, Seed Packet or Classic. Your browser remembers the choice.
@@ -25,7 +26,8 @@ That's it. Bookmark the page to come back to it.
 - Vegetable and melon planting dates come from the University of Arizona Cooperative Extension's [Vegetable Planting Calendar for Maricopa County (AZ1005)](https://extension.arizona.edu/sites/extension.arizona.edu/files/pubs/az1005-2018.pdf).
 - Fruit planting dates come from other University of Arizona Extension guides (strawberries, citrus, figs, grapes, low-chill fruit trees). Each plant page lists its sources.
 - Spacing, watering, yield and tips are general home-garden guidance and will vary with variety, soil and weather.
-- Photos are from [Wikimedia Commons](https://commons.wikimedia.org/) under free licenses. Credits are on the About page and in [`images/plants/CREDITS.md`](images/plants/CREDITS.md).
+- Monthly tasks and pest advice come from University of Arizona Cooperative Extension publications, including its monthly garden reminders. Watering frequencies come from *Landscape Watering by the Numbers*, the guide used by Phoenix-area cities, and the Extension's citrus watering guide.
+- Plant photos are from [Wikimedia Commons](https://commons.wikimedia.org/); pest photos are from [iNaturalist](https://www.inaturalist.org/) and [Flickr](https://www.flickr.com/). All use free licenses. Credits are on the About page and in [`images/plants/CREDITS.md`](images/plants/CREDITS.md) and [`images/pests/CREDITS.md`](images/pests/CREDITS.md).
 
 ## For contributors
 
@@ -43,8 +45,11 @@ The app is plain HTML, CSS and JavaScript with no build step or dependencies.
 | `js/data/plants.vi.js` | Vietnamese text for each plant |
 | `js/data/sources.js` | Reference publications cited by plants |
 | `js/data/sources.vi.js` | Vietnamese notes for each source |
-| `js/data/photos.js` | Photo files, photo type and credits for each plant |
-| `images/plants/<plant>/` | Plant photos (with smaller versions in `thumbs/`) |
+| `js/data/tasks.js`, `tasks.vi.js` | Garden to-do list for each month |
+| `js/data/pests.js`, `pests.vi.js` | Pests and problems: signs, what to do, when to watch |
+| `js/data/watering.js` | Numbers for the watering guide |
+| `js/data/photos.js` | Photo files, photo type and credits for each plant and pest |
+| `images/plants/<plant>/`, `images/pests/<pest>/` | Photos (with smaller versions in `thumbs/`) |
 | `scripts/validate-data.js` | Checks the data files for mistakes |
 
 To check the data after editing it (requires [Node.js](https://nodejs.org/)):

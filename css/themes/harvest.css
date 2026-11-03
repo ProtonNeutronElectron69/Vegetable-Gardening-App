@@ -76,13 +76,15 @@
 [data-skin="harvest"] .now-panel .eyebrow { color: #f2c48a; }
 [data-skin="harvest"] .now-range, [data-skin="harvest"] .now-count { color: #c9d8b8; }
 [data-skin="harvest"] .now-panel .link-btn { color: #f2c48a; }
+[data-skin="harvest"] .now-panel .fine { color: #c9d8b8; }
+[data-skin="harvest"] .now-panel .panel-link a { color: #f2c48a; }
 [data-skin="harvest"] .icon-btn { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.4); color: #fff; }
 [data-skin="harvest"] .now-list a { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); }
 [data-skin="harvest"] .now-list a:hover { background: #fff; color: var(--brand-strong); }
 
 /* Filters: soil-brown pills with a terracotta active state */
 [data-skin="harvest"] .segmented { background: var(--surface-2); }
-[data-skin="harvest"] .segmented button[aria-pressed="true"] { background: var(--soil); color: #fff; }
+[data-skin="harvest"] .segmented button[aria-pressed="true"], [data-skin="harvest"] .segmented a[aria-current="page"] { background: var(--soil); color: #fff; }
 [data-skin="harvest"] .search input, [data-skin="harvest"] .jump select { background: #fff; border-color: var(--border); }
 
 /* Calendar table: soil-brown header, alternating month columns, season bands */
@@ -141,3 +143,6 @@
 
 /* Vietnamese: DM Serif Display has no Vietnamese letters, so headings use Playfair Display */
 :root[data-skin="harvest"][lang="vi"] { --display: "Playfair Display", Georgia, serif; }
+
+/* Garden care pages */
+[data-skin="harvest"] .task-group, [data-skin="harvest"] .table-scroll { border: 0; box-shadow: var(--shadow); }

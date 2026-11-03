@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
-  Checks the plant, source, photo and translation data for mistakes.
+  Checks the plant, source, photo, garden care and translation data for mistakes.
   Run with:  node scripts/validate-data.js
 */
 "use strict";
@@ -13,11 +13,12 @@ const root = path.join(__dirname, "..");
 const context = { window: {} };
 vm.createContext(context);
 const DATA_FILES = ["js/i18n.js", "js/data/sources.js", "js/data/sources.vi.js", "js/data/plants.js",
-  "js/data/plants.vi.js", "js/data/photos.js"];
+  "js/data/plants.vi.js", "js/data/tasks.js", "js/data/tasks.vi.js", "js/data/pests.js", "js/data/pests.vi.js",
+  "js/data/watering.js", "js/data/photos.js"];
 for (const file of DATA_FILES) {
   vm.runInContext(fs.readFileSync(path.join(root, file), "utf8"), context, { filename: file });
 }
-const { PLANTS, SOURCES, PHOTOS, I18N, PLANTS_VI, SOURCES_VI } = context.window;
+const { PLANTS, SOURCES, PHOTOS, I18N, PLANTS_VI, SOURCES_VI, TASKS, TASKS_VI, PESTS, PESTS_VI, PEST_PHOTOS, WATERING } = context.window;
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -119,9 +120,79 @@ for (const id of Object.keys(PHOTOS || {})) {
   if (!ids.has(id)) fail(`photo "${id}"`, "does not match any plant id");
 }
 
+const SOURCE_GROUPS = ["plants", "care", "pests", "monthly"];
 for (const [key, s] of Object.entries(SOURCES || {})) {
   if (!s.title || !/^https:\/\//.test(s.url || "")) fail(`source "${key}"`, "needs a title and an https url");
+  if (!SOURCE_GROUPS.includes(s.group)) fail(`source "${key}"`, `group must be one of ${SOURCE_GROUPS.join(", ")}`);
 }
+const checkSources = (where, list) => {
+  if (!Array.isArray(list) || list.length === 0) fail(where, "needs at least one source");
+  for (const k of list || []) if (!SOURCES[k]) fail(where, `unknown source "${k}" (add it to js/data/sources.js)`);
+};
+
+// ---------------------------------------------------------------- garden care
+const TASK_GROUPS = ["protect", "water", "feed", "pests", "care"];
+const PEST_TYPES = ["insect", "animal", "disease", "condition"];
+const PEST_KINDS = ["pest", "damage"];
+const pestIds = new Set((PESTS || []).map((x) => x.id));
+
+if (!Array.isArray(TASKS) || TASKS.length !== 12) fail("tasks.js", "window.TASKS needs one entry per month (12)");
+(TASKS || []).forEach((month, mi) => {
+  const where = `tasks.js month ${mi + 1}`;
+  if (typeof month.weather !== "string" || !month.weather.trim()) fail(where, 'missing "weather"');
+  if (!Array.isArray(month.tasks) || month.tasks.length === 0) fail(where, "needs at least one task");
+  (month.tasks || []).forEach((task, ti) => {
+    const at = `${where} task ${ti + 1}`;
+    if (!TASK_GROUPS.includes(task.group)) fail(at, `group must be one of ${TASK_GROUPS.join(", ")}`);
+    if (typeof task.text !== "string" || !task.text.trim()) fail(at, 'missing "text"');
+    checkSources(at, task.sources);
+    for (const id of task.pests || []) if (!pestIds.has(id)) fail(at, `unknown pest "${id}"`);
+    for (const id of task.plants || []) if (!ids.has(id)) fail(at, `unknown plant "${id}"`);
+  });
+});
+
+const seenPests = new Set();
+for (const x of PESTS || []) {
+  const where = `pest "${x.id}"`;
+  if (!/^[a-z0-9-]+$/.test(x.id || "")) fail(where, "id must be lowercase letters, numbers and dashes");
+  if (seenPests.has(x.id)) fail(where, "duplicate id");
+  seenPests.add(x.id);
+  if (!PEST_TYPES.includes(x.type)) fail(where, `type must be one of ${PEST_TYPES.join(", ")}`);
+  for (const f of ["name", "summary"]) if (typeof x[f] !== "string" || !x[f].trim()) fail(where, `missing "${f}"`);
+  for (const f of ["signs", "control"]) if (!Array.isArray(x[f]) || x[f].length === 0) fail(where, `needs at least one item in "${f}"`);
+  if (!Array.isArray(x.months) || x.months.length === 0 || x.months.some((m) => !Number.isInteger(m) || m < 1 || m > 12)) {
+    fail(where, "months must be a list of month numbers 1 to 12");
+  }
+  if (!Array.isArray(x.plants)) fail(where, "plants must be a list (it may be empty)");
+  for (const id of x.plants || []) if (!ids.has(id)) fail(where, `unknown plant "${id}"`);
+  checkSources(where, x.sources);
+
+  const photos = PEST_PHOTOS[x.id];
+  if (!Array.isArray(photos) || photos.length === 0) { fail(where, "needs at least one photo in PEST_PHOTOS (js/data/photos.js)"); continue; }
+  photos.forEach((ph, i) => {
+    const at = `${where} photo ${i + 1}`;
+    if (!PEST_KINDS.includes(ph.kind)) fail(at, `kind must be one of ${PEST_KINDS.join(", ")}`);
+    for (const f of ["src", "thumb", "alt", "artist", "license", "sourceUrl"]) if (!ph[f]) fail(at, `missing "${f}"`);
+    for (const f of ["src", "thumb"]) if (ph[f] && !fs.existsSync(path.join(root, ph[f]))) fail(at, `file not found: ${ph[f]}`);
+  });
+}
+for (const id of Object.keys(PEST_PHOTOS || {})) if (!pestIds.has(id)) fail(`pest photo "${id}"`, "does not match any pest id");
+
+// Watering numbers: each range is [fewest, most] days with fewest <= most.
+const goodRange = (r) => Array.isArray(r) && r.length === 2 && r.every((n) => Number.isInteger(n) && n > 0) && r[0] <= r[1];
+const W = WATERING || {};
+if (!Array.isArray(W.seasonOfMonth) || W.seasonOfMonth.length !== 12 || W.seasonOfMonth.some((s) => !(W.seasons || []).includes(s))) {
+  fail("watering.js", "seasonOfMonth needs 12 entries, each one of seasons");
+}
+for (const r of W.rows || []) {
+  if ((r.days || []).length !== (W.seasons || []).length || !r.days.every(goodRange) || !goodRange(r.depth)) fail(`watering.js row "${r.id}"`, "needs a day range per season and a depth range");
+}
+for (const r of W.citrus || []) {
+  if (r.allYear ? !goodRange(r.allYear) : (r.days || []).length !== (W.citrusPeriods || []).length || !r.days.every(goodRange)) {
+    fail(`watering.js citrus "${r.age}"`, "needs allYear or one day range per period");
+  }
+}
+checkSources("watering.js", W.sources);
 
 // Every local CSS and JS link in index.html needs the same ?v= tag, so browsers
 // fetch a matching set after an update instead of mixing old and new files.
@@ -171,12 +242,14 @@ const usedKeys = new Set([
   ...[...appJs.matchAll(/\bt\("([a-zA-Z0-9.]*[a-zA-Z0-9])"/g)].map((m) => m[1]),
   ...[...indexHtml.matchAll(/data-i18n(?:-html|-aria)?="([a-zA-Z0-9.]+)"/g)].map((m) => m[1])
 ]);
-for (const p of ["kind.", "method.", "season.", "group.", "category.", "theme."]) {
-  // Built from a prefix plus an id in app.js; check the ids that can occur.
-  const ids = { "kind.": ["produce", "plant", "closeup"], "method.": METHODS, "season.": SEASONS, "group.": SEASONS,
-    "category.": CATEGORIES, "theme.": appThemes }[p];
-  ids.forEach((id) => usedKeys.add(p + id));
-}
+// Keys built from a prefix plus an id in app.js; check the ids that can occur.
+const DYNAMIC_KEYS = {
+  "kind.": ["produce", "plant", "closeup"], "method.": METHODS, "season.": SEASONS, "group.": SEASONS,
+  "category.": CATEGORIES, "theme.": appThemes, "tasks.group.": TASK_GROUPS, "pests.type.": PEST_TYPES,
+  "pestKind.": PEST_KINDS, "sourceGroup.": SOURCE_GROUPS, "water.season.": W.seasons || [],
+  "water.row.": (W.rows || []).flatMap((r) => [r.id, r.id + "Note"]), "water.age.": (W.citrus || []).map((r) => r.age)
+};
+for (const [prefix, list] of Object.entries(DYNAMIC_KEYS)) list.forEach((id) => usedKeys.add(prefix + id));
 for (const key of usedKeys) {
   if (!I18N[key]) fail("js/i18n.js", `missing key "${key}" used by the app`);
 }
@@ -199,6 +272,28 @@ for (const id of Object.keys(PLANTS_VI || {})) {
 for (const key of Object.keys(SOURCES || {})) {
   if (typeof SOURCES_VI[key] !== "string" || !SOURCES_VI[key].trim()) fail(`sources.vi.js "${key}"`, "missing Vietnamese note");
 }
+// Vietnamese tasks: same months and number of tasks as English.
+(TASKS || []).forEach((month, mi) => {
+  const vi = (TASKS_VI || [])[mi];
+  const where = `tasks.vi.js month ${mi + 1}`;
+  if (!vi) { fail(where, "missing"); return; }
+  if (typeof vi.weather !== "string" || !vi.weather.trim()) fail(where, 'missing "weather"');
+  if (!Array.isArray(vi.tasks) || vi.tasks.length !== month.tasks.length || vi.tasks.some((s) => typeof s !== "string" || !s.trim())) {
+    fail(where, `needs ${month.tasks.length} tasks to match English (has ${Array.isArray(vi.tasks) ? vi.tasks.length : 0})`);
+  }
+});
+if ((TASKS_VI || []).length !== (TASKS || []).length) fail("tasks.vi.js", "needs one entry per month");
+// Vietnamese pest text: every pest, same number of signs and controls.
+for (const x of PESTS || []) {
+  const vi = PESTS_VI[x.id];
+  const where = `pests.vi.js "${x.id}"`;
+  if (!vi) { fail(where, "missing (every pest needs Vietnamese text)"); continue; }
+  for (const f of ["name", "summary"]) if (typeof vi[f] !== "string" || !vi[f].trim()) fail(where, `missing "${f}"`);
+  for (const f of ["signs", "control"]) {
+    if (!Array.isArray(vi[f]) || vi[f].length !== x[f].length) fail(where, `needs ${x[f].length} "${f}" items to match English`);
+  }
+}
+for (const id of Object.keys(PESTS_VI || {})) if (!pestIds.has(id)) fail(`pests.vi.js "${id}"`, "does not match any pest id");
 
 if (warnings.length) {
   console.warn(`Warning(s):\n  - ${warnings.join("\n  - ")}`);
@@ -207,5 +302,6 @@ if (errors.length) {
   console.error(`Found ${errors.length} problem(s):\n  - ${errors.join("\n  - ")}`);
   process.exit(1);
 }
-const photoTotal = Object.values(PHOTOS).reduce((n, list) => n + list.length, 0);
-console.log(`OK: ${PLANTS.length} plants, ${Object.keys(SOURCES).length} sources, ${photoTotal} photos.`);
+const photoTotal = [PHOTOS, PEST_PHOTOS].reduce((n, set) => n + Object.values(set).reduce((m, list) => m + list.length, 0), 0);
+const taskTotal = TASKS.reduce((n, month) => n + month.tasks.length, 0);
+console.log(`OK: ${PLANTS.length} plants, ${PESTS.length} pests, ${taskTotal} monthly tasks, ${Object.keys(SOURCES).length} sources, ${photoTotal} photos.`);

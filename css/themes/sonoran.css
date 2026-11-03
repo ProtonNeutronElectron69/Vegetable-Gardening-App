@@ -64,6 +64,7 @@
 [data-skin="sonoran"] .site-nav a { color: #fff6e9; font-weight: 600; border: 1.5px solid rgba(255, 246, 233, 0.45); }
 [data-skin="sonoran"] .site-nav a[data-nav="calendar"]:hover { background: #c23b6f; color: #fff; }
 [data-skin="sonoran"] .site-nav a[data-nav="plants"]:hover { background: #5c8a3a; color: #fff; }
+[data-skin="sonoran"] .site-nav a[data-nav="care"]:hover { background: #b9771f; color: #fff; }
 [data-skin="sonoran"] .site-nav a[data-nav="gallery"]:hover { background: #e2714f; color: #fff; }
 [data-skin="sonoran"] .site-nav a[data-nav="about"]:hover { background: #2f8fa0; color: #fff; }
 [data-skin="sonoran"] .site-nav a[aria-current="page"] {
@@ -88,12 +89,14 @@
 [data-skin="sonoran"] .now-panel .eyebrow { color: #ffd27a; }
 [data-skin="sonoran"] .now-range, [data-skin="sonoran"] .now-count { color: #e6cfe0; }
 [data-skin="sonoran"] .now-panel .link-btn { color: #ffd27a; }
+[data-skin="sonoran"] .now-panel .fine { color: #e6cfe0; }
+[data-skin="sonoran"] .now-panel .panel-link a { color: #ffd27a; }
 [data-skin="sonoran"] .icon-btn { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.35); color: #fff; }
 [data-skin="sonoran"] .now-list a { background: rgba(255, 246, 233, 0.1); color: #fff6e9; border: 1px solid rgba(255, 246, 233, 0.22); }
 [data-skin="sonoran"] .now-list a:hover { background: #fff6e9; color: var(--dusk-1); }
 
 [data-skin="sonoran"] .segmented { background: var(--surface-2); }
-[data-skin="sonoran"] .segmented button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+[data-skin="sonoran"] .segmented button[aria-pressed="true"], [data-skin="sonoran"] .segmented a[aria-current="page"] { background: var(--accent); color: #fff; }
 [data-skin="sonoran"] .search input, [data-skin="sonoran"] .jump select { border-color: var(--border); background: var(--surface); }
 
 /* Calendar table: dusk-purple header, sand-striped months, colored season bands */
@@ -149,3 +152,6 @@
   [data-skin="sonoran"] .brand-name { font-size: 1.15rem; }
   :root[data-skin="sonoran"][lang="vi"] .site-nav a { font-size: 0.78rem; padding-inline: 3px; }
 }
+
+/* Garden care pages */
+[data-skin="sonoran"] .task-group, [data-skin="sonoran"] .table-scroll { border: 0; box-shadow: var(--shadow); }

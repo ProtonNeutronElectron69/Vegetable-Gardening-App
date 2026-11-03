@@ -2408,3 +2408,373 @@ window.PHOTOS = {
     }
   ]
 };
+
+/*
+  Photos for each pest or problem in pests.js (keyed by pest id), same fields as above.
+  kind: "pest" = what it looks like, "damage" = the damage it causes.
+  Keep images/pests/CREDITS.md in sync.
+*/
+window.PEST_PHOTOS = {
+  "aphids": [
+    {
+      "kind": "pest",
+      "src": "images/pests/aphids/pest-1.jpg",
+      "thumb": "images/pests/aphids/thumbs/pest-1.jpg",
+      "alt": "Cabbage aphids clustered on a stem",
+      "artist": "W Rao",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/370477723"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/aphids/pest-2.jpg",
+      "thumb": "images/pests/aphids/thumbs/pest-2.jpg",
+      "alt": "Cabbage aphids on a cabbage-family plant",
+      "artist": "Erik Steenkamp",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/427754816"
+    }
+  ],
+  "whiteflies": [
+    {
+      "kind": "pest",
+      "src": "images/pests/whiteflies/pest-1.jpg",
+      "thumb": "images/pests/whiteflies/thumbs/pest-1.jpg",
+      "alt": "Two adult silverleaf whiteflies on a leaf",
+      "artist": "Mike Bowie",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/323385463"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/whiteflies/pest-2.jpg",
+      "thumb": "images/pests/whiteflies/thumbs/pest-2.jpg",
+      "alt": "Whiteflies on the underside of a leaf",
+      "artist": "Michele Jones",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/242186163"
+    }
+  ],
+  "squash-bugs": [
+    {
+      "kind": "pest",
+      "src": "images/pests/squash-bugs/pest-1.jpg",
+      "thumb": "images/pests/squash-bugs/thumbs/pest-1.jpg",
+      "alt": "Adult squash bug on a plant in Phoenix",
+      "artist": "Andrew Meeds",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/204783879"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/squash-bugs/pest-2.jpg",
+      "thumb": "images/pests/squash-bugs/thumbs/pest-2.jpg",
+      "alt": "Squash bug eggs and a young squash bug on a leaf",
+      "artist": "Douglas Goldman",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/83068197"
+    },
+    {
+      "kind": "damage",
+      "src": "images/pests/squash-bugs/damage-3.jpg",
+      "thumb": "images/pests/squash-bugs/thumbs/damage-3.jpg",
+      "alt": "Young squash bugs gathered on a squash leaf",
+      "artist": "Lisa Zins",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "sourceUrl": "https://www.flickr.com/photos/94846844@N04/20605091071"
+    }
+  ],
+  "leaffooted-bugs": [
+    {
+      "kind": "pest",
+      "src": "images/pests/leaffooted-bugs/pest-1.jpg",
+      "thumb": "images/pests/leaffooted-bugs/thumbs/pest-1.jpg",
+      "alt": "Adult leaf-footed bug",
+      "artist": "Andrew Meeds",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/438696999"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/leaffooted-bugs/pest-2.jpg",
+      "thumb": "images/pests/leaffooted-bugs/thumbs/pest-2.jpg",
+      "alt": "Leaf-footed bug in Yuma, Arizona",
+      "artist": "Lon Brehmer",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/445755736"
+    }
+  ],
+  "spider-mites": [
+    {
+      "kind": "pest",
+      "src": "images/pests/spider-mites/pest-1.jpg",
+      "thumb": "images/pests/spider-mites/thumbs/pest-1.jpg",
+      "alt": "Two-spotted spider mites on a leaf",
+      "artist": "Mike Bowie",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/152879740"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/spider-mites/pest-2.jpg",
+      "thumb": "images/pests/spider-mites/thumbs/pest-2.jpg",
+      "alt": "Spider mite webbing covering leaves",
+      "artist": "Murielle Desrois",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/45631339"
+    }
+  ],
+  "hornworms": [
+    {
+      "kind": "pest",
+      "src": "images/pests/hornworms/pest-1.jpg",
+      "thumb": "images/pests/hornworms/thumbs/pest-1.jpg",
+      "alt": "Hornworm caterpillar on a chewed plant",
+      "artist": "Wendy McCrady",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/317991060"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/hornworms/pest-2.jpg",
+      "thumb": "images/pests/hornworms/thumbs/pest-2.jpg",
+      "alt": "Hornworm caterpillar with its tail horn",
+      "artist": "Matt Felperin",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/595836694"
+    }
+  ],
+  "cabbage-loopers": [
+    {
+      "kind": "pest",
+      "src": "images/pests/cabbage-loopers/pest-1.jpg",
+      "thumb": "images/pests/cabbage-loopers/thumbs/pest-1.jpg",
+      "alt": "Cabbage looper caterpillar close up",
+      "artist": "SimplyLivingLife",
+      "license": "Public domain",
+      "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "sourceUrl": "https://www.flickr.com/photos/146280220@N04/29139681607"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/cabbage-loopers/pest-2.jpg",
+      "thumb": "images/pests/cabbage-loopers/thumbs/pest-2.jpg",
+      "alt": "Cabbage looper caterpillar on leaves",
+      "artist": "Plant pests and diseases",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.flickr.com/photos/62295966@N07/28972749883"
+    }
+  ],
+  "cutworms": [
+    {
+      "kind": "pest",
+      "src": "images/pests/cutworms/pest-1.jpg",
+      "thumb": "images/pests/cutworms/thumbs/pest-1.jpg",
+      "alt": "Cutworm caterpillar",
+      "artist": "Michael Berardozzi",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/371630877"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/cutworms/pest-2.jpg",
+      "thumb": "images/pests/cutworms/thumbs/pest-2.jpg",
+      "alt": "Cutworm caterpillar curled on the ground",
+      "artist": "Aalbert Rebergen",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/352711262"
+    }
+  ],
+  "flea-beetles": [
+    {
+      "kind": "pest",
+      "src": "images/pests/flea-beetles/pest-1.jpg",
+      "thumb": "images/pests/flea-beetles/thumbs/pest-1.jpg",
+      "alt": "Flea beetle on a leaf",
+      "artist": "Andrew Meeds",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/246243275"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/flea-beetles/pest-2.jpg",
+      "thumb": "images/pests/flea-beetles/thumbs/pest-2.jpg",
+      "alt": "Small black flea beetle on a leaf",
+      "artist": "Helio Lourencini",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/111654398"
+    }
+  ],
+  "green-fruit-beetle": [
+    {
+      "kind": "pest",
+      "src": "images/pests/green-fruit-beetle/pest-1.jpg",
+      "thumb": "images/pests/green-fruit-beetle/thumbs/pest-1.jpg",
+      "alt": "Green fruit beetle (fig beetle)",
+      "artist": "CK2AZ",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/9354781"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/green-fruit-beetle/pest-2.jpg",
+      "thumb": "images/pests/green-fruit-beetle/thumbs/pest-2.jpg",
+      "alt": "Green fruit beetles feeding on a tree in Phoenix",
+      "artist": "Billy Aguirre",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/4556852"
+    }
+  ],
+  "rabbits": [
+    {
+      "kind": "pest",
+      "src": "images/pests/rabbits/pest-1.jpg",
+      "thumb": "images/pests/rabbits/thumbs/pest-1.jpg",
+      "alt": "Desert cottontail rabbit in Maricopa, Arizona",
+      "artist": "k7hpn",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/608075286"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/rabbits/pest-2.jpg",
+      "thumb": "images/pests/rabbits/thumbs/pest-2.jpg",
+      "alt": "Desert cottontail rabbit",
+      "artist": "Tristan A. McKnight",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/403972226"
+    }
+  ],
+  "curly-top": [
+    {
+      "kind": "pest",
+      "src": "images/pests/curly-top/pest-1.jpg",
+      "thumb": "images/pests/curly-top/thumbs/pest-1.jpg",
+      "alt": "Beet leafhopper, the insect that spreads curly top virus",
+      "artist": "Jesse Rorabaugh",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/5279937"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/curly-top/pest-2.jpg",
+      "thumb": "images/pests/curly-top/thumbs/pest-2.jpg",
+      "alt": "Beet leafhopper close up",
+      "artist": "antimatterbee",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "sourceUrl": "https://www.inaturalist.org/photos/450169325"
+    }
+  ],
+  "powdery-mildew": [
+    {
+      "kind": "pest",
+      "src": "images/pests/powdery-mildew/pest-1.jpg",
+      "thumb": "images/pests/powdery-mildew/thumbs/pest-1.jpg",
+      "alt": "Powdery mildew on a squash leaf",
+      "artist": "Plant pests and diseases",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.flickr.com/photos/62295966@N07/16488048256"
+    },
+    {
+      "kind": "pest",
+      "src": "images/pests/powdery-mildew/pest-2.jpg",
+      "thumb": "images/pests/powdery-mildew/thumbs/pest-2.jpg",
+      "alt": "Powdery mildew on pumpkin leaves",
+      "artist": "Plant pests and diseases",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.flickr.com/photos/62295966@N07/15357500783"
+    }
+  ],
+  "root-knot-nematodes": [
+    {
+      "kind": "damage",
+      "src": "images/pests/root-knot-nematodes/damage-1.jpg",
+      "thumb": "images/pests/root-knot-nematodes/thumbs/damage-1.jpg",
+      "alt": "Root-knot nematode galls on tomato roots",
+      "artist": "Plant pests and diseases",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.flickr.com/photos/62295966@N07/37157704286"
+    },
+    {
+      "kind": "damage",
+      "src": "images/pests/root-knot-nematodes/damage-2.jpg",
+      "thumb": "images/pests/root-knot-nematodes/thumbs/damage-2.jpg",
+      "alt": "Root-knot nematode galls on carrots",
+      "artist": "Plant pests and diseases",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.flickr.com/photos/62295966@N07/9807795696"
+    }
+  ],
+  "blossom-end-rot": [
+    {
+      "kind": "damage",
+      "src": "images/pests/blossom-end-rot/damage-1.jpg",
+      "thumb": "images/pests/blossom-end-rot/thumbs/damage-1.jpg",
+      "alt": "Blossom-end rot on green tomatoes",
+      "artist": "Plant pests and diseases",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.flickr.com/photos/62295966@N07/5836882746"
+    },
+    {
+      "kind": "damage",
+      "src": "images/pests/blossom-end-rot/damage-2.jpg",
+      "thumb": "images/pests/blossom-end-rot/thumbs/damage-2.jpg",
+      "alt": "Blossom-end rot on ripening tomatoes",
+      "artist": "Plant pests and diseases",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.flickr.com/photos/62295966@N07/9737392836"
+    }
+  ],
+  "sunburn": [
+    {
+      "kind": "damage",
+      "src": "images/pests/sunburn/damage-1.jpg",
+      "thumb": "images/pests/sunburn/thumbs/damage-1.jpg",
+      "alt": "Sunscald on a green tomato",
+      "artist": "Plant pests and diseases",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.flickr.com/photos/62295966@N07/13919379037"
+    },
+    {
+      "kind": "damage",
+      "src": "images/pests/sunburn/damage-2.jpg",
+      "thumb": "images/pests/sunburn/thumbs/damage-2.jpg",
+      "alt": "Sunscald patch on a tomato",
+      "artist": "Plant pests and diseases",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceUrl": "https://www.flickr.com/photos/62295966@N07/14102803331"
+    }
+  ]
+};
