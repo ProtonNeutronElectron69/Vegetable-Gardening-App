@@ -983,8 +983,9 @@
     else if (view === "plants") renderPlants();
     else if (view === "plant") renderPlant(parts[1]);
     else if (view === "care") {
+      // "#/care" alone is always this month; "#/care/3" is March.
       var m = parseInt(parts[1], 10);
-      if (m >= 1 && m <= 12) state.careMonth = m - 1;
+      state.careMonth = m >= 1 && m <= 12 ? m - 1 : new Date().getMonth();
       renderCare();
     }
     else if (view === "water") renderWater();
