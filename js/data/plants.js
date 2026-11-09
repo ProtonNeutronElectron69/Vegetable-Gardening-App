@@ -45,7 +45,8 @@ window.PLANTS = [
       "The fall planting (mid-July to mid-August) produces until the first frost."
     ],
     varieties: "The Extension doesn't name varieties for Phoenix. Pick early ones (under 70 days to harvest), cherry and plum types, and ones marked V, F or N for disease resistance; big, long-season tomatoes often fail here.",
-    sources: ["az1005", "az2078"]
+    container: true,
+    sources: ["az1005", "az2078", "az1713"]
   },
   {
     id: "peppers",
@@ -68,7 +69,8 @@ window.PLANTS = [
       "Flowers may drop in peak summer heat; plants usually start setting fruit again in fall.",
       "Keep plants dense and leafy so leaves shade the fruit."
     ],
-    sources: ["az1005"]
+    container: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "eggplant",
@@ -90,7 +92,8 @@ window.PLANTS = [
       "Harvest while skin is glossy; dull skin means the fruit is overripe and seedy.",
       "Watch for flea beetles on young plants."
     ],
-    sources: ["az1005"]
+    container: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "summer-squash",
@@ -113,7 +116,8 @@ window.PLANTS = [
       "Check leaf undersides for squash bug eggs and remove them.",
       "If fruit shrivels at the tip, flowers are not being pollinated; hand-pollinate early in the morning."
     ],
-    sources: ["az1005"]
+    container: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "winter-squash",
@@ -181,7 +185,8 @@ window.PLANTS = [
       "Pick often and young; leaving big cucumbers on the vine stops new ones from forming.",
       "For summer, grow Armenian cucumbers instead; they take the heat much better."
     ],
-    sources: ["az1005"]
+    container: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "armenian-cucumber",
@@ -312,7 +317,8 @@ window.PLANTS = [
       "Pick every few days while pods are slim and snap cleanly.",
       "For midsummer, try yardlong beans, which tolerate heat better."
     ],
-    sources: ["az1005"]
+    container: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "corn",
@@ -404,7 +410,8 @@ window.PLANTS = [
       "Harvest by cutting stems just above a pair of leaves, which makes the plant bushier.",
       "Frost kills basil; it is strictly a warm-season herb here."
     ],
-    sources: ["az1005"]
+    container: true,
+    sources: ["az1005", "az2061"]
   },
 
   // ---------------------------------------------------------------- cool season
@@ -433,7 +440,9 @@ window.PLANTS = [
       "Let a few plants flower: the dried seeds are coriander, and the flowers attract lacewings and other helpful insects.",
       "Use it fresh; it loses its flavor when dried."
     ],
-    sources: ["az1615", "az2061", "bg-herbs", "reminders-feb"]
+    container: true,
+    partShade: true,
+    sources: ["az1615", "az2061", "bg-herbs", "reminders-feb", "az1435"]
   },
   {
     id: "lettuce",
@@ -459,7 +468,9 @@ window.PLANTS = [
       "Pick outer leaves and let the center keep growing.",
       "Leaf and romaine types are easier here than head (iceberg) lettuce."
     ],
-    sources: ["az1005"]
+    container: true,
+    partShade: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "spinach",
@@ -475,14 +486,15 @@ window.PLANTS = [
     timeToHarvest: "30 to 90 days from seed",
     spacing: "3 to 6 inches apart; rows 12 to 18 inches apart",
     water: "Moderate. Keep soil consistently moist.",
-    sun: "Full sun in winter.",
+    sun: "Full sun in winter; tolerates partial shade.",
     growth: "Fast.",
     yield: "About 4 to 6 pounds per 10 feet of row with repeated picking.",
     tips: [
       "Seeds germinate poorly in hot soil; wait until fall soil cools.",
       "Pick outer leaves or cut the whole plant an inch above the soil to regrow."
     ],
-    sources: ["az1005"]
+    partShade: true,
+    sources: ["az1005", "az1435"]
   },
   {
     id: "kale",
@@ -504,7 +516,9 @@ window.PLANTS = [
       "Harvest lower leaves first; the plant keeps growing from the top.",
       "Watch for aphids and cabbage loopers on leaf undersides."
     ],
-    sources: ["az1005"]
+    container: true,
+    partShade: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "chard",
@@ -528,7 +542,9 @@ window.PLANTS = [
       "Cut outer stalks near the base and leave the center to keep producing.",
       "Rainbow varieties make an attractive edible border."
     ],
-    sources: ["az1005"]
+    container: true,
+    partShade: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "bok-choy",
@@ -551,7 +567,8 @@ window.PLANTS = [
       "Harvest before warm weather causes bolting.",
       "Sow small batches every few weeks."
     ],
-    sources: ["az1005"]
+    partShade: true,
+    sources: ["az1005", "az1435"]
   },
   {
     id: "broccoli",
@@ -617,14 +634,16 @@ window.PLANTS = [
     timeToHarvest: "80 to 90 days from transplant; 120 to 130 days from seed",
     spacing: "12 to 24 inches apart; rows 2 to 3 feet apart",
     water: "Moderate. Uneven watering can split heads.",
-    sun: "Full sun.",
+    sun: "Full sun; tolerates partial shade.",
     growth: "Moderate.",
     yield: "One 2 to 4 pound head per plant.",
     tips: [
       "Harvest when the head feels firm when squeezed.",
       "Cover young plants with fabric row cover to keep out cabbage moths."
     ],
-    sources: ["az1005"]
+    container: true,
+    partShade: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "carrots",
@@ -639,7 +658,7 @@ window.PLANTS = [
     timeToHarvest: "60 to 100 days from seed",
     spacing: "Thin to 2 to 3 inches apart; rows 12 to 18 inches apart",
     water: "Moderate. Keep the surface moist until seeds sprout (they can take 2 to 3 weeks).",
-    sun: "Full sun.",
+    sun: "Full sun; tolerates partial shade.",
     growth: "Slow to sprout, then steady.",
     yield: "About 7 to 10 pounds per 10 feet of row.",
     tips: [
@@ -647,7 +666,9 @@ window.PLANTS = [
       "Cover the seed row with burlap or a board to hold moisture, and remove it once sprouts appear.",
       "Thin seedlings early or the roots will be small and tangled."
     ],
-    sources: ["az1005"]
+    container: true,
+    partShade: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "beets",
@@ -662,7 +683,7 @@ window.PLANTS = [
     timeToHarvest: "60 to 80 days from seed",
     spacing: "Thin to 3 to 4 inches apart; rows 12 to 18 inches apart",
     water: "Moderate. Even moisture keeps roots tender.",
-    sun: "Full sun.",
+    sun: "Full sun; tolerates partial shade.",
     growth: "Moderate.",
     yield: "About 10 pounds of roots per 10 feet of row, plus greens.",
     tips: [
@@ -670,7 +691,9 @@ window.PLANTS = [
       "Eat the thinnings as baby greens.",
       "Harvest roots at 1.5 to 3 inches across for the best texture."
     ],
-    sources: ["az1005"]
+    container: true,
+    partShade: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "radishes",
@@ -685,14 +708,15 @@ window.PLANTS = [
     timeToHarvest: "30 to 60 days from seed",
     spacing: "1 to 2 inches apart; rows 12 inches apart",
     water: "Moderate. Dry spells make radishes hot and pithy.",
-    sun: "Full sun.",
+    sun: "Full sun; tolerates partial shade.",
     growth: "Very fast.",
     yield: "One radish per seed.",
     tips: [
       "Sow small amounts every 1 to 2 weeks.",
       "Pull them as soon as they size up; they go woody if left too long."
     ],
-    sources: ["az1005"]
+    partShade: true,
+    sources: ["az1005", "az1435"]
   },
   {
     id: "turnips",
@@ -707,14 +731,16 @@ window.PLANTS = [
     timeToHarvest: "75 to 120 days from seed (greens much sooner)",
     spacing: "Thin to 3 to 4 inches apart; rows 12 to 18 inches apart",
     water: "Moderate.",
-    sun: "Full sun.",
+    sun: "Full sun; tolerates partial shade.",
     growth: "Fast.",
     yield: "About 8 to 10 pounds per 10 feet of row.",
     tips: [
       "Harvest roots at 2 to 3 inches across; larger ones get woody.",
       "Young greens are tasty cooked like spinach."
     ],
-    sources: ["az1005"]
+    container: true,
+    partShade: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "peas",
@@ -798,14 +824,16 @@ window.PLANTS = [
     timeToHarvest: "90 to 100 days (the Extension guide's figure); young thinnings can be eaten sooner",
     spacing: "1 to 2 inches apart; rows 12 inches apart",
     water: "Moderate.",
-    sun: "Full sun.",
+    sun: "Full sun; tolerates partial shade.",
     growth: "Moderate.",
     yield: "One bunch of 6 to 8 per foot of row.",
     tips: [
       "Sow small batches every few weeks.",
       "Regrow store-bought green onions by planting the root ends."
     ],
-    sources: ["az1005"]
+    container: true,
+    partShade: true,
+    sources: ["az1005", "az1713"]
   },
   {
     id: "garlic",

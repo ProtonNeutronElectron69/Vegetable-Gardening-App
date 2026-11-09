@@ -302,7 +302,7 @@ window.PLANTS_VI = {
     timeToHarvest: "30 đến 90 ngày kể từ khi gieo hạt",
     spacing: "Cây cách cây 3–6 inch (8–15 cm); hàng cách hàng 12–18 inch (30–45 cm)",
     water: "Vừa phải. Giữ đất ẩm đều.",
-    sun: "Nắng đầy đủ vào mùa đông.",
+    sun: "Nắng đầy đủ vào mùa đông; chịu được chỗ hơi râm.",
     growth: "Nhanh.",
     yield: "Khoảng 4–6 pound (1,8–2,7 kg) cho mỗi 10 feet (3 m) hàng nếu hái nhiều lần.",
     tips: [
@@ -387,7 +387,7 @@ window.PLANTS_VI = {
     timeToHarvest: "80 đến 90 ngày kể từ khi trồng cây con; 120 đến 130 ngày kể từ khi gieo hạt",
     spacing: "Cây cách cây 12–24 inch (30–60 cm); hàng cách hàng 2–3 feet (60–90 cm)",
     water: "Vừa phải. Tưới không đều có thể làm nứt bắp.",
-    sun: "Nắng đầy đủ.",
+    sun: "Nắng đầy đủ; chịu được chỗ hơi râm.",
     growth: "Trung bình.",
     yield: "Một bắp nặng 2–4 pound (0,9–1,8 kg) mỗi cây.",
     tips: [
@@ -401,7 +401,7 @@ window.PLANTS_VI = {
     timeToHarvest: "60 đến 100 ngày kể từ khi gieo hạt",
     spacing: "Tỉa còn cách nhau 2–3 inch (5–8 cm); hàng cách hàng 12–18 inch (30–45 cm)",
     water: "Vừa phải. Giữ mặt đất ẩm tới khi hạt nảy mầm (có thể mất 2–3 tuần).",
-    sun: "Nắng đầy đủ.",
+    sun: "Nắng đầy đủ; chịu được chỗ hơi râm.",
     growth: "Nảy mầm chậm, sau đó lớn đều.",
     yield: "Khoảng 7–10 pound (3–4,5 kg) cho mỗi 10 feet (3 m) hàng.",
     tips: [
@@ -416,7 +416,7 @@ window.PLANTS_VI = {
     timeToHarvest: "60 đến 80 ngày kể từ khi gieo hạt",
     spacing: "Tỉa còn cách nhau 3–4 inch (8–10 cm); hàng cách hàng 12–18 inch (30–45 cm)",
     water: "Vừa phải. Ẩm đều thì củ mềm.",
-    sun: "Nắng đầy đủ.",
+    sun: "Nắng đầy đủ; chịu được chỗ hơi râm.",
     growth: "Trung bình.",
     yield: "Khoảng 10 pound (4,5 kg) củ cho mỗi 10 feet (3 m) hàng, cộng thêm lá.",
     tips: [
@@ -431,7 +431,7 @@ window.PLANTS_VI = {
     timeToHarvest: "30 đến 60 ngày kể từ khi gieo hạt",
     spacing: "Cây cách cây 1–2 inch (2,5–5 cm); hàng cách hàng 12 inch (30 cm)",
     water: "Vừa phải. Đất khô làm củ cay và xốp ruột.",
-    sun: "Nắng đầy đủ.",
+    sun: "Nắng đầy đủ; chịu được chỗ hơi râm.",
     growth: "Rất nhanh.",
     yield: "Mỗi hạt một củ.",
     tips: [
@@ -445,7 +445,7 @@ window.PLANTS_VI = {
     timeToHarvest: "75 đến 120 ngày kể từ khi gieo hạt (ăn lá thì sớm hơn nhiều)",
     spacing: "Tỉa còn cách nhau 3–4 inch (8–10 cm); hàng cách hàng 12–18 inch (30–45 cm)",
     water: "Vừa phải.",
-    sun: "Nắng đầy đủ.",
+    sun: "Nắng đầy đủ; chịu được chỗ hơi râm.",
     growth: "Nhanh.",
     yield: "Khoảng 8–10 pound (3,5–4,5 kg) cho mỗi 10 feet (3 m) hàng.",
     tips: [
@@ -503,7 +503,7 @@ window.PLANTS_VI = {
     timeToHarvest: "90 đến 100 ngày (theo bảng của Extension); cây tỉa non có thể ăn sớm hơn",
     spacing: "Cây cách cây 1–2 inch (2,5–5 cm); hàng cách hàng 12 inch (30 cm)",
     water: "Vừa phải.",
-    sun: "Nắng đầy đủ.",
+    sun: "Nắng đầy đủ; chịu được chỗ hơi râm.",
     growth: "Trung bình.",
     yield: "Mỗi foot (30 cm) hàng được một bó 6–8 cây.",
     tips: [

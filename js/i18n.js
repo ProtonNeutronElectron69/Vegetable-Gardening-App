@@ -107,6 +107,10 @@ window.I18N = {
   "filter.warm": { en: "Warm", vi: "Nóng" },
   "filter.cool": { en: "Cool", vi: "Mát" },
   "filter.perennial": { en: "Perennial", vi: "Lâu năm" },
+  "filter.container": { en: "Good in containers", vi: "Trồng chậu được" },
+  "filter.shade": { en: "Tolerates some shade", vi: "Chịu được chỗ hơi râm" },
+  "tag.container": { en: "Grows in pots", vi: "Trồng chậu được" },
+  "tag.shade": { en: "Tolerates part shade", vi: "Chịu hơi râm" },
   "filter.noPlants": { en: "No plants match these filters.", vi: "Không có cây nào khớp với bộ lọc." },
   "legend.label": { en: "Legend", vi: "Chú thích" },
 

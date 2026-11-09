@@ -148,6 +148,8 @@
     season: "all",
     query: "",
     plantableOnly: false,
+    containerOnly: false,
+    shadeOnly: false,
     galleryCategory: "all",
     galleryKind: "all",
     careMonth: new Date().getMonth(),
@@ -268,6 +270,11 @@
     return [["all", t("filter.all")], ["vegetable", t("filter.vegetables")], ["fruit", t("filter.fruit")], ["herb", t("filter.herbs")]];
   }
 
+  function check(name, label) {
+    return '<label class="check"><input type="checkbox" data-filter="' + name + '"' + (state[name] ? " checked" : "") +
+      "> " + esc(label) + "</label>";
+  }
+
   function filterToolbar(opts) {
     return '<div class="toolbar">' +
       '<label class="search"><span class="visually-hidden">' + esc(t("filter.searchLabel")) + "</span>" +
@@ -275,8 +282,9 @@
       segmented("category", categoryOptions(), state.category, t("filter.typeLabel")) +
       segmented("season", [["all", t("filter.anySeason")], ["warm", t("filter.warm")], ["cool", t("filter.cool")],
         ["perennial", t("filter.perennial")]], state.season, t("filter.seasonLabel")) +
-      '<label class="check"><input type="checkbox" data-filter="plantableOnly"' + (state.plantableOnly ? " checked" : "") +
-      "> " + esc(opts.plantableLabel) + "</label>" +
+      check("plantableOnly", opts.plantableLabel) +
+      // Containers and shade only on the Plants page, so the calendar toolbar stays short.
+      (opts.growing ? check("containerOnly", t("filter.container")) + check("shadeOnly", t("filter.shade")) : "") +
       "</div>";
   }
 
@@ -381,7 +389,7 @@
     var html = '<section class="page">' +
       '<div class="page-head"><h1>' + esc(t("plants.title")) + "</h1><p>" +
       esc(t("plants.intro", { n: PLANTS.length })) + "</p></div>" +
-      filterToolbar({ plantableLabel: t("plants.canPlantNow", halfParams(todayHalf())) }) +
+      filterToolbar({ plantableLabel: t("plants.canPlantNow", halfParams(todayHalf())), growing: true }) +
       '<div class="card-grid" id="plant-grid">' + plantCards() + "</div></section>";
     setView(html, t("plants.title"));
   }
@@ -390,7 +398,9 @@
     // On the Plants page "plantable" always means today, not the calendar's selected period.
     var saved = state.half;
     state.half = todayHalf();
-    var list = PLANTS.filter(matchesFilters).sort(byName);
+    var list = PLANTS.filter(function (p) {
+      return matchesFilters(p) && (!state.containerOnly || p.container) && (!state.shadeOnly || p.partShade);
+    }).sort(byName);
     state.half = saved;
     if (!list.length) return '<p class="empty">' + esc(t("filter.noPlants")) + "</p>";
     var now = todayHalf();
@@ -468,7 +478,9 @@
       (ph ? '<figcaption class="credit">' + photoCredit(ph) + "</figcaption>" : "") + "</figure>" +
       '<div class="plant-intro">' +
       '<div class="tags"><span class="tag season-' + p.season + '">' + esc(t("season." + p.season)) + "</span>" +
-      '<span class="tag">' + esc(t("category." + p.category)) + "</span></div>" +
+      '<span class="tag">' + esc(t("category." + p.category)) + "</span>" +
+      (p.container ? '<span class="tag">' + esc(t("tag.container")) + "</span>" : "") +
+      (p.partShade ? '<span class="tag">' + esc(t("tag.shade")) + "</span>" : "") + "</div>" +
       "<h1>" + esc(pname(p)) + "</h1>" +
       '<p class="lead">' + esc(pt(p, "summary")) + "</p>" +
       '<section class="when" aria-labelledby="when-title"><h2 id="when-title">' + esc(t("plant.when")) + "</h2>" +
@@ -1048,8 +1060,8 @@
       e.target.value = "";
       return;
     }
-    if (e.target.matches('[data-filter="plantableOnly"]')) {
-      state.plantableOnly = e.target.checked;
+    if (e.target.matches('input[type="checkbox"][data-filter]')) {
+      state[e.target.getAttribute("data-filter")] = e.target.checked;
       refresh();
     }
     if (e.target.matches('[data-filter="pestPlant"]')) {
