@@ -14,6 +14,7 @@ That's it. Bookmark the page to come back to it.
 ## What's inside
 
 - **Planting calendar**: shows what you can plant right now and lays out a full-year chart for every crop. Click any column to see what to plant in that half of the month, and filter by vegetables, fruit, herbs or season.
+- **Plants list**: search, filter by type and season, show what you can plant now, and find plants that grow in containers or tolerate some shade.
 - **Plant guides**: a page for each plant with planting dates, spacing, watering, sun, growth, typical yield and Phoenix-specific tips, plus a short note on recommended varieties where the University of Arizona gives one (fruit trees, grapes, strawberries, tomatoes).
 - **Garden care**: a month-by-month to-do list (watering, feeding, frost and heat protection, pests, pruning and harvest, plus what to plant), a seasonal watering guide with how often to water vegetables, fruit trees and citrus, and a guide to common pests and problems with photos, signs to look for and what to do. Plant pages link to the pests that affect them.
 - **Gallery**: about 230 photos. Each crop has at least three photos of the harvest and three of the whole plant, so you can see its size and shape. Leafy greens and herbs have wide shots and close-ups instead. Filter by plant type or photo type, jump straight to a plant, and view any photo full screen. Each plant's page also shows its own photos.

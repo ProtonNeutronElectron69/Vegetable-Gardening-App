@@ -84,6 +84,13 @@ for (const p of PLANTS || []) {
   }
 
   if (p.leafy !== undefined && p.leafy !== true) fail(where, 'leafy must be true or left out');
+  // Plants-page filters: each flag needs one of the UA sources that supports it.
+  const FLAG_SOURCES = { container: ["az1713", "az2061"], partShade: ["az1713", "az1435"] };
+  for (const [flag, allowed] of Object.entries(FLAG_SOURCES)) {
+    if (p[flag] === undefined) continue;
+    if (p[flag] !== true) fail(where, `${flag} must be true or left out`);
+    else if (!(p.sources || []).some((s) => allowed.includes(s))) fail(where, `${flag} needs one of these in sources: ${allowed.join(", ")}`);
+  }
 
   const photos = PHOTOS[p.id];
   if (!Array.isArray(photos) || photos.length === 0) {

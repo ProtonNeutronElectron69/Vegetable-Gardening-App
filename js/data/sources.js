@@ -66,6 +66,12 @@ window.SOURCES = {
     url: "https://www.extension.arizona.edu/sites/default/files/attachment/Herbs.pdf",
     note: "Growing and harvesting common herbs, including cilantro (coriander)."
   },
+  "az1713": {
+    group: "plants",
+    title: "Container Gardening in the Southwest Desert (AZ1713)",
+    url: "https://extension.arizona.edu/sites/default/files/2024-08/az1713-2016.pdf",
+    note: "Table of vegetables for containers, with pot sizes and which ones tolerate partial shade."
+  },
   "az2078": {
     group: "plants",
     title: "Growing Tomatoes (AZ2078)",

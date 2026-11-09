@@ -13,6 +13,7 @@ window.SOURCES_VI = {
   "az1615": "Lịch trồng vùng sa mạc thấp có cả rau thơm. Thời điểm trồng ngò rí lấy từ đây, vì lịch của quận Maricopa không có ngò rí.",
   "az2061": "Lịch trồng rau thơm cho miền nam Arizona: khi nào trồng và loại nào cần che sương giá.",
   "bg-herbs": "Cách trồng và thu hoạch các loại rau thơm thường gặp, trong đó có ngò rí.",
+  "az1713": "Bảng các loại rau trồng chậu được, kèm cỡ chậu và loại nào chịu được chỗ hơi râm.",
   "az2078": "Cách lựa giống cà chua cho vùng sa mạc thấp: giống chín sớm, trái nhỏ và kháng bệnh.",
   "monthly-january": "Viết cho Tucson, nhưng thời điểm trồng cây ăn trái rễ trần và tỉa nho vào mùa đông cũng áp dụng được cho Phoenix."
 ,
