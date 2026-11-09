@@ -45,7 +45,8 @@ Reference app for vegetable and fruit gardening in the Phoenix, AZ metro area (l
 
 ## Data accuracy rules
 
-- Vegetable planting windows must match UA Extension AZ1005 (Maricopa County planting calendar). Do not invent or "round" dates.
+- Vegetable planting windows must match UA Extension AZ1005 (Maricopa County planting calendar). Do not invent or "round" dates. Herbs that AZ1005 doesn't list (cilantro) use the UA Yuma County low-desert calendar (AZ1615); say so in a comment on the entry.
+- `varieties` (optional, both languages) is a one-line note shown quietly under a plant's growing facts. Only add it where a UA low-desert source names varieties (AZ1001 citrus, AZ1269 deciduous fruit, AZ1657 grapes, AZ1667 strawberries) or gives selection advice (AZ2078 tomatoes); that source must be in the plant's `sources`. Don't use high-desert (Yavapai) variety lists.
 - Fruit windows must cite a UA Extension source in `sources.js`.
 - Spacing, yield and tips are general guidance; keep them conservative and Phoenix-relevant.
 - Only use photos with a free license (public domain, CC0, CC BY, CC BY-SA) and record artist, license and source URL.

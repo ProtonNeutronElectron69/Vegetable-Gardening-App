@@ -482,7 +482,11 @@
       fact("fact.sun", "sun") +
       fact("fact.growth", "growth") +
       fact("fact.yield", "yield") +
-      '</dl><p class="more-link"><a href="#/water">' + esc(t("plant.waterLink")) + "</a></p></section>" +
+      "</dl>" +
+      // A quiet one-line note, only for plants with Extension variety advice.
+      (p.varieties ? '<p class="variety-note"><span class="variety-label">' + esc(t("plant.varieties")) + "</span> " +
+        esc(pt(p, "varieties")) + "</p>" : "") +
+      '<p class="more-link"><a href="#/water">' + esc(t("plant.waterLink")) + "</a></p></section>" +
 
       '<section aria-labelledby="tips-title"><h2 id="tips-title">' + esc(t("plant.tips")) + '</h2><ul class="tips">' +
       pt(p, "tips").map(function (tip) { return "<li>" + esc(tip) + "</li>"; }).join("") + "</ul></section>" +

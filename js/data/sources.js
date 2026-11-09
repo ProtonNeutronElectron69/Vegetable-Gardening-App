@@ -48,6 +48,30 @@ window.SOURCES = {
     url: "https://www.extension.arizona.edu/publication/growing-common-figs-low-desert",
     note: "Plant in fall or early spring so roots establish before summer heat."
   },
+  "az1615": {
+    group: "plants",
+    title: "Planting and Harvesting Calendar for Gardeners in Yuma County (AZ1615)",
+    url: "https://extension.arizona.edu/sites/default/files/2024-08/az1615-2020.pdf",
+    note: "Low-desert calendar that includes herbs. Cilantro's planting window comes from it, because the Maricopa County calendar doesn't list cilantro."
+  },
+  "az2061": {
+    group: "plants",
+    title: "Growing Herbs in Tucson (AZ2061)",
+    url: "https://extension.arizona.edu/sites/extension.arizona.edu/files/pubs/az2061-2023.pdf",
+    note: "Herb planting calendar for southern Arizona: when to plant and which herbs need frost protection."
+  },
+  "bg-herbs": {
+    group: "plants",
+    title: "Herbs (Backyard Gardener #216)",
+    url: "https://www.extension.arizona.edu/sites/default/files/attachment/Herbs.pdf",
+    note: "Growing and harvesting common herbs, including cilantro (coriander)."
+  },
+  "az2078": {
+    group: "plants",
+    title: "Growing Tomatoes (AZ2078)",
+    url: "https://www.extension.arizona.edu/sites/default/files/2024-09/az2078-2024.pdf",
+    note: "Choosing tomato varieties for the low desert: early, small-fruited and disease-resistant types."
+  },
   "monthly-january": {
     group: "plants",
     title: "January Monthly Gardening Guide (Pima County Master Gardeners)",

@@ -175,6 +175,7 @@ window.I18N = {
     vi: "Thời điểm trồng lấy từ các nguồn trên. Khoảng cách, sản lượng và mẹo trồng là hướng dẫn chung cho vườn nhà; kết quả thay đổi tùy giống, đất và thời tiết."
   },
   "plant.more": { en: "More plants", vi: "Cây khác" },
+  "plant.varieties": { en: "Varieties:", vi: "Chọn giống:" },
   "plant.waterLink": { en: "Seasonal watering guide →", vi: "Hướng dẫn tưới theo mùa →" },
   "plant.watchFor": { en: "Pests and problems to watch for", vi: "Sâu bệnh cần coi chừng" },
 

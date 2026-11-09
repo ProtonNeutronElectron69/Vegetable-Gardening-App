@@ -21,7 +21,8 @@ window.PLANTS_VI = {
       "Trồng sớm nhất có thể khi hết sương giá (giữa tháng 2) để cây đậu trái trước khi nóng tới.",
       "Ngoài vườn thì trồng cây con, đừng gieo hạt. Ươm hạt trong nhà từ tháng 12 hoặc tháng 1.",
       "Vụ thu (giữa tháng 7 đến giữa tháng 8) cho trái tới đợt sương giá đầu tiên."
-    ]
+    ],
+    varieties: "Extension không nêu tên giống cụ thể cho Phoenix. Lựa giống chín sớm (dưới 70 ngày là có trái), cà chua bi và cà chua trái dài, và giống có ghi V, F hoặc N (kháng bệnh); giống trái to, mùa dài thường không thành công ở đây."
   },
   "peppers": {
     name: "Ớt",
@@ -262,6 +263,24 @@ window.PLANTS_VI = {
   },
 
   // ---------------------------------------------------------------- cool season
+  "cilantro": {
+    name: "Ngò rí",
+    summary: "Rau thơm mùa mát lớn nhanh, dùng cho salsa và các món canh. Gieo vào mùa thu; trời xuân nóng lên là cây trổ bông.",
+    timeToHarvest: "Hái lá từ khoảng tháng 1 tới tháng 4 nếu gieo vào mùa thu",
+    spacing: "Gieo hột sâu 1/4 inch (khoảng 6 mm); tỉa cây cách nhau 1–2 inch (2,5–5 cm)",
+    water: "Giữ đất ẩm đều; để đất khô là cây trổ bông sớm hơn.",
+    sun: "Nắng đầy đủ vào mùa mát; chịu được chỗ hơi râm.",
+    growth: "Nhanh. Cây nhiều lá cao khoảng 1 foot (30 cm), trời ấm lên thì trổ cọng bông.",
+    yield: "Mỗi đợt gieo hái lá được vài tuần, cần tới đâu cắt tới đó.",
+    tips: [
+      "Trồng vào mùa thu. Ngò rí là cây một năm mùa mát và trổ bông (ra hột) rất nhanh khi trời xuân nóng lên.",
+      "Từ tháng 9 tới tháng 12, cứ vài tuần gieo một ít để lúc nào cũng có ngò hái.",
+      "Gieo vào cuối đông (tháng 2) cũng được, nhưng thời gian hái ngắn trước khi cây trổ bông.",
+      "Phủ cây con vào những đêm có sương giá.",
+      "Để vài cây trổ bông: hột khô chính là hột ngò (coriander), còn bông dụ chuồn chuồn cỏ và các côn trùng có ích khác tới.",
+      "Dùng tươi; phơi khô thì mất mùi."
+    ]
+  },
   "lettuce": {
     name: "Xà lách",
     summary: "Xà lách lá là một trong những cây trồng mùa đông dễ nhất. Khi mùa xuân nóng lên thì lá bị đắng và cây trổ ngồng.",
@@ -523,7 +542,8 @@ window.PLANTS_VI = {
       "Luống cao có ích vì thoát nước tốt và giữ muối tránh xa gốc.",
       "Đặt cây sao cho thân gốc (crown) ngang mặt đất; trồng sâu quá hay cạn quá đều có thể làm chết cây.",
       "Nắng hè thường làm cây tàn; phần lớn người trồng trồng lại mỗi mùa thu."
-    ]
+    ],
+    varieties: "Các giống ra trái một vụ (June-bearing) trồng vào mùa thu: 'Chandler', 'Camarosa', 'Sequoia', 'Tioga' và 'Sweet Charlie'."
   },
   "citrus": {
     name: "Cây có múi",
@@ -539,7 +559,8 @@ window.PLANTS_VI = {
       "Chanh vàng và chanh dễ bị sương giá nhất; phủ cây non vào những đêm có sương giá.",
       "Trái không chín thêm sau khi hái; ăn thử trước khi hái cả cây.",
       "Để nguyên các cành thấp (phần “váy” của cây); chúng che nắng cho thân."
-    ]
+    ],
+    varieties: "Cam: cam navel 'Parent Washington', 'Trovita', 'Diller', 'Hamlin', và cam Valencia 'Campbell', 'Olinda'. Quýt: 'Fairchild', 'Algerian' (Clementine), 'Kinnow'; quýt lai 'Minneola'. Bưởi chùm: 'Marsh', 'Redblush', 'Rio Red'. Chanh vàng: 'Eureka', 'Lisbon'. Quýt và tắc chịu lạnh tốt nhất."
   },
   "fig": {
     name: "Sung Mỹ (trái vả)",
@@ -555,7 +576,8 @@ window.PLANTS_VI = {
       "Trồng vào mùa thu hoặc đầu xuân để rễ bén trước cái nóng mùa hè.",
       "Sung không chín thêm sau khi hái; hái khi trái mềm và rũ xuống trên cuống.",
       "Chim rất thích sung; giăng lưới sẽ đỡ."
-    ]
+    ],
+    varieties: "'Black Mission' (hợp nhất ở độ cao dưới 2.000 feet), 'Conadria' (chịu nóng tốt) và 'White Kadota'."
   },
   "pomegranate": {
     name: "Lựu",
@@ -586,7 +608,8 @@ window.PLANTS_VI = {
       "Tỉa cành trong thời gian cây ngủ nghỉ mùa đông (tới giữa tháng 2).",
       "Các giống chín sớm như Flame Seedless và Perlette trồng tốt ở vùng sa mạc thấp.",
       "Tránh chỗ trũng nơi khí lạnh đọng lại và đất có lớp caliche (đất vôi cứng) nằm cạn."
-    ]
+    ],
+    varieties: "Nho châu Âu hợp với vùng sa mạc thấp: 'Thompson Seedless', 'Flame Seedless', 'Perlette', 'Ruby Seedless', 'Beauty Seedless', 'Cardinal' và 'Exotic'."
   },
   "peach": {
     name: "Đào (ít giờ lạnh)",
@@ -601,7 +624,8 @@ window.PLANTS_VI = {
       "Lựa giống cần dưới 400 giờ lạnh, như Desert Gold, Earligrande, Florida Prince, Tropic Snow hoặc Mid-Pride.",
       "Trồng cây rễ trần vào mùa đông khi cây đang ngủ nghỉ.",
       "Vào mùa xuân, tỉa bớt trái non cho cách nhau 6–8 inch (15–20 cm) để đào trái bự hơn."
-    ]
+    ],
+    varieties: "Các giống ít giờ lạnh, tự thụ phấn như 'Desert Gold', 'Florida Prince', 'Eva's Pride', 'Tropic Beauty', 'Tropic Snow', 'Mid-Pride' và 'May Pride'. Lựa giống cần dưới 400 giờ lạnh."
   },
   "apricot": {
     name: "Mơ (ít giờ lạnh)",
@@ -616,6 +640,7 @@ window.PLANTS_VI = {
       "Lựa giống cần 400 giờ lạnh trở xuống, như Gold Kist, Katy hoặc Modesto.",
       "Vùng sa mạc thấp trung bình có khoảng 300–400 giờ lạnh mỗi năm, nên giống càng ít giờ lạnh càng chắc ăn.",
       "Trồng cây rễ trần vào mùa đông khi cây đang ngủ nghỉ."
-    ]
+    ],
+    varieties: "'Gold Kist', 'Katy', 'Blenheim' (Royal) và 'Modesto': đều tự thụ phấn, cần 300–400 giờ lạnh."
   }
 };
