@@ -130,6 +130,15 @@ All plant photos are from [Wikimedia Commons](https://commons.wikimedia.org/) an
 | `plant-2.jpg` | [Cauliflower-buds-on-Plant-view9.JPG](https://commons.wikimedia.org/wiki/File:Cauliflower-buds-on-Plant-view9.JPG) | Edukeralam,( Navaneeth Krishnan S) | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
 | `plant-3.jpg` | [Cauliflower field near Chale Green, Isle of Wight, England.jpg](https://commons.wikimedia.org/wiki/File:Cauliflower_field_near_Chale_Green,_Isle_of_Wight,_England.jpg) | ITookSomePhotos | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
+## Cilantro
+
+| Photo | File | Author | License |
+| --- | --- | --- | --- |
+| `plant-1.jpg` | [Cilantro plants.jpg](https://commons.wikimedia.org/wiki/File:Cilantro_plants.jpg) | HitroMilanese | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
+| `plant-2.jpg` | [Coriandrum sativum 'Cilantro' kz01.jpg](https://commons.wikimedia.org/wiki/File:Coriandrum_sativum_%27Cilantro%27_kz01.jpg) | Krzysztof Ziarnek, Kenraiz | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| `closeup-1.jpg` | [Starr-080731-9544-Coriandrum sativum-leaves-makawao-Maui (24924687415).jpg](https://commons.wikimedia.org/wiki/File:Starr-080731-9544-Coriandrum_sativum-leaves-makawao-Maui_%2824924687415%29.jpg) | Forest and Kim Starr | [CC BY 3.0 us](https://creativecommons.org/licenses/by/3.0/us/deed.en) |
+| `closeup-2.jpg` | [Bunches of coriander leaves.jpg](https://commons.wikimedia.org/wiki/File:Bunches_of_coriander_leaves.jpg) | Kpsudeep | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+
 ## Citrus
 
 | Photo | File | Author | License |

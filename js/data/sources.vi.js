@@ -10,6 +10,10 @@ window.SOURCES_VI = {
   "az1269": "Giống ít giờ lạnh, số giờ lạnh cần thiết và thời gian chín của đào, mơ, sung và nho.",
   "az1657": "Khoảng cách trồng nho, cách trồng dây rễ trần và cách tưới.",
   "figs-low-desert": "Trồng vào mùa thu hoặc đầu xuân để rễ bén trước cái nóng mùa hè.",
+  "az1615": "Lịch trồng vùng sa mạc thấp có cả rau thơm. Thời điểm trồng ngò rí lấy từ đây, vì lịch của quận Maricopa không có ngò rí.",
+  "az2061": "Lịch trồng rau thơm cho miền nam Arizona: khi nào trồng và loại nào cần che sương giá.",
+  "bg-herbs": "Cách trồng và thu hoạch các loại rau thơm thường gặp, trong đó có ngò rí.",
+  "az2078": "Cách lựa giống cà chua cho vùng sa mạc thấp: giống chín sớm, trái nhỏ và kháng bệnh.",
   "monthly-january": "Viết cho Tucson, nhưng thời điểm trồng cây ăn trái rễ trần và tỉa nho vào mùa đông cũng áp dụng được cho Phoenix."
 ,
   "az1435": "Cách làm đất, tưới nước, phủ gốc và phòng sâu bệnh cơ bản cho vườn rau ở Arizona.",

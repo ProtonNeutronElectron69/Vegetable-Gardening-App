@@ -44,7 +44,8 @@ window.PLANTS = [
       "Use transplants, not seeds, in the garden. Start seeds indoors in December or January.",
       "The fall planting (mid-July to mid-August) produces until the first frost."
     ],
-    sources: ["az1005"]
+    varieties: "The Extension doesn't name varieties for Phoenix. Pick early ones (under 70 days to harvest), cherry and plum types, and ones marked V, F or N for disease resistance; big, long-season tomatoes often fail here.",
+    sources: ["az1005", "az2078"]
   },
   {
     id: "peppers",
@@ -407,6 +408,33 @@ window.PLANTS = [
   },
 
   // ---------------------------------------------------------------- cool season
+  {
+    id: "cilantro",
+    name: "Cilantro",
+    leafy: true,
+    category: "herb",
+    season: "cool",
+    summary: "A fast cool-season herb for salsa and soups. Sow it in fall; it goes to seed once spring heat arrives.",
+    // Not on the Maricopa County calendar (AZ1005); the window is from the Yuma County low-desert calendar.
+    windows: [
+      { from: "Sep 1", to: "Dec 31", method: "S" }
+    ],
+    timeToHarvest: "Leaves from about January to April after a fall sowing",
+    spacing: "Sow seeds 1/4 inch deep; thin plants to 1 to 2 inches apart",
+    water: "Keep the soil evenly moist; dry spells make it go to seed sooner.",
+    sun: "Full sun in the cool season; tolerates some shade.",
+    growth: "Fast. Leafy plants about 1 foot tall that send up flower stalks as it warms.",
+    yield: "Cut leaves as needed from each sowing for several weeks.",
+    tips: [
+      "Plant in fall. Cilantro is a cool-season annual and bolts (goes to seed) quickly once spring heat arrives.",
+      "Sow a little every few weeks from September through December for a steady supply.",
+      "A late-winter sowing in February can also work, but expect a short harvest before it bolts.",
+      "Cover young plants on frosty nights.",
+      "Let a few plants flower: the dried seeds are coriander, and the flowers attract lacewings and other helpful insects.",
+      "Use it fresh; it loses its flavor when dried."
+    ],
+    sources: ["az1615", "az2061", "bg-herbs", "reminders-feb"]
+  },
   {
     id: "lettuce",
     name: "Lettuce",
@@ -824,6 +852,7 @@ window.PLANTS = [
       "Set plants so the crown sits level with the soil surface; too deep or too shallow can kill them.",
       "Summer heat usually ends the plants; most gardeners replant each fall."
     ],
+    varieties: "June-bearing types planted in fall: 'Chandler', 'Camarosa', 'Sequoia', 'Tioga' and 'Sweet Charlie'.",
     sources: ["az1667"]
   },
   {
@@ -847,6 +876,7 @@ window.PLANTS = [
       "Fruit does not ripen after picking; taste-test before harvesting the whole tree.",
       "Leave the lower branches (the 'skirt') on; they shade the trunk."
     ],
+    varieties: "Oranges: 'Parent Washington' navel, 'Trovita', 'Diller', 'Hamlin', and the Valencias 'Campbell' and 'Olinda'. Mandarins: 'Fairchild', 'Algerian' (Clementine), 'Kinnow'; tangelo 'Minneola'. Grapefruit: 'Marsh', 'Redblush', 'Rio Red'. Lemons: 'Eureka', 'Lisbon'. Mandarins and kumquats handle cold best.",
     sources: ["az1001", "reminders-mar", "az1222"]
   },
   {
@@ -871,6 +901,7 @@ window.PLANTS = [
       "Figs do not ripen after picking; harvest when soft and drooping on the stem.",
       "Birds love figs; netting helps."
     ],
+    varieties: "'Black Mission' (best below 2,000 feet), 'Conadria' (handles heat well) and 'White Kadota'.",
     sources: ["figs-low-desert", "az1269", "reminders-mar"]
   },
   {
@@ -917,6 +948,7 @@ window.PLANTS = [
       "Early-ripening varieties such as Flame Seedless and Perlette do well in the low desert.",
       "Avoid low spots where cold air settles and soils with shallow caliche."
     ],
+    varieties: "European grapes suit the low desert: 'Thompson Seedless', 'Flame Seedless', 'Perlette', 'Ruby Seedless', 'Beauty Seedless', 'Cardinal' and 'Exotic'.",
     sources: ["az1657", "az1269", "monthly-january"]
   },
   {
@@ -939,6 +971,7 @@ window.PLANTS = [
       "Plant bare-root trees in winter while dormant.",
       "Thin small fruit to 6 to 8 inches apart in spring for bigger peaches."
     ],
+    varieties: "Low-chill, self-fruitful types such as 'Desert Gold', 'Florida Prince', 'Eva's Pride', 'Tropic Beauty', 'Tropic Snow', 'Mid-Pride' and 'May Pride'. Choose ones needing under 400 chill hours.",
     sources: ["az1269", "monthly-january", "reminders-mar"]
   },
   {
@@ -961,6 +994,7 @@ window.PLANTS = [
       "The low desert averages about 300 to 400 chill hours a year, so lower-chill varieties are safer.",
       "Plant bare-root trees in winter while dormant."
     ],
+    varieties: "'Gold Kist', 'Katy', 'Blenheim' (Royal) and 'Modesto': all self-fruitful, needing 300 to 400 chill hours.",
     sources: ["az1269", "monthly-january", "reminders-mar"]
   }
 ];

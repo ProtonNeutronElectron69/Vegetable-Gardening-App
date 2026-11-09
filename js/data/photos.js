@@ -5,6 +5,48 @@
   Keep images/plants/CREDITS.md in sync when changing photos.
 */
 window.PHOTOS = {
+  "cilantro": [
+    {
+      "kind": "plant",
+      "src": "images/plants/cilantro/plant-1.jpg",
+      "thumb": "images/plants/cilantro/thumbs/plant-1.jpg",
+      "alt": "Cilantro plants growing in a pot",
+      "artist": "HitroMilanese",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cilantro_plants.jpg"
+    },
+    {
+      "kind": "plant",
+      "src": "images/plants/cilantro/plant-2.jpg",
+      "thumb": "images/plants/cilantro/thumbs/plant-2.jpg",
+      "alt": "Cilantro plants in flower",
+      "artist": "Krzysztof Ziarnek, Kenraiz",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Coriandrum_sativum_%27Cilantro%27_kz01.jpg"
+    },
+    {
+      "kind": "closeup",
+      "src": "images/plants/cilantro/closeup-1.jpg",
+      "thumb": "images/plants/cilantro/thumbs/closeup-1.jpg",
+      "alt": "Cilantro leaves close up",
+      "artist": "Forest and Kim Starr",
+      "license": "CC BY 3.0 us",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/us/deed.en",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Starr-080731-9544-Coriandrum_sativum-leaves-makawao-Maui_(24924687415).jpg"
+    },
+    {
+      "kind": "closeup",
+      "src": "images/plants/cilantro/closeup-2.jpg",
+      "thumb": "images/plants/cilantro/thumbs/closeup-2.jpg",
+      "alt": "Bunches of fresh cilantro leaves",
+      "artist": "Kpsudeep",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bunches_of_coriander_leaves.jpg"
+    }
+  ],
   "tomato": [
     {
       "kind": "produce",

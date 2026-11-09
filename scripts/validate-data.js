@@ -262,6 +262,8 @@ for (const p of PLANTS || []) {
   for (const f of TEXT_FIELDS) {
     if (typeof vi[f] !== "string" || !vi[f].trim()) fail(where, `missing "${f}"`);
   }
+  if (p.varieties !== undefined && (typeof p.varieties !== "string" || !p.varieties.trim())) fail(`plant "${p.id}"`, "varieties must be text or left out");
+  if (Boolean(p.varieties) !== Boolean(vi.varieties)) fail(where, "varieties must be in both languages or neither");
   if (!Array.isArray(vi.tips) || vi.tips.length !== p.tips.length) {
     fail(where, `needs ${p.tips.length} tips to match English (has ${Array.isArray(vi.tips) ? vi.tips.length : 0})`);
   }

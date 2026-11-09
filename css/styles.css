@@ -709,6 +709,9 @@ tbody .cal-plant-col a:hover { color: var(--brand-strong); text-decoration: unde
 
 .panel-link { text-align: center; margin: 14px 0 0; font-size: 0.92rem; }
 .panel-link a { font-weight: 600; }
+.variety-note { margin: -16px 0 22px; font-size: 0.85rem; color: var(--text-muted); max-width: 80ch; }
+.variety-label { font-weight: 700; }
+.variety-note + .more-link { margin-top: 0; }
 .more-link { margin: -16px 0 28px; font-size: 0.92rem; }
 .more-link a { font-weight: 600; }
 
